@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Aether WebOS Kit : Your mind, cleaved into working software</title>
+<meta name="description" content="Zero-install browser mind-map operating system and 30-day mentorship kit built by Eloquent (@mjeanhudson-dev).">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='2' fill='%2307090D'/%3E%3Cpath d='M16 4L27 16L16 28L5 16Z' fill='none' stroke='%23ECEAE4' stroke-width='2'/%3E%3Cpath d='M16 4V28' stroke='%23E27A2C' stroke-width='1.8'/%3E%3Ccircle cx='16' cy='16' r='3' fill='%23E27A2C'/%3E%3C/svg%3E">
+<link rel="preload" href="./fonts/BricolageGrotesque-Bold.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="./fonts/BricolageGrotesque-Regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="./assets/meteorite-crust.webp" as="image" type="image/webp" fetchpriority="high">
+<link rel="stylesheet" href="scrollcraft.css">
+<link rel="stylesheet" href="webos/refractory.css">
+<link rel="stylesheet" href="styles/site.css">
+<script defer src="scrollcraft.js"></script>
+<script defer src="webos/exporter.js"></script>
+<script defer src="webos/refractory.js"></script>
+<script defer src="webgl/artifact-shader.js"></script>
+<script defer src="scripts/stage-choreography.js"></script>
+</head>
+<body>
+
+<header class="site-bar" aria-label="Primary Navigation">
+  <a class="site-bar__brand" href="#top">
+    <svg class="site-bar__mark" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M12 2.5L21.5 12L12 21.5L2.5 12Z" fill="none" stroke="#ECEAE4" stroke-width="1.6"/>
+      <path d="M12 2.5V21.5" stroke="#E27A2C" stroke-width="1.4"/>
+      <circle cx="12" cy="12" r="2.2" fill="#E27A2C"/>
+    </svg>
+    <span>AETHER</span>
+  </a>
+
+  <nav class="site-bar__nav" aria-label="Page sections">
+    <a class="site-bar__link" href="#act-corridor">Story</a>
+    <a class="site-bar__link" href="#act-artifact">Artifact</a>
+    <a class="site-bar__link" href="#act-studio">Studio</a>
+    <a class="site-bar__link" href="#act-curriculum">Days</a>
+  </nav>
+
+  <div class="site-bar__right">
+    <span class="site-bar__day" data-aether-nav-day aria-live="polite">Day 1 · Wk 1</span>
+    <a class="btn btn--primary site-bar__cta" href="#act-studio" data-aether-start>Start Day 1: Free</a>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ACT 1 : TENSION (pin 2.1, Warm Alabaster vs Deep Obsidian Split Cleavage) -->
+  <section id="act-cleave" data-sc-act="pin" data-sc-span="2.1">
+    <div data-sc-stage class="cleave-stage" id="cleave-stage" data-sc-verify-state="p:0.00|cleave:0">
+      <div class="cleave-left">
+        <div class="cleave-copy" data-sc-cue="0 1 0 0" data-sc-rise="0">
+          <h1 class="cleave-title">Your mind, cleaved into working software.</h1>
+          <p class="cleave-sub">Turn messy plain English notes into a working visual floorplan and single file offline tool on any device.</p>
+          <div class="cleave-actions">
+            <a class="btn btn--primary cleave-cta" href="#act-studio" data-aether-start>Start Day 1: Free</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="cleave-right">
+        <div class="cleave-seam" aria-hidden="true"></div>
+        <div class="cleave-meteor" id="cleave-meteor">
+          <img
+            class="cleave-meteor__img"
+            src="assets/meteorite-crust.webp"
+            width="1200"
+            height="1200"
+            fetchpriority="high"
+            loading="eager"
+            decoding="async"
+            alt="Natural iron-nickel octahedrite meteorite specimen with regmaglypt fusion crust and cleaved acid-etched Widmanstatten crystal face.">
+        </div>
+
+        <div class="cleave-annot" data-sc-cue="0 1 0 0" data-sc-rise="0">
+          <span class="cleave-annot__rule" aria-hidden="true"></span>
+          <div class="cleave-annot__meta">
+            <span class="cleave-annot__tag">FE-NI FUSION CRUST · 60° WIDMANSTATTEN</span>
+            <span class="cleave-annot__readout" id="cleave-readout">CLEAVAGE SEAM · 4 STARTER KITS · 30 DAYS</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACT 2 : WIT & MOMENTUM (pan 4.2, Unboxed 6-Plate Horizontal Corridor) -->
+  <section id="act-corridor" data-sc-act="pan" data-sc-span="4.2">
+    <div data-sc-stage class="corridor-stage" aria-label="Horizontal narrative corridor">
+      <div class="corridor-rail" data-sc-pan="0.04" id="corridor-rail">
+
+        <article class="corridor-plate corridor-plate--lead">
+          <h2 class="corridor-title">Your chatbot forgot your name at turn twenty-six.</h2>
+          <p class="corridor-body">By turn twenty-five, the cloud chat politely asks what project you are building. Again. Every Tuesday morning starts with a hostage negotiation over pasted old transcripts.</p>
+          <div class="corridor-datum">
+            <span class="corridor-datum__row">TURN 01: Sharp plan.</span>
+            <span class="corridor-datum__row corridor-datum__row--amber">TURN 25: Polite stranger.</span>
+          </div>
+        </article>
+
+        <article class="corridor-plate corridor-plate--media">
+          <div class="corridor-plate__text">
+            <h2 class="corridor-title">Forty-seven open tabs to buy milk and pay rent.</h2>
+            <p class="corridor-body">Three monthly subscriptions, two abandoned boards, and an app demanding two-factor authentication before letting you read your own Tuesday errands.</p>
+          </div>
+          <div class="corridor-plate__art">
+            <img
+              src="assets/shard-01.webp"
+              width="640"
+              height="640"
+              loading="lazy"
+              decoding="async"
+              alt="Natural torn Sikhote-Alin iron-nickel meteorite shrapnel fragment on transparent field.">
+          </div>
+        </article>
+
+        <article class="corridor-plate">
+          <h2 class="corridor-title">Iron needs a million quiet years to crystallize.</h2>
+          <p class="corridor-body">Nickel-iron meteorites grow sixty-degree Widmanstatten bands only when molten chaos cools undisturbed. Plain notes cleave into order the moment the noise drops.</p>
+          <div class="corridor-datum">
+            <span class="corridor-datum__row">60° / 120° LAMELLAR BANDS</span>
+            <span class="corridor-datum__row corridor-datum__row--amber">PLAIN PROSE -> FLOORPLAN TREE</span>
+          </div>
+        </article>
+
+        <article class="corridor-plate corridor-plate--media">
+          <div class="corridor-plate__text">
+            <h2 class="corridor-title">Plain English in. Dependency geometry out.</h2>
+            <p class="corridor-body">Write how you speak across a kitchen table. Aether extracts your Lexicon, splits Wave 0 from Wave 2, and seals a WebCrypto SHA-256 digest in browser memory.</p>
+          </div>
+          <div class="corridor-plate__art">
+            <img
+              src="assets/shard-02.webp"
+              width="640"
+              height="640"
+              loading="lazy"
+              decoding="async"
+              alt="Organic liquid mercury droplets solidifying over rough jagged blackened meteoric iron on transparent field.">
+          </div>
+        </article>
+
+        <article class="corridor-plate">
+          <h2 class="corridor-title">floorplan-codex is real, public, and inspectable.</h2>
+          <p class="corridor-body">Preview how plain sentences cleave into deterministic Wave nodes right here, or inspect the open-source parser repository directly on GitHub.</p>
+          <div class="codex-preview" data-codex-preview>
+            <div class="codex-preview__tabs" role="group" aria-label="Floorplan Codex specimen preview">
+              <button type="button" class="codex-preview__btn" data-codex-sample="household" aria-pressed="true">Household</button>
+              <button type="button" class="codex-preview__btn" data-codex-sample="workshop" aria-pressed="false">Workshop</button>
+              <button type="button" class="codex-preview__btn" data-codex-sample="creator" aria-pressed="false">Creator</button>
+            </div>
+            <pre class="codex-preview__out" id="codex-preview-out">WAVE 0 -> Fixed bills snapshot + due dates
+WAVE 1 -> 10-meal pantry loop (depends: Wave 0)
+WAVE 2 -> $25 buffer jar + offline HTML export</pre>
+          </div>
+          <a class="corridor-link" href="https://github.com/mjeanhudson-dev/floorplan-codex" target="_blank" rel="noopener noreferrer">Inspect floorplan-codex on GitHub -></a>
+        </article>
+
+        <article class="corridor-plate">
+          <h2 class="corridor-title">Works at 36,000 feet with Wi-Fi switched off.</h2>
+          <p class="corridor-body">Export one self-contained HTML file to your drive. Double-click it on a borrowed laptop, in a quiet library, or over the ocean without an account.</p>
+          <div class="corridor-plate__cta">
+            <a class="btn btn--primary" href="#act-studio" data-aether-start>Start Day 1: Free</a>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ACT 3 : AUTHORED SILENCE (pin 1.7, Natural Basalt Impact -> Reflective Obsidian Mirror Void #030508) -->
+  <section id="act-mirror" data-sc-act="pin" data-sc-span="1.7">
+    <div data-sc-stage class="mirror-stage" id="mirror-stage" data-sc-verify-state="mirror:0.00|beat:1">
+      <img
+        class="mirror-impact"
+        id="mirror-impact"
+        src="assets/impact-void.webp"
+        width="1440"
+        height="900"
+        loading="lazy"
+        decoding="async"
+        alt="">
+      <div class="mirror-sheen" id="mirror-sheen" aria-hidden="true"></div>
+      <div class="mirror-copy">
+        <h2 class="mirror__line mirror__line--primary" data-sc-cue="0 0.90 0 0.12" data-sc-rise="0">The meteor landed.</h2>
+        <p class="mirror__line mirror__line--secondary" data-sc-cue="0.22 0.94 0.24 0.12" data-sc-rise="0">Everything unnecessary went dark.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACT 4 : THE PEAK (pin 3.6, dwell 0.40, Photorealistic Liquid-Mercury Widmanstatten WebGL + Poster Fallback) -->
+  <section id="act-artifact" data-sc-act="pin" data-sc-span="3.6" data-sc-dwell="0.40" data-aether-shader-state="standby">
+    <div data-sc-stage class="artifact-stage" id="artifact-stage" data-sc-verify-state="phase:mercury|step:0|p:0.00">
+      <img
+        class="artifact-poster"
+        src="assets/artifact-poster.webp"
+        width="1440"
+        height="900"
+        loading="lazy"
+        decoding="async"
+        alt="Molten liquid mercury streaming across a jagged cleaved iron-nickel Widmanstatten meteorite core on dark obsidian.">
+      <template id="aether-artifact-plates">
+        <img data-plate="mercury" src="assets/artifact-mercury.webp" alt="">
+        <img data-plate="cleave" src="assets/artifact-poster.webp" alt="">
+        <img data-plate="crystal" src="assets/artifact-crystal.webp" alt="">
+      </template>
+      <canvas id="aether-artifact-canvas" aria-label="Interactive liquid-mercury Widmanstatten mineral relighting shader"></canvas>
+
+      <div class="artifact-scrim artifact-scrim--top" aria-hidden="true"></div>
+      <div class="artifact-scrim artifact-scrim--bottom" aria-hidden="true"></div>
+
+      <div class="artifact-hud__top" data-sc-cue="0 1 0 0" data-sc-rise="0">
+        <div class="artifact-hud__lead">
+          <h2 class="artifact-title">Disordered prose locks into crystal structure.</h2>
+          <p class="artifact-phase" id="artifact-phase-readout">Phase 01 · Molten Mercury Suspension</p>
+        </div>
+        <button type="button" class="btn btn--ghost artifact-toggle" data-aether-shader-toggle>Pause shader</button>
+      </div>
+
+      <div class="artifact-hud__bottom" data-sc-cue="0 1 0 0" data-sc-rise="0">
+        <div class="artifact-pipeline" role="list" aria-label="Cleavage transformation stages">
+          <div class="artifact-node is-active" role="listitem" data-cleave-step="0">
+            <span class="artifact-node__tick" aria-hidden="true"></span>
+            <span class="artifact-node__label">RAW NOTE</span>
+          </div>
+          <div class="artifact-node" role="listitem" data-cleave-step="1">
+            <span class="artifact-node__tick" aria-hidden="true"></span>
+            <span class="artifact-node__label">LEXICON</span>
+          </div>
+          <div class="artifact-node" role="listitem" data-cleave-step="2">
+            <span class="artifact-node__tick" aria-hidden="true"></span>
+            <span class="artifact-node__label">FLOORPLAN</span>
+          </div>
+          <div class="artifact-node" role="listitem" data-cleave-step="3">
+            <span class="artifact-node__tick" aria-hidden="true"></span>
+            <span class="artifact-node__label">WAVE 0..2</span>
+          </div>
+          <div class="artifact-node" role="listitem" data-cleave-step="4">
+            <span class="artifact-node__tick" aria-hidden="true"></span>
+            <span class="artifact-node__label">SHA-256</span>
+          </div>
+        </div>
+
+        <div class="artifact-unlocks" aria-label="Unlockable Artifacts">
+          <div class="artifact-unlock">
+            <span class="artifact-unlock__id">Artifact 01: floorplan-codex</span>
+            <a class="artifact-unlock__link" href="https://github.com/mjeanhudson-dev/floorplan-codex" target="_blank" rel="noopener noreferrer">Open-source parser repo -></a>
+          </div>
+          <div class="artifact-unlock">
+            <span class="artifact-unlock__id">Artifact 02: Aether WebOS Refractory Kit</span>
+            <a class="artifact-unlock__link" href="#act-studio" data-aether-start>Open offline studio -></a>
+          </div>
+          <div class="artifact-unlock">
+            <span class="artifact-unlock__id">Artifact 03: Portable Single-File HTML Kit</span>
+            <button type="button" class="artifact-unlock__btn" data-aether-export>Export My Kit (.html) -></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACT 5 : CLARITY / OPERATE MODE (flow, Borderless Offline WebOS Refractory) -->
+  <section id="act-studio" class="studio-section" data-sc-act="flow">
+    <div class="sc-wrap">
+      <header class="studio-head">
+        <h2 class="studio-title">The Aether WebOS Refractory</h2>
+        <p class="studio-sub">Pick one of four plain-English Starter Kits or paste raw notes below. Edit directly to regenerate the SVG Mind-Map, Dual-View Reader, Lexicon, and 25-Turn SHA-256 Capsule.</p>
+      </header>
+
+      <div class="studio-cv-shell">
+        <div id="aether-webos-mount" data-aw-lazy="true">
+          <div class="studio-skeleton" aria-label="Preparing Aether WebOS Refractory Studio">
+            <div class="studio-skeleton__bar">
+              <span>AETHER WEBOS REFRACTORY · STANDBY</span>
+              <span>4 KITS · 30 DAYS · ZERO INSTALL</span>
+            </div>
+            <div class="studio-skeleton__grid">
+              <div class="studio-skeleton__col">
+                <p>Loading plain-English editor and Wave 0..2 dependency parser...</p>
+                <a class="btn btn--primary" href="#act-studio" data-aether-start>Start Day 1: Free</a>
+              </div>
+              <div class="studio-skeleton__col">
+                <p>Scroll closer or select any Day below to hydrate SVG Mind-Map, Dual-View Reader, Lexicon, and WebCrypto SHA-256 Capsule.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACT 6 : RESOLVE (flow, Unboxed 4-Week Hairline Ledger + Non-Fading 472px Colophon) -->
+  <section id="act-curriculum" class="curriculum-section" data-sc-act="flow">
+    <div class="sc-wrap curriculum-cv-shell">
+
+      <div class="ledger" aria-label="30-Day Mentorship Ledger">
+        <header class="ledger-head">
+          <h2 class="ledger-title">30-Day Ledger: from scattered note to owned offline kit.</h2>
+          <span class="ledger-active" data-aether-ledger-day>Active: Day 1 · Week 1</span>
+        </header>
+
+        <div class="aw-ledger-week is-active-week" data-week-row="1">
+          <div class="aw-ledger-week__meta">
+            <h3 class="aw-ledger-week__title">Voice &amp; Personal Lexicon</h3>
+            <span class="aw-ledger-week__tag">WEEK 01 · DAYS 1 TO 7</span>
+            <p class="aw-ledger-week__desc">Empty the kitchen-table clutter, pin three Soul rules, and define your everyday vocabulary.</p>
+          </div>
+          <div class="aw-ledger-week__days" role="group" aria-label="Week 1 mentorship days">
+            <button type="button" class="aw-ledger-day-btn" data-select-day="1" aria-pressed="true" aria-label="D1: Empty the Kitchen-Table Brain Dump">D1</button>
+            <button type="button" class="aw-ledger-day-btn" data-select-day="2" aria-pressed="false" aria-label="D2: Write Three Soul Rules You Refuse to Break">D2</button>
+            <button type="button" class="aw-ledger-day-btn" data-select-day="3" aria-pressed="false" aria-label="D3: Build Your First Five-Word Lexicon">D3</button>
+            <button type="button" class="aw-ledger-day-btn" data-select-day="4" aria-pressed="false" aria-label="D4: Separate Facts From Guesses">D4</button>
+            <button type="button" class="aw-ledger-day-btn" data-select-day="5" aria-pressed="false" aria-label="D5: Ban Five Hollow Phrases From Your Voice">D5</button>
+            <button type="button" class="aw-ledger-day-btn" data-select-day="6" aria-pressed="false" aria-label="D6: Create One Pocket Wiki Entry">D6</button>
+            <button type="button" class="aw-ledger-day-btn" data-select-day="7" aria-pressed="false" aria-label="D7: Week 1 Review &amp; Clean SHA-256 Snapshot">D7</button>
+          </div>
+        </div>
+
+        <div class="aw-ledger-week" data-week-row="2">
+          <div class="aw-ledger-week__meta">
+            <h3 class="aw-ledger-week__title">Visual Mind-Maps &amp; Floorplans</h3>
+            <span class="aw-ledger-week__tag">WEEK 02 · DAYS 8 TO 15</span>
+            <p class="aw-ledger-week__desc">Cleave today from next week across Wave 0, Wave 1, and Wave 2 trees with real dependencies.</p>
+          </div>
+          <div class="aw-ledger-week__days" role="group" aria-label="Week 2 mentorship days">
+            <button type="button" class="aw-ledger-day-btn" data-select-day="8" aria-pressed="false" aria-label="D8: Split Today From Next Week (Wave 0 vs Wave 1)">D8</button>
+            <button type="button" class="aw-ledger-day-btn" data-select-day="9" aria-pressed="false" aria-label="D9: Wire Explicit Task Dependencies">D9</button>
+            <button type="button" class="aw-ledger-day-btn" data-select-day="10" aria-pressed="false" aria-label="D10: Turn a Scattered Offer Into a One-Page Scope">D10</button>
+            <button type="button" class="aw-ledger-day-btn" data-select-day="11" aria-pressed="false" aria-label="D11: Build a Four-Question Customer or Family Intake">D11</button>
+            <button type="button" class="aw-ledger-day-btn" data-select-day="12" aria-pressed="false" aria-label="D12: Design Your Wave 2 Finish Line">D12</button>
+            <button type="button" class="aw-ledger-day-btn" data-select-day="13" aria-pressed="false" aria-label="D13: Audit Dual-View Readability at Arm's Length">D13</button>
+            <button type="button" class="aw-ledger-day-btn" data-select-day="14" aria-pressed="false" aria-label="D14: Map Hidden Failure Modes Into Checklists">D14</button>
+            <button type="button" class="aw-ledger-day-btn" data-select-day="15" aria-pressed="false" aria-label="D15: Week 2 Floorplan Lock &amp; Visual Export">D15</button>
+          </div>
+        </div>
+
+        <div class="aw-ledger-week" data-week-row="3">
+          <div class="aw-ledger-week__meta">
+            <h3 class="aw-ledger-week__title">Zero-Code Agentic Sprints</h3>
+            <span class="aw-ledger-week__tag">WEEK 03 · DAYS 16 TO 23</span>
+            <p class="aw-ledger-week__desc">Carry a 25-Turn Pass-Down Capsule and SHA-256 checksum across resets with zero drift.</p>
+          </div>
+          <div class="aw-ledger-week__days" role="group" aria-label="Week 3 mentorship days">
+            <button type="button" class="aw-ledger-day-btn" data-select-day="16" aria-pressed="false" aria-label="D16: Build Your First 25-Turn Pass-Down Capsule">D16</button>
+            <button type="button" class="aw-ledger-day-btn" data-select-day="17" aria-pressed="false" aria-label="D17: Separate Durable Rules From Disposable Chatter">D17</button>
+            <button type="button" class="aw-ledger-day-btn" data-select-day="18" aria-pressed="false" aria-label="D18: Run a 25-Minute Sprint Without Editing Mid-Flow">D18</button>
+            <button type="button" class="aw-ledger-day-btn" data-select-day="19" aria-pressed="false" aria-label="D19: Test Hot-Swapping a Terminal Context Manifest">D19</button>
+            <button type="button" class="aw-ledger-day-btn" data-select-day="20" aria-pressed="false" aria-label="D20: Convert Repetition Into One Reusable Prompt Card">D20</button>
+            <button type="button" class="aw-ledger-day-btn" data-select-day="21" aria-pressed="false" aria-label="D21: Verify Every Claim Against Real Observation">D21</button>
+            <button type="button" class="aw-ledger-day-btn" data-select-day="22" aria-pressed="false" aria-label="D22: Practice Mid-Project Handoff Across Tools">D22</button>
+            <button type="button" class="aw-ledger-day-btn" data-select-day="23" aria-pressed="false" aria-label="D23: Week 3 Compaction Gate &amp; Digest Audit">D23</button>
+          </div>
+        </div>
+
+        <div class="aw-ledger-week" data-week-row="4">
+          <div class="aw-ledger-week__meta">
+            <h3 class="aw-ledger-week__title">Ship &amp; Share Offline Kit</h3>
+            <span class="aw-ledger-week__tag">WEEK 04 · DAYS 24 TO 30</span>
+            <p class="aw-ledger-week__desc">Export one self-contained HTML file that runs in airplane mode and passes smoothly to neighbors.</p>
+          </div>
+          <div class="aw-ledger-week__days" role="group" aria-label="Week 4 mentorship days">
+            <button type="button" class="aw-ledger-day-btn" data-select-day="24" aria-pressed="false" aria-label="D24: Package a Beginner-Safe Teaching Version">D24</button>
+            <button type="button" class="aw-ledger-day-btn" data-select-day="25" aria-pressed="false" aria-label="D25: Run the Airplane-Mode Independence Test">D25</button>
+            <button type="button" class="aw-ledger-day-btn" data-select-day="26" aria-pressed="false" aria-label="D26: Write Your Honest One-Sentence Share Note">D26</button>
+            <button type="button" class="aw-ledger-day-btn" data-select-day="27" aria-pressed="false" aria-label="D27: Host a 20-Minute Kitchen-Table Walkthrough">D27</button>
+            <button type="button" class="aw-ledger-day-btn" data-select-day="28" aria-pressed="false" aria-label="D28: Create a Monthly Refresh Ritual">D28</button>
+            <button type="button" class="aw-ledger-day-btn" data-select-day="29" aria-pressed="false" aria-label="D29: Bundle Your Final 30-Day Capstone Kit">D29</button>
+            <button type="button" class="aw-ledger-day-btn" data-select-day="30" aria-pressed="false" aria-label="D30: Ship It Forward: Pass the Offline Kit">D30</button>
+          </div>
+        </div>
+      </div>
+
+      <section class="colophon" aria-label="Active Day Summary and Export">
+        <div class="colophon__measure">
+          <h3 class="colophon__title" id="colophon-day-title">Empty the Kitchen-Table Brain Dump</h3>
+          <p class="colophon__day" id="colophon-day-badge">DAY 1 · WEEK 1 · VOICE &amp; PERSONAL LEXICON</p>
+          <p class="colophon__prompt" id="colophon-day-prompt">Write 10 messy bullet points about the one weekly headache eating your peace right now. Do not polish grammar yet; just name bills, tasks, or unfinished promises.</p>
+          <p class="colophon__deliverable" id="colophon-day-deliverable">Deliverable: Raw 10-line plain-English note loaded inside the Refractory editor.</p>
+
+          <div class="colophon__actions">
+            <a class="btn btn--primary" href="#act-studio" data-aether-start>Start Day 1: Free</a>
+            <button type="button" class="btn btn--ghost" id="colophon-export-btn" data-aether-export>Export My Kit (.html)</button>
+            <button type="button" class="btn btn--ghost" id="colophon-share-btn" data-aether-share>Copy 472px Brief</button>
+          </div>
+
+          <p class="colophon__feedback" id="colophon-feedback" data-aether-feedback aria-live="polite"></p>
+        </div>
+
+        <footer class="site-foot">
+          <span>
+            <a class="site-foot__link" href="https://github.com/mjeanhudson-dev/floorplan-codex" target="_blank" rel="noopener noreferrer">Artifact 01: floorplan-codex</a>
+            · Built by Eloquent (@mjeanhudson-dev)
+          </span>
+          <span>MIT License · Zero-Install Offline WebOS · Start Day 1: Free</span>
+        </footer>
+      </section>
+
+    </div>
+  </section>
+
+</main>
+
+</body>
+</html>

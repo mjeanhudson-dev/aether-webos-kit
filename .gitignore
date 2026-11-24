@@ -1,0 +1,17 @@
+# Dependencies and build artifacts
+node_modules/
+references/
+lab/
+.env
+*.sqlite3*
+tmp/
+
+# OS metadata
+.DS_Store
+Thumbs.db
+
+# Impeccable local runtime cache & review captures
+.impeccable/hook.cache.json
+.impeccable/review/
+.impeccable/questions/
+.impeccable/mocks/

@@ -1,0 +1,203 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-11-24T08:22:40.058Z",
+  "target": {
+    "siteUrl": "https://example.com",
+    "editorUrl": "https://your-site.squarespace.com/config/pages",
+    "assetBase": "/s/",
+    "loadMode": "direct",
+    "inlineEngine": false,
+    "corsNote": "Squarespace /s/ static files redirect to static1.squarespace.com without Access-Control-Allow-Origin headers. data-sc-load='direct' bypasses cross-origin fetch() Blob loading and streams dense-GOP +faststart clips via byte-range requests."
+  },
+  "modes": {
+    "blankPageTakeover": {
+      "headInjectionFile": "blank-page-head.html",
+      "codeBlockFile": "blank-page-body.html",
+      "preservesEditorChrome": true
+    },
+    "scopedCodeBlock": {
+      "codeBlockFile": "code-block-embed.html",
+      "mountSelector": "#sc-embed-aether-webos-rollout"
+    },
+    "iframeEmbed": {
+      "codeBlockFile": "iframe-embed.html"
+    }
+  },
+  "pushWorkflows": {
+    "manual": "Upload upload-to-s/* via Squarespace Link Editor -> File (maps to /s/<filename>), then paste blank-page-head.html + blank-page-body.html OR code-block-embed.html.",
+    "squarespaceMcp": "If a Squarespace MCP server is configured, upload manifest.uploads[] to static files and apply modes.blankPageTakeover or modes.scopedCodeBlock to the target page.",
+    "browserEditor": "Open https://your-site.squarespace.com/config/pages in an authenticated browser session, upload upload-to-s/* to /s/, inject the HTML snippets, save, and verify desktop + mobile + reduced-motion."
+  },
+  "uploads": [
+    {
+      "source": "fonts/BricolageGrotesque-Bold.woff2",
+      "uploadFile": "aether-webos-rollout-fonts-BricolageGrotesque-Bold-bd80f5a1.woff2",
+      "publicPath": "/s/aether-webos-rollout-fonts-BricolageGrotesque-Bold-bd80f5a1.woff2",
+      "bytes": 37656,
+      "sha256": "bd80f5a10dd08772d542d51500eb650a203a11f959f4387f2d7eaa352d0b2b30",
+      "over20MB": false
+    },
+    {
+      "source": "fonts/BricolageGrotesque-Regular.woff2",
+      "uploadFile": "aether-webos-rollout-fonts-BricolageGrotesque-Regular-fb01cae7.woff2",
+      "publicPath": "/s/aether-webos-rollout-fonts-BricolageGrotesque-Regular-fb01cae7.woff2",
+      "bytes": 38064,
+      "sha256": "fb01cae707f59e60b245e5dcd562f6d116053aaaa6b03a563ec90e4027560139",
+      "over20MB": false
+    },
+    {
+      "source": "assets/meteorite-crust.webp",
+      "uploadFile": "aether-webos-rollout-meteorite-crust-e4c3bf03.webp",
+      "publicPath": "/s/aether-webos-rollout-meteorite-crust-e4c3bf03.webp",
+      "bytes": 140356,
+      "sha256": "e4c3bf036304dd4fbb1b5acb3e8b27b467c215e68b15d25d0a64e52a7872fffd",
+      "over20MB": false
+    },
+    {
+      "source": "webos/refractory.css",
+      "uploadFile": "aether-webos-rollout-webos-refractory-02a5a37e.css",
+      "publicPath": "/s/aether-webos-rollout-webos-refractory-02a5a37e.css",
+      "bytes": 25247,
+      "sha256": "02a5a37ed646da9f0f485f1c5c6c091a0d1bffe372b759049ceb86a64fe4a8b1",
+      "over20MB": false
+    },
+    {
+      "source": "styles/site.css",
+      "uploadFile": "aether-webos-rollout-styles-site-30d8b4b5.css",
+      "publicPath": "/s/aether-webos-rollout-styles-site-30d8b4b5.css",
+      "bytes": 27129,
+      "sha256": "30d8b4b50fc8b337788cfb3b144d56daa6c5c699edbb5f9f8abd510b00649a48",
+      "over20MB": false
+    },
+    {
+      "source": "webos/exporter.js",
+      "uploadFile": "aether-webos-rollout-webos-exporter-c2c33702.js",
+      "publicPath": "/s/aether-webos-rollout-webos-exporter-c2c33702.js",
+      "bytes": 41211,
+      "sha256": "c2c3370286e9205b4f1f58e1f5731a4cc539dadda41669f83c1e8eadb65b8c03",
+      "over20MB": false
+    },
+    {
+      "source": "webos/refractory.js",
+      "uploadFile": "aether-webos-rollout-webos-refractory-4f31394a.js",
+      "publicPath": "/s/aether-webos-rollout-webos-refractory-4f31394a.js",
+      "bytes": 116089,
+      "sha256": "4f31394a81c1d6713f95fe599695e922e1a821ae6dfd83fc24de1706eb741126",
+      "over20MB": false
+    },
+    {
+      "source": "webgl/artifact-shader.js",
+      "uploadFile": "aether-webos-rollout-webgl-artifact-shader-8d445956.js",
+      "publicPath": "/s/aether-webos-rollout-webgl-artifact-shader-8d445956.js",
+      "bytes": 41385,
+      "sha256": "8d4459569e0a2698fd2baadfc468acbf853fcbefe5129781b5e3b281c04cbec3",
+      "over20MB": false
+    },
+    {
+      "source": "scripts/stage-choreography.js",
+      "uploadFile": "aether-webos-rollout-scripts-stage-choreography-5d830aa9.js",
+      "publicPath": "/s/aether-webos-rollout-scripts-stage-choreography-5d830aa9.js",
+      "bytes": 15611,
+      "sha256": "5d830aa9e1bb8b94ea481cbb37fffaf310d982873be6fd71a9bb4543dc39c17d",
+      "over20MB": false
+    },
+    {
+      "source": "assets/shard-01.webp",
+      "uploadFile": "aether-webos-rollout-shard-01-2e90580a.webp",
+      "publicPath": "/s/aether-webos-rollout-shard-01-2e90580a.webp",
+      "bytes": 64560,
+      "sha256": "2e90580a76394a977a2f812b575820d7c551ac7ada407433b86fb3e06e65bd0e",
+      "over20MB": false
+    },
+    {
+      "source": "assets/shard-02.webp",
+      "uploadFile": "aether-webos-rollout-shard-02-4c93db59.webp",
+      "publicPath": "/s/aether-webos-rollout-shard-02-4c93db59.webp",
+      "bytes": 58124,
+      "sha256": "4c93db59a4b696e686c073c92f67a0f32f266047a728b59054c01c05827ffd59",
+      "over20MB": false
+    },
+    {
+      "source": "assets/impact-void.webp",
+      "uploadFile": "aether-webos-rollout-impact-void-ca9a53a8.webp",
+      "publicPath": "/s/aether-webos-rollout-impact-void-ca9a53a8.webp",
+      "bytes": 35174,
+      "sha256": "ca9a53a80969046a18a79cdeb49ba5e9e29cb7d3374c48e21266176af1384d91",
+      "over20MB": false
+    },
+    {
+      "source": "assets/artifact-poster.webp",
+      "uploadFile": "aether-webos-rollout-artifact-poster-3c2ac240.webp",
+      "publicPath": "/s/aether-webos-rollout-artifact-poster-3c2ac240.webp",
+      "bytes": 58246,
+      "sha256": "3c2ac240f16c9ebadabdb51de51737e162da9b8cd9e9843bb1a6a5392f835415",
+      "over20MB": false
+    },
+    {
+      "source": "assets/artifact-mercury.webp",
+      "uploadFile": "aether-webos-rollout-artifact-mercury-9f9f902a.webp",
+      "publicPath": "/s/aether-webos-rollout-artifact-mercury-9f9f902a.webp",
+      "bytes": 25796,
+      "sha256": "9f9f902ae998cacfc36512b22100e02e7719efa27d495ca8a48866dd8d18663a",
+      "over20MB": false
+    },
+    {
+      "source": "assets/artifact-crystal.webp",
+      "uploadFile": "aether-webos-rollout-artifact-crystal-7a7e83bf.webp",
+      "publicPath": "/s/aether-webos-rollout-artifact-crystal-7a7e83bf.webp",
+      "bytes": 54020,
+      "sha256": "7a7e83bf5164bba7e97bb75ce2b87a49e4b992adb70025c9e315e8ab56197235",
+      "over20MB": false
+    },
+    {
+      "source": "(generated) aether-webos-rollout-scrollcraft-da17381c.css",
+      "uploadFile": "aether-webos-rollout-scrollcraft-da17381c.css",
+      "publicPath": "/s/aether-webos-rollout-scrollcraft-da17381c.css",
+      "bytes": 19874,
+      "sha256": "da17381cb5e3a836f1631066f5bd5bb0294e3c014e228a297168cd81997d44d8",
+      "over20MB": false
+    },
+    {
+      "source": "(generated) aether-webos-rollout-scrollcraft-embed-7b1c4a4d.css",
+      "uploadFile": "aether-webos-rollout-scrollcraft-embed-7b1c4a4d.css",
+      "publicPath": "/s/aether-webos-rollout-scrollcraft-embed-7b1c4a4d.css",
+      "bytes": 20706,
+      "sha256": "7b1c4a4dabf7e64ed1bad1732d0a9f38bffa18b2b7a4053687d78e7c88c2f240",
+      "over20MB": false
+    },
+    {
+      "source": "(generated) aether-webos-rollout-scrollcraft-92369dfe.js",
+      "uploadFile": "aether-webos-rollout-scrollcraft-92369dfe.js",
+      "publicPath": "/s/aether-webos-rollout-scrollcraft-92369dfe.js",
+      "bytes": 66717,
+      "sha256": "92369dfe311f1eb8808637be69d6ba9f867eacfb59c70fcaf31ee620bf491949",
+      "over20MB": false
+    },
+    {
+      "source": "fonts/RedHatMono-Regular.woff2",
+      "uploadFile": "aether-webos-rollout-fonts-RedHatMono-Regular-d195bc97.woff2",
+      "publicPath": "/s/aether-webos-rollout-fonts-RedHatMono-Regular-d195bc97.woff2",
+      "bytes": 13568,
+      "sha256": "d195bc97a78767cb14e09bc358efadf238e2cc6b110bfa35b6a669fca65a089a",
+      "over20MB": false
+    },
+    {
+      "source": "fonts/RedHatMono-Bold.woff2",
+      "uploadFile": "aether-webos-rollout-fonts-RedHatMono-Bold-253afa83.woff2",
+      "publicPath": "/s/aether-webos-rollout-fonts-RedHatMono-Bold-253afa83.woff2",
+      "bytes": 13716,
+      "sha256": "253afa83032d1c23deaa65603369ed223462c5f96e32eb9ab013e01cffde99bf",
+      "over20MB": false
+    },
+    {
+      "source": "(generated) aether-webos-rollout-styles-site-embed-95a25a32.css",
+      "uploadFile": "aether-webos-rollout-styles-site-embed-95a25a32.css",
+      "publicPath": "/s/aether-webos-rollout-styles-site-embed-95a25a32.css",
+      "bytes": 27176,
+      "sha256": "95a25a32c6ba8791a922d31271c0ae354cc0accc54819a7c0cf99a18339d1d6c",
+      "over20MB": false
+    }
+  ],
+  "warnings": [],
+  "totalUploadBytes": 940425
+}

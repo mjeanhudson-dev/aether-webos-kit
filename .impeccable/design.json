@@ -1,0 +1,749 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-24T10:15:00Z",
+  "title": "Design System: Aether WebOS Kit",
+  "extensions": {
+    "colorMeta": {
+      "troilite-amber": {
+        "role": "primary",
+        "displayName": "Molten Troilite Amber",
+        "canonical": "oklch(68.5% 0.155 52.7)",
+        "tonalRamp": [
+          "oklch(15.0% 0.054 52.7)",
+          "oklch(26.0% 0.106 52.7)",
+          "oklch(37.0% 0.155 52.7)",
+          "oklch(49.0% 0.155 52.7)",
+          "oklch(61.0% 0.155 52.7)",
+          "oklch(73.0% 0.155 52.7)",
+          "oklch(85.0% 0.106 52.7)",
+          "oklch(95.0% 0.054 52.7)"
+        ]
+      },
+      "troilite-amber-hover": {
+        "role": "primary",
+        "displayName": "Troilite Amber Hover",
+        "canonical": "oklch(73.1% 0.141 55.8)",
+        "tonalRamp": [
+          "oklch(15.0% 0.049 55.8)",
+          "oklch(26.0% 0.096 55.8)",
+          "oklch(37.0% 0.141 55.8)",
+          "oklch(49.0% 0.141 55.8)",
+          "oklch(61.0% 0.141 55.8)",
+          "oklch(73.0% 0.141 55.8)",
+          "oklch(85.0% 0.096 55.8)",
+          "oklch(95.0% 0.049 55.8)"
+        ]
+      },
+      "troilite-amber-studio-hover": {
+        "role": "primary",
+        "displayName": "Studio Amber Hover",
+        "canonical": "oklch(73.0% 0.147 55.0)",
+        "tonalRamp": [
+          "oklch(15.0% 0.051 55.0)",
+          "oklch(26.0% 0.100 55.0)",
+          "oklch(37.0% 0.147 55.0)",
+          "oklch(49.0% 0.147 55.0)",
+          "oklch(61.0% 0.147 55.0)",
+          "oklch(73.0% 0.147 55.0)",
+          "oklch(85.0% 0.100 55.0)",
+          "oklch(95.0% 0.051 55.0)"
+        ]
+      },
+      "troilite-amber-ink": {
+        "role": "primary",
+        "displayName": "Troilite AA Ink",
+        "canonical": "oklch(18.2% 0.004 264.5)",
+        "tonalRamp": [
+          "oklch(15.0% 0.002 264.5)",
+          "oklch(26.0% 0.003 264.5)",
+          "oklch(37.0% 0.004 264.5)",
+          "oklch(49.0% 0.004 264.5)",
+          "oklch(61.0% 0.004 264.5)",
+          "oklch(73.0% 0.004 264.5)",
+          "oklch(85.0% 0.003 264.5)",
+          "oklch(95.0% 0.002 264.5)"
+        ]
+      },
+      "troilite-amber-text-obsidian": {
+        "role": "primary",
+        "displayName": "Amber Text (Obsidian AA)",
+        "canonical": "oklch(72.9% 0.143 56.0)",
+        "tonalRamp": [
+          "oklch(15.0% 0.050 56.0)",
+          "oklch(26.0% 0.097 56.0)",
+          "oklch(37.0% 0.143 56.0)",
+          "oklch(49.0% 0.143 56.0)",
+          "oklch(61.0% 0.143 56.0)",
+          "oklch(73.0% 0.143 56.0)",
+          "oklch(85.0% 0.097 56.0)",
+          "oklch(95.0% 0.050 56.0)"
+        ]
+      },
+      "troilite-amber-text-paper": {
+        "role": "primary",
+        "displayName": "Burnt Troilite Text (Paper AA)",
+        "canonical": "oklch(48.7% 0.130 47.8)",
+        "tonalRamp": [
+          "oklch(15.0% 0.046 47.8)",
+          "oklch(26.0% 0.088 47.8)",
+          "oklch(37.0% 0.130 47.8)",
+          "oklch(49.0% 0.130 47.8)",
+          "oklch(61.0% 0.130 47.8)",
+          "oklch(73.0% 0.130 47.8)",
+          "oklch(85.0% 0.088 47.8)",
+          "oklch(95.0% 0.046 47.8)"
+        ]
+      },
+      "mirror-void": {
+        "role": "neutral",
+        "displayName": "Obsidian Mirror Void",
+        "canonical": "oklch(11.3% 0.011 251.8)",
+        "tonalRamp": [
+          "oklch(15.0% 0.004 251.8)",
+          "oklch(26.0% 0.007 251.8)",
+          "oklch(37.0% 0.011 251.8)",
+          "oklch(49.0% 0.011 251.8)",
+          "oklch(61.0% 0.011 251.8)",
+          "oklch(73.0% 0.011 251.8)",
+          "oklch(85.0% 0.007 251.8)",
+          "oklch(95.0% 0.004 251.8)"
+        ]
+      },
+      "peak-stage": {
+        "role": "neutral",
+        "displayName": "Peak Artifact Obsidian",
+        "canonical": "oklch(12.8% 0.011 259.6)",
+        "tonalRamp": [
+          "oklch(15.0% 0.004 259.6)",
+          "oklch(26.0% 0.007 259.6)",
+          "oklch(37.0% 0.011 259.6)",
+          "oklch(49.0% 0.011 259.6)",
+          "oklch(61.0% 0.011 259.6)",
+          "oklch(73.0% 0.011 259.6)",
+          "oklch(85.0% 0.007 259.6)",
+          "oklch(95.0% 0.004 259.6)"
+        ]
+      },
+      "obsidian": {
+        "role": "neutral",
+        "displayName": "Deep Obsidian",
+        "canonical": "oklch(13.9% 0.010 261.8)",
+        "tonalRamp": [
+          "oklch(15.0% 0.003 261.8)",
+          "oklch(26.0% 0.007 261.8)",
+          "oklch(37.0% 0.010 261.8)",
+          "oklch(49.0% 0.010 261.8)",
+          "oklch(61.0% 0.010 261.8)",
+          "oklch(73.0% 0.010 261.8)",
+          "oklch(85.0% 0.007 261.8)",
+          "oklch(95.0% 0.003 261.8)"
+        ]
+      },
+      "obsidian-surface": {
+        "role": "neutral",
+        "displayName": "Obsidian Surface",
+        "canonical": "oklch(14.4% 0.009 263.0)",
+        "tonalRamp": [
+          "oklch(15.0% 0.003 263.0)",
+          "oklch(26.0% 0.006 263.0)",
+          "oklch(37.0% 0.009 263.0)",
+          "oklch(49.0% 0.009 263.0)",
+          "oklch(61.0% 0.009 263.0)",
+          "oklch(73.0% 0.009 263.0)",
+          "oklch(85.0% 0.006 263.0)",
+          "oklch(95.0% 0.003 263.0)"
+        ]
+      },
+      "obsidian-deep": {
+        "role": "neutral",
+        "displayName": "Obsidian Editor Deep",
+        "canonical": "oklch(16.3% 0.014 264.1)",
+        "tonalRamp": [
+          "oklch(15.0% 0.005 264.1)",
+          "oklch(26.0% 0.009 264.1)",
+          "oklch(37.0% 0.014 264.1)",
+          "oklch(49.0% 0.014 264.1)",
+          "oklch(61.0% 0.014 264.1)",
+          "oklch(73.0% 0.014 264.1)",
+          "oklch(85.0% 0.009 264.1)",
+          "oklch(95.0% 0.005 264.1)"
+        ]
+      },
+      "obsidian-elevated": {
+        "role": "neutral",
+        "displayName": "Obsidian Elevated",
+        "canonical": "oklch(17.3% 0.015 266.7)",
+        "tonalRamp": [
+          "oklch(15.0% 0.005 266.7)",
+          "oklch(26.0% 0.010 266.7)",
+          "oklch(37.0% 0.015 266.7)",
+          "oklch(49.0% 0.015 266.7)",
+          "oklch(61.0% 0.015 266.7)",
+          "oklch(73.0% 0.015 266.7)",
+          "oklch(85.0% 0.010 266.7)",
+          "oklch(95.0% 0.005 266.7)"
+        ]
+      },
+      "obsidian-hover": {
+        "role": "neutral",
+        "displayName": "Obsidian Button Hover",
+        "canonical": "oklch(19.1% 0.017 264.0)",
+        "tonalRamp": [
+          "oklch(15.0% 0.006 264.0)",
+          "oklch(26.0% 0.012 264.0)",
+          "oklch(37.0% 0.017 264.0)",
+          "oklch(49.0% 0.017 264.0)",
+          "oklch(61.0% 0.017 264.0)",
+          "oklch(73.0% 0.017 264.0)",
+          "oklch(85.0% 0.012 264.0)",
+          "oklch(95.0% 0.006 264.0)"
+        ]
+      },
+      "obsidian-active": {
+        "role": "neutral",
+        "displayName": "Obsidian Active Surface",
+        "canonical": "oklch(21.3% 0.019 262.1)",
+        "tonalRamp": [
+          "oklch(15.0% 0.007 262.1)",
+          "oklch(26.0% 0.013 262.1)",
+          "oklch(37.0% 0.019 262.1)",
+          "oklch(49.0% 0.019 262.1)",
+          "oklch(61.0% 0.019 262.1)",
+          "oklch(73.0% 0.019 262.1)",
+          "oklch(85.0% 0.013 262.1)",
+          "oklch(95.0% 0.007 262.1)"
+        ]
+      },
+      "warm-alabaster": {
+        "role": "neutral",
+        "displayName": "Warm Alabaster",
+        "canonical": "oklch(95.3% 0.010 87.5)",
+        "tonalRamp": [
+          "oklch(15.0% 0.003 87.5)",
+          "oklch(26.0% 0.007 87.5)",
+          "oklch(37.0% 0.010 87.5)",
+          "oklch(49.0% 0.010 87.5)",
+          "oklch(61.0% 0.010 87.5)",
+          "oklch(73.0% 0.010 87.5)",
+          "oklch(85.0% 0.007 87.5)",
+          "oklch(95.0% 0.003 87.5)"
+        ]
+      },
+      "warm-alabaster-deep": {
+        "role": "neutral",
+        "displayName": "Warm Alabaster Deep",
+        "canonical": "oklch(92.9% 0.013 82.4)",
+        "tonalRamp": [
+          "oklch(15.0% 0.005 82.4)",
+          "oklch(26.0% 0.009 82.4)",
+          "oklch(37.0% 0.013 82.4)",
+          "oklch(49.0% 0.013 82.4)",
+          "oklch(61.0% 0.013 82.4)",
+          "oklch(73.0% 0.013 82.4)",
+          "oklch(85.0% 0.009 82.4)",
+          "oklch(95.0% 0.005 82.4)"
+        ]
+      },
+      "warm-alabaster-elevated": {
+        "role": "neutral",
+        "displayName": "Warm Alabaster Elevated",
+        "canonical": "oklch(92.3% 0.014 84.6)",
+        "tonalRamp": [
+          "oklch(15.0% 0.005 84.6)",
+          "oklch(26.0% 0.010 84.6)",
+          "oklch(37.0% 0.014 84.6)",
+          "oklch(49.0% 0.014 84.6)",
+          "oklch(61.0% 0.014 84.6)",
+          "oklch(73.0% 0.014 84.6)",
+          "oklch(85.0% 0.010 84.6)",
+          "oklch(95.0% 0.005 84.6)"
+        ]
+      },
+      "warm-alabaster-active": {
+        "role": "neutral",
+        "displayName": "Warm Alabaster Active",
+        "canonical": "oklch(89.8% 0.017 88.0)",
+        "tonalRamp": [
+          "oklch(15.0% 0.006 88.0)",
+          "oklch(26.0% 0.012 88.0)",
+          "oklch(37.0% 0.017 88.0)",
+          "oklch(49.0% 0.017 88.0)",
+          "oklch(61.0% 0.017 88.0)",
+          "oklch(73.0% 0.017 88.0)",
+          "oklch(85.0% 0.012 88.0)",
+          "oklch(95.0% 0.006 88.0)"
+        ]
+      },
+      "alabaster-ink": {
+        "role": "neutral",
+        "displayName": "Alabaster Ink",
+        "canonical": "oklch(18.2% 0.004 264.5)",
+        "tonalRamp": [
+          "oklch(15.0% 0.002 264.5)",
+          "oklch(26.0% 0.003 264.5)",
+          "oklch(37.0% 0.004 264.5)",
+          "oklch(49.0% 0.004 264.5)",
+          "oklch(61.0% 0.004 264.5)",
+          "oklch(73.0% 0.004 264.5)",
+          "oklch(85.0% 0.003 264.5)",
+          "oklch(95.0% 0.002 264.5)"
+        ]
+      },
+      "alabaster-ink-soft": {
+        "role": "neutral",
+        "displayName": "Alabaster Soft Ink",
+        "canonical": "oklch(42.0% 0.014 269.4)",
+        "tonalRamp": [
+          "oklch(15.0% 0.005 269.4)",
+          "oklch(26.0% 0.009 269.4)",
+          "oklch(37.0% 0.014 269.4)",
+          "oklch(49.0% 0.014 269.4)",
+          "oklch(61.0% 0.014 269.4)",
+          "oklch(73.0% 0.014 269.4)",
+          "oklch(85.0% 0.009 269.4)",
+          "oklch(95.0% 0.005 269.4)"
+        ]
+      },
+      "platinum": {
+        "role": "neutral",
+        "displayName": "Warm Platinum",
+        "canonical": "oklch(93.7% 0.008 91.5)",
+        "tonalRamp": [
+          "oklch(15.0% 0.003 91.5)",
+          "oklch(26.0% 0.006 91.5)",
+          "oklch(37.0% 0.008 91.5)",
+          "oklch(49.0% 0.008 91.5)",
+          "oklch(61.0% 0.008 91.5)",
+          "oklch(73.0% 0.008 91.5)",
+          "oklch(85.0% 0.006 91.5)",
+          "oklch(95.0% 0.003 91.5)"
+        ]
+      },
+      "steel": {
+        "role": "neutral",
+        "displayName": "Brushed Steel",
+        "canonical": "oklch(75.5% 0.019 258.4)",
+        "tonalRamp": [
+          "oklch(15.0% 0.007 258.4)",
+          "oklch(26.0% 0.013 258.4)",
+          "oklch(37.0% 0.019 258.4)",
+          "oklch(49.0% 0.019 258.4)",
+          "oklch(61.0% 0.019 258.4)",
+          "oklch(73.0% 0.019 258.4)",
+          "oklch(85.0% 0.013 258.4)",
+          "oklch(95.0% 0.007 258.4)"
+        ]
+      },
+      "hairline-obsidian": {
+        "role": "neutral",
+        "displayName": "Obsidian Hairline",
+        "canonical": "oklch(93.7% 0.008 91.5 / 0.14)",
+        "tonalRamp": [
+          "oklch(15.0% 0.003 91.5)",
+          "oklch(26.0% 0.006 91.5)",
+          "oklch(37.0% 0.008 91.5)",
+          "oklch(49.0% 0.008 91.5)",
+          "oklch(61.0% 0.008 91.5)",
+          "oklch(73.0% 0.008 91.5)",
+          "oklch(85.0% 0.006 91.5)",
+          "oklch(95.0% 0.003 91.5)"
+        ]
+      },
+      "hairline-obsidian-strong": {
+        "role": "neutral",
+        "displayName": "Obsidian Strong Hairline",
+        "canonical": "oklch(93.7% 0.008 91.5 / 0.28)",
+        "tonalRamp": [
+          "oklch(15.0% 0.003 91.5)",
+          "oklch(26.0% 0.006 91.5)",
+          "oklch(37.0% 0.008 91.5)",
+          "oklch(49.0% 0.008 91.5)",
+          "oklch(61.0% 0.008 91.5)",
+          "oklch(73.0% 0.008 91.5)",
+          "oklch(85.0% 0.006 91.5)",
+          "oklch(95.0% 0.003 91.5)"
+        ]
+      },
+      "hairline-paper": {
+        "role": "neutral",
+        "displayName": "Paper Hairline",
+        "canonical": "oklch(18.2% 0.004 264.5 / 0.16)",
+        "tonalRamp": [
+          "oklch(15.0% 0.002 264.5)",
+          "oklch(26.0% 0.003 264.5)",
+          "oklch(37.0% 0.004 264.5)",
+          "oklch(49.0% 0.004 264.5)",
+          "oklch(61.0% 0.004 264.5)",
+          "oklch(73.0% 0.004 264.5)",
+          "oklch(85.0% 0.003 264.5)",
+          "oklch(95.0% 0.002 264.5)"
+        ]
+      },
+      "hairline-paper-strong": {
+        "role": "neutral",
+        "displayName": "Paper Strong Hairline",
+        "canonical": "oklch(18.2% 0.004 264.5 / 0.34)",
+        "tonalRamp": [
+          "oklch(15.0% 0.002 264.5)",
+          "oklch(26.0% 0.003 264.5)",
+          "oklch(37.0% 0.004 264.5)",
+          "oklch(49.0% 0.004 264.5)",
+          "oklch(61.0% 0.004 264.5)",
+          "oklch(73.0% 0.004 264.5)",
+          "oklch(85.0% 0.003 264.5)",
+          "oklch(95.0% 0.002 264.5)"
+        ]
+      },
+      "wave-1-cyan": {
+        "role": "secondary",
+        "displayName": "Wave 1 Cyan (Obsidian)",
+        "canonical": "oklch(80.7% 0.114 228.5)",
+        "tonalRamp": [
+          "oklch(15.0% 0.040 228.5)",
+          "oklch(26.0% 0.077 228.5)",
+          "oklch(37.0% 0.114 228.5)",
+          "oklch(49.0% 0.114 228.5)",
+          "oklch(61.0% 0.114 228.5)",
+          "oklch(73.0% 0.114 228.5)",
+          "oklch(85.0% 0.077 228.5)",
+          "oklch(95.0% 0.040 228.5)"
+        ]
+      },
+      "wave-2-emerald": {
+        "role": "secondary",
+        "displayName": "Wave 2 Emerald (Obsidian)",
+        "canonical": "oklch(80.0% 0.182 151.7)",
+        "tonalRamp": [
+          "oklch(15.0% 0.064 151.7)",
+          "oklch(26.0% 0.124 151.7)",
+          "oklch(37.0% 0.182 151.7)",
+          "oklch(49.0% 0.182 151.7)",
+          "oklch(61.0% 0.182 151.7)",
+          "oklch(73.0% 0.182 151.7)",
+          "oklch(85.0% 0.124 151.7)",
+          "oklch(95.0% 0.064 151.7)"
+        ]
+      },
+      "wave-1-slate-paper": {
+        "role": "secondary",
+        "displayName": "Wave 1 Slate (Paper AA)",
+        "canonical": "oklch(42.0% 0.083 241.3)",
+        "tonalRamp": [
+          "oklch(15.0% 0.029 241.3)",
+          "oklch(26.0% 0.056 241.3)",
+          "oklch(37.0% 0.083 241.3)",
+          "oklch(49.0% 0.083 241.3)",
+          "oklch(61.0% 0.083 241.3)",
+          "oklch(73.0% 0.083 241.3)",
+          "oklch(85.0% 0.056 241.3)",
+          "oklch(95.0% 0.029 241.3)"
+        ]
+      },
+      "wave-2-pine-paper": {
+        "role": "secondary",
+        "displayName": "Wave 2 Pine (Paper AA)",
+        "canonical": "oklch(41.5% 0.095 153.4)",
+        "tonalRamp": [
+          "oklch(15.0% 0.033 153.4)",
+          "oklch(26.0% 0.065 153.4)",
+          "oklch(37.0% 0.095 153.4)",
+          "oklch(49.0% 0.095 153.4)",
+          "oklch(61.0% 0.095 153.4)",
+          "oklch(73.0% 0.095 153.4)",
+          "oklch(85.0% 0.065 153.4)",
+          "oklch(95.0% 0.033 153.4)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display (BricolageGrotesque Bold)",
+        "purpose": "Hero cleavage headline and Act 3 primary mirror void statement; balance-wrapped with tight negative tracking."
+      },
+      "headline": {
+        "displayName": "Headline (BricolageGrotesque Bold)",
+        "purpose": "Corridor plate headlines, Peak WebGL stage title, Studio heading, and 30-Day Ledger heading."
+      },
+      "title": {
+        "displayName": "Title (BricolageGrotesque Bold)",
+        "purpose": "Active Day colophon headline, Dual-View Reader H3 document heading, and weekly ledger phase titles."
+      },
+      "body": {
+        "displayName": "Body (BricolageGrotesque Regular)",
+        "purpose": "Plain-English copy in 40ch to 58ch measures and 472px colophon dispatch blocks; font-synthesis-weight: none."
+      },
+      "label": {
+        "displayName": "Label (RedHatMono Bold)",
+        "purpose": "Tabular-nums day counters, mineral readouts, pipeline step badges, chips, and ledger week tags."
+      },
+      "mono": {
+        "displayName": "Mono (RedHatMono Regular)",
+        "purpose": "Refractory Markdown textarea, 25-Turn Rehydration Capsule output, and inline floorplan-codex specimen preview."
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(0.23, 1, 0.32, 1)",
+        "purpose": "Exponential deceleration curve (--sc-ease-out, --aw-ease) for button states, tab border shifts, and flow reveals."
+      },
+      {
+        "name": "duration-control",
+        "value": "140ms",
+        "purpose": "Color and border transition duration on host buttons/links (120ms inside studio; 110ms active scale)."
+      },
+      {
+        "name": "pointer-damping",
+        "value": "0.12 lerp / frame",
+        "purpose": "Fine-pointer damping on Acts 1, 3, and 4 forwarded via zero-DOM-touch setPointer/setProgress hooks; shader smooths uniforms at 1 - exp(-dt * 10.0)."
+      },
+      {
+        "name": "peak-dwell",
+        "value": "0.40",
+        "purpose": "Cubic Scroll-Craft dwell factor on Act 4 (#act-artifact, pin[3.6]) holding the liquid-mercury cleavage phase mid-pin."
+      },
+      {
+        "name": "webgl-budget",
+        "value": "MAX_DPR 1.25 / single-pass Sobel PBR (3-5 taps) / staggered uploads / offscreen paused",
+        "purpose": "Single WebGL context lazy-initialized at 1100px + requestIdleCallback + KHR_parallel_shader_compile with 1-per-frame texImage2D uploads, static paused redraws on scroll/resize, 3-plate CSS cross-fade fallback, and rAF pausing on IntersectionObserver exit, document.hidden, contentvisibilityautostatechange, and WCAG 2.2.2 Pause shader."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "static poster + overflow-x: auto",
+        "purpose": "Zeroes transforms, enables native horizontal scroll on Act 2 rail, and holds the crisp static artifact-poster.webp with zero WebGL context spin-up."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "compact-phone",
+        "value": "360px",
+        "purpose": "Verified zero-overflow compact viewport floor (360x640, 11940px doc height)."
+      },
+      {
+        "name": "studio-stack",
+        "value": "640px",
+        "purpose": "Collapses Refractory Starter Kit grid and Lexicon/Wiki/Soul grid to 1 column; narrows studio padding and map height."
+      },
+      {
+        "name": "mobile-cleave",
+        "value": "760px",
+        "purpose": "Hides top nav anchor links, stacks Act 1 split hero vertically, narrows corridor plates to min(88vw, 336px), stacks Peak artifacts."
+      },
+      {
+        "name": "tablet-cleave",
+        "value": "960px",
+        "purpose": "Adjusts Act 1 split ratio to 54fr 46fr and collapses 30-Day Ledger week rows to single column."
+      },
+      {
+        "name": "desktop-studio",
+        "value": "1020px",
+        "purpose": "Switches Refractory workspace to 0.9fr / 1.35fr split pane and wraps 30-day selector buttons without scrollbar."
+      }
+    ],
+    "surfaces": {
+      "scrollScore": "pin[2.1] > pan[4.2] > pin[1.7] > pin[3.6, dwell=0.40] > flow > flow",
+      "studioToggle": "#aether-webos-mount[data-aw-surface=\"obsidian\"|\"paper\"]",
+      "author": "Eloquent (@mjeanhudson-dev)"
+    },
+    "provenance": {
+      "buildPath": "code",
+      "finishDisposition": "ship",
+      "lighthouse": "100/100/100/100",
+      "cls": 0,
+      "assets": [
+        {
+          "file": "./assets/meteorite-crust.webp",
+          "sidecar": "./assets/meteorite-crust.webp.json",
+          "dimensions": "1200x1200",
+          "bytes": 140356,
+          "alpha": true
+        },
+        {
+          "file": "./assets/shard-01.webp",
+          "sidecar": "./assets/shard-01.webp.json",
+          "dimensions": "640x640",
+          "bytes": 64560,
+          "alpha": true
+        },
+        {
+          "file": "./assets/shard-02.webp",
+          "sidecar": "./assets/shard-02.webp.json",
+          "dimensions": "640x640",
+          "bytes": 58124,
+          "alpha": true
+        },
+        {
+          "file": "./assets/impact-void.webp",
+          "sidecar": "./assets/impact-void.webp.json",
+          "dimensions": "1440x900",
+          "bytes": 35174,
+          "alpha": false
+        },
+        {
+          "file": "./assets/artifact-poster.webp",
+          "sidecar": "./assets/artifact-poster.webp.json",
+          "dimensions": "1440x900",
+          "bytes": 58246,
+          "alpha": false
+        },
+        {
+          "file": "./assets/artifact-mercury.webp",
+          "sidecar": "./assets/artifact-mercury.webp.json",
+          "dimensions": "1280x720",
+          "bytes": 25796,
+          "alpha": false
+        },
+        {
+          "file": "./assets/artifact-crystal.webp",
+          "sidecar": "./assets/artifact-crystal.webp.json",
+          "dimensions": "1280x720",
+          "bytes": 54020,
+          "alpha": false
+        }
+      ]
+    }
+  },
+  "components": [
+    {
+      "name": "Primary Action Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Solid troilite amber call-to-action with AA dark ink, sharp 2px corners, and scale(0.98) press feedback.",
+      "html": "<button type=\"button\" class=\"ds-btn-primary\">Start Day 1: Free</button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0.62rem 1.25rem; border: 1px solid var(--aether-amber, #E27A2C); border-radius: 2px; background: var(--aether-amber, #E27A2C); color: var(--aether-amber-ink, #111214); font-family: var(--sc-font-text, \"BricolageGrotesque\", sans-serif); font-size: 0.88rem; font-weight: 700; line-height: 1.2; cursor: pointer; transition: background-color 140ms cubic-bezier(0.23, 1, 0.32, 1), border-color 140ms cubic-bezier(0.23, 1, 0.32, 1), transform 110ms cubic-bezier(0.23, 1, 0.32, 1); } .ds-btn-primary:hover { background: var(--aether-amber-hover, #EA8E47); border-color: var(--aether-amber-hover, #EA8E47); } .ds-btn-primary:active { transform: scale(0.98); } .ds-btn-primary:focus-visible { outline: 2px solid var(--aether-amber, #E27A2C); outline-offset: 2px; }"
+    },
+    {
+      "name": "Ghost Action Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Opaque obsidian secondary button with 1px strong hairline border and amber hover edge.",
+      "html": "<button type=\"button\" class=\"ds-btn-ghost\">Export My Kit (.html)</button>",
+      "css": ".ds-btn-ghost { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0.62rem 1.25rem; border: 1px solid var(--aether-hairline-strong, rgba(236, 234, 228, 0.28)); border-radius: 2px; background: var(--aether-obsidian, #07090D); color: var(--aether-platinum, #ECEAE4); font-family: var(--sc-font-text, \"BricolageGrotesque\", sans-serif); font-size: 0.88rem; font-weight: 700; line-height: 1.2; cursor: pointer; transition: background-color 140ms cubic-bezier(0.23, 1, 0.32, 1), border-color 140ms cubic-bezier(0.23, 1, 0.32, 1), transform 110ms cubic-bezier(0.23, 1, 0.32, 1); } .ds-btn-ghost:hover { background: #10141C; border-color: var(--aether-amber, #E27A2C); } .ds-btn-ghost:active { transform: scale(0.98); } .ds-btn-ghost:focus-visible { outline: 2px solid var(--aether-amber, #E27A2C); outline-offset: 2px; }"
+    },
+    {
+      "name": "Top Hairline Navigation Bar",
+      "kind": "nav",
+      "refersTo": "nav-bar",
+      "description": "Opaque 60px hairline top bar with diamond cleavage SVG emblem, four one-word links, day readout, and CTA.",
+      "html": "<header class=\"ds-site-bar\"><a class=\"ds-brand\" href=\"#top\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 2.5L21.5 12L12 21.5L2.5 12Z\" fill=\"none\" stroke=\"#ECEAE4\" stroke-width=\"1.6\"/><path d=\"M12 2.5V21.5\" stroke=\"#E27A2C\" stroke-width=\"1.4\"/><circle cx=\"12\" cy=\"12\" r=\"2.2\" fill=\"#E27A2C\"/></svg><span>AETHER</span></a><nav class=\"ds-nav\"><a href=\"#act-corridor\">Story</a><a href=\"#act-artifact\">Artifact</a><a href=\"#act-studio\">Studio</a><a href=\"#act-curriculum\">Days</a></nav><div class=\"ds-right\"><span class=\"ds-day\">Day 1 · Wk 1</span><a class=\"ds-cta\" href=\"#act-studio\">Start Day 1: Free</a></div></header>",
+      "css": ".ds-site-bar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; height: 60px; padding-inline: clamp(1.25rem, 5vw, 3rem); background: var(--aether-obsidian, #07090D); border-bottom: 1px solid var(--aether-hairline, rgba(236, 234, 228, 0.14)); color: var(--aether-platinum, #ECEAE4); } .ds-brand { display: inline-flex; align-items: center; gap: 0.55rem; text-decoration: none; color: inherit; font-family: var(--sc-font-mono, \"RedHatMono\", monospace); font-size: 0.9rem; font-weight: 700; letter-spacing: 0.14em; } .ds-nav { display: flex; align-items: center; gap: 1.5rem; } .ds-nav a { text-decoration: none; font-size: 0.86rem; color: var(--aether-steel, #A8B0BC); transition: color 140ms cubic-bezier(0.23, 1, 0.32, 1); } .ds-nav a:hover, .ds-nav a:focus-visible { color: var(--aether-platinum, #ECEAE4); } .ds-right { display: flex; align-items: center; gap: 0.75rem; } .ds-day { font-family: var(--sc-font-mono, \"RedHatMono\", monospace); font-size: 0.76rem; font-weight: 700; color: var(--aether-amber, #E27A2C); font-variant-numeric: tabular-nums; } .ds-cta { display: inline-flex; align-items: center; min-height: 36px; padding: 0.4rem 0.95rem; border-radius: 2px; background: var(--aether-amber, #E27A2C); color: var(--aether-amber-ink, #111214); font-size: 0.82rem; font-weight: 700; text-decoration: none; } .ds-cta:hover { background: var(--aether-amber-hover, #EA8E47); } .ds-site-bar :focus-visible { outline: 2px solid var(--aether-amber, #E27A2C); outline-offset: 2px; border-radius: 2px; }"
+    },
+    {
+      "name": "Refractory Status Chip",
+      "kind": "chip",
+      "refersTo": "studio-chip",
+      "description": "Sharp 2px RedHatMono metadata and semantic state indicator for SHA-256 digests and Wave tags.",
+      "html": "<div class=\"ds-chip-row\"><span class=\"ds-chip ds-chip-live\">sha256: 9f4c2a1b</span><span class=\"ds-chip ds-chip-amber\">Day 1 · Week 1</span><span class=\"ds-chip ds-chip-ok\">Connected</span></div>",
+      "css": ".ds-chip-row { display: flex; flex-wrap: wrap; gap: 0.5rem; background: #080A0E; padding: 0.5rem; } .ds-chip { display: inline-flex; align-items: center; padding: 0.22rem 0.55rem; border-radius: 2px; border: 1px solid rgba(236, 234, 228, 0.14); background: #0D1017; color: #A8B0BC; font-family: var(--sc-font-mono, \"RedHatMono\", monospace); font-size: 0.74rem; line-height: 1.35; } .ds-chip-live { border-color: rgba(103, 206, 250, 0.42); background: rgba(103, 206, 250, 0.12); color: #67CEFA; } .ds-chip-amber { border-color: rgba(226, 122, 44, 0.48); background: rgba(226, 122, 44, 0.14); color: #EA8D44; } .ds-chip-ok { border-color: rgba(74, 222, 128, 0.42); background: rgba(74, 222, 128, 0.12); color: #4ADE80; }"
+    },
+    {
+      "name": "Borderless Starter Kit Selector",
+      "kind": "card",
+      "refersTo": "studio-kit-card",
+      "description": "Hairline-separated 0px selector cell with a 2px troilite amber top bar indicating the active kit.",
+      "html": "<div class=\"ds-kit-grid\"><button type=\"button\" class=\"ds-kit-card\" aria-pressed=\"true\"><span class=\"ds-kit-title\">Household &amp; Cashflow Clarity</span><span class=\"ds-kit-aud\">Families and solo earners organizing bills offline.</span></button><button type=\"button\" class=\"ds-kit-card\" aria-pressed=\"false\"><span class=\"ds-kit-title\">Local Service &amp; Workshop</span><span class=\"ds-kit-aud\">Neighborhood pros launching on zero ad spend.</span></button></div>",
+      "css": ".ds-kit-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: rgba(236, 234, 228, 0.14); border-top: 1px solid rgba(236, 234, 228, 0.14); border-bottom: 1px solid rgba(236, 234, 228, 0.14); } .ds-kit-card { appearance: none; text-align: left; display: flex; flex-direction: column; gap: 0.35rem; padding: 0.85rem 1rem; border: 0; border-top: 2px solid transparent; border-radius: 0; background: #080A0E; color: #ECEAE4; cursor: pointer; transition: border-color 120ms cubic-bezier(0.23, 1, 0.32, 1), background-color 120ms cubic-bezier(0.23, 1, 0.32, 1); } .ds-kit-card:hover { background: #0D1017; } .ds-kit-card[aria-pressed=\"true\"] { border-top-color: var(--aether-amber, #E27A2C); background: #141922; } .ds-kit-card:focus-visible { outline: 2px solid var(--aether-amber, #E27A2C); outline-offset: -2px; } .ds-kit-title { font-family: var(--sc-font-display, \"BricolageGrotesque\", sans-serif); font-size: 0.92rem; font-weight: 700; } .ds-kit-aud { font-size: 0.78rem; color: #A8B0BC; line-height: 1.42; }"
+    },
+    {
+      "name": "Refractory Output Tabs",
+      "kind": "nav",
+      "refersTo": "studio-tab",
+      "description": "40px hairline output view switcher with a 2px bottom amber underline for the active workspace view.",
+      "html": "<div class=\"ds-tablist\" role=\"tablist\"><button type=\"button\" class=\"ds-tab\" role=\"tab\" aria-selected=\"true\">Mind-Map Floorplan</button><button type=\"button\" class=\"ds-tab\" role=\"tab\" aria-selected=\"false\">Dual-View Reader</button><button type=\"button\" class=\"ds-tab\" role=\"tab\" aria-selected=\"false\">25-Turn Capsule</button></div>",
+      "css": ".ds-tablist { display: flex; flex-wrap: wrap; gap: 0.25rem; padding: 0 1.15rem; background: #080A0E; border-bottom: 1px solid rgba(236, 234, 228, 0.14); } .ds-tab { appearance: none; min-height: 40px; padding: 0.55rem 0.75rem; border: 0; border-bottom: 2px solid transparent; border-radius: 0; background: transparent; color: #A8B0BC; font-family: var(--sc-font-text, \"BricolageGrotesque\", sans-serif); font-size: 0.84rem; font-weight: 400; cursor: pointer; transition: border-color 120ms cubic-bezier(0.23, 1, 0.32, 1), color 120ms cubic-bezier(0.23, 1, 0.32, 1); } .ds-tab:hover { color: #ECEAE4; background: rgba(236, 234, 228, 0.06); } .ds-tab[aria-selected=\"true\"] { border-bottom-color: var(--aether-amber, #E27A2C); color: #ECEAE4; font-weight: 700; } .ds-tab:focus-visible { outline: 2px solid var(--aether-amber, #E27A2C); outline-offset: -2px; }"
+    },
+    {
+      "name": "Plain-English Markdown Input",
+      "kind": "input",
+      "refersTo": "studio-input",
+      "description": "Borderless deep-obsidian RedHatMono input field with amber caret and sharp 2px focus ring.",
+      "html": "<textarea class=\"ds-textarea\" rows=\"4\" aria-label=\"Plain-English Note\"># Household Clarity\n## Wave 0: Baseline Snapshot\n- [ ] List fixed bills [Wave 0]</textarea>",
+      "css": ".ds-textarea { width: 100%; padding: 1rem 1.1rem; border: 1px solid rgba(236, 234, 228, 0.14); border-radius: 0; background: #0B0E14; color: #ECEAE4; font-family: var(--sc-font-mono, \"RedHatMono\", monospace); font-size: 0.85rem; line-height: 1.62; caret-color: var(--aether-amber, #E27A2C); resize: vertical; } .ds-textarea::placeholder { color: #A8B0BC; opacity: 1; } .ds-textarea:focus-visible { outline: 2px solid var(--aether-amber, #E27A2C); outline-offset: 2px; }"
+    },
+    {
+      "name": "472px Transactional Colophon",
+      "kind": "custom",
+      "refersTo": "colophon-measure",
+      "description": "Centered 472px non-fading Act 6 colophon block combining active Day prompt, action buttons, and attribution.",
+      "html": "<section class=\"ds-colophon\"><div class=\"ds-colophon-measure\"><h3 class=\"ds-colophon-title\">Empty the Kitchen-Table Brain Dump</h3><p class=\"ds-colophon-day\">DAY 1 · WEEK 1 · VOICE &amp; PERSONAL LEXICON</p><p class=\"ds-colophon-prompt\">Write 10 messy bullet points about the one weekly headache eating your peace right now.</p><div class=\"ds-colophon-actions\"><a class=\"ds-c-btn ds-c-primary\" href=\"#act-studio\">Start Day 1: Free</a><button type=\"button\" class=\"ds-c-btn ds-c-ghost\">Export My Kit (.html)</button></div></div></section>",
+      "css": ".ds-colophon { padding: 2.5rem 1.25rem; border-top: 1px solid rgba(236, 234, 228, 0.14); background: var(--aether-obsidian, #07090D); color: var(--aether-platinum, #ECEAE4); } .ds-colophon-measure { max-width: 472px; margin-inline: auto; display: flex; flex-direction: column; gap: 0.85rem; } .ds-colophon-title { margin: 0; font-family: var(--sc-font-display, \"BricolageGrotesque\", sans-serif); font-weight: 700; font-size: clamp(1.45rem, 2.5vw, 2.15rem); line-height: 1.08; letter-spacing: -0.025em; } .ds-colophon-day { margin: 0; font-family: var(--sc-font-mono, \"RedHatMono\", monospace); font-size: 0.76rem; font-weight: 700; letter-spacing: 0.09em; color: var(--aether-amber, #E27A2C); } .ds-colophon-prompt { margin: 0; font-size: 0.96rem; line-height: 1.6; } .ds-colophon-actions { display: flex; flex-wrap: wrap; gap: 0.65rem; margin-top: 0.45rem; } .ds-c-btn { display: inline-flex; align-items: center; min-height: 44px; padding: 0.62rem 1.25rem; border-radius: 2px; font-weight: 700; font-size: 0.88rem; text-decoration: none; cursor: pointer; } .ds-c-primary { background: #E27A2C; border: 1px solid #E27A2C; color: #111214; } .ds-c-primary:hover { background: #EA8E47; border-color: #EA8E47; } .ds-c-ghost { background: #07090D; border: 1px solid rgba(236, 234, 228, 0.28); color: #ECEAE4; } .ds-c-ghost:hover { background: #10141C; border-color: #E27A2C; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Cleaved Mineral Precision",
+    "overview": "Aether WebOS Kit v2.1 turns unstructured plain-English notes into Wave 0 to Wave 2 floorplans through meteorite cleavage and hairline editorial clarity. Built by Eloquent (@mjeanhudson-dev), the page opens on a Warm Alabaster vs. Obsidian split anchored by a macro geological meteorite cutout, pans a six-plate 25-turn amnesia autopsy, drops into basalt-and-obsidian mirror-void silence, awakens a single-pass Sobel PBR WebGL image-relighting Peak over three macro mineral plates, and closes in a lazy-hydrated borderless Operate studio and 472px colophon.\n\nHierarchy uses 1px hairlines, tonal obsidian steps, 2px control corners, self-hosted BricolageGrotesque and RedHatMono WOFF2 fonts, and Molten Troilite Amber reserved for primary actions and active landmarks.",
+    "keyCharacteristics": [
+      "Split Warm Alabaster (#F2EFE8) vs. Obsidian (#07090D) polarity paired with scoped [data-aw-surface=\"obsidian\"|\"paper\"] Operate surfaces.",
+      "Zero box-shadow, zero backdrop-filter, zero [data-sc-progress] spoiler bars, and zero rounded card grids.",
+      "Single-pass Sobel PBR WebGL image-relighting Peak (./webgl/artifact-shader.js, MAX_DPR = 1.25, per-plate aspect correction, staggered uploads, static paused redraws, 3-plate CSS cross-fade fallback) paused offscreen (IntersectionObserver, visibilitychange, contentvisibilityautostatechange) with Pause shader (WCAG 2.2.2, no aria-pressed).",
+      "Self-hosted WOFF2 fonts (./fonts/*.woff2, 103.0 KB total) and 7 macro geological WebP plates with ./assets/*.webp.json provenance sidecars, zero external requests."
+    ],
+    "rules": [
+      {
+        "name": "The Cleaved Polarity Rule",
+        "body": "Pair Warm Alabaster (#F2EFE8, #111214) directly against Obsidian (#07090D, #ECEAE4, #A8B0BC) along 1px seams rather than blending mid-grays.",
+        "section": "colors"
+      },
+      {
+        "name": "The Molten Troilite Reserve Rule",
+        "body": "Restrict #E27A2C strictly to primary actions, active landmarks, and mineral glints; pair solid fills with #111214 ink and shift inline amber text to #EA8D44 (obsidian) or #984306 (paper).",
+        "section": "colors"
+      },
+      {
+        "name": "The Scoped Dual-Surface Rule",
+        "body": "Confine [data-aw-surface=\"obsidian\"|\"paper\"] toggling to #aether-webos-mount so narrative acts hold fixed lighting.",
+        "section": "colors"
+      },
+      {
+        "name": "The Two-Voice Self-Hosted Rule",
+        "body": "Serve only self-hosted BricolageGrotesque (preloaded) and RedHatMono WOFF2 fonts from ./fonts/ with font-synthesis-weight: none; never add third-party font stylesheets or unnecessary above-fold preload stalls.",
+        "section": "typography"
+      },
+      {
+        "name": "The Monospace Measurement Rule",
+        "body": "Reserve RedHatMono (tabular-nums) for digests, day indices, coordinates, and Markdown/capsule text editors rather than decorative prose.",
+        "section": "typography"
+      },
+      {
+        "name": "The Surprise-Over-Spoiler Rule",
+        "body": "Omit [data-sc-progress] top bars so horizontal travel, Mirror Void silence, and Peak cleavage land without progress spoilers.",
+        "section": "layout"
+      },
+      {
+        "name": "The Budgeted Single-Peak Rule",
+        "body": "Permit one active WebGL context (./webgl/artifact-shader.js) capped at 1.25 DPR with staggered texture uploads, static paused redraws, and 3-plate CSS fallback, pausing requestAnimationFrame offscreen, when hidden, or under content-visibility: auto, paired with Pause shader (WCAG 2.2.2).",
+        "section": "layout"
+      },
+      {
+        "name": "The Zero-Shadow Tonal Depth Rule",
+        "body": "Never add drop shadows or blurred glass; convey elevation exclusively via stepped tonal fills and 1px hairline partitions.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Sharp Control and Mineral Edge Rule",
+        "body": "Keep containers at 0px and controls at 2px; render mineral silhouettes as real RGBA alpha mattes with provenance sidecars rather than CSS clip-path masks.",
+        "section": "shapes"
+      },
+      {
+        "name": "The Borderless Operate Hairline Rule",
+        "body": "Partition #act-studio and #act-curriculum with 1px hairlines, surface steps, and 2px active strokes rather than rounded, shadowed SaaS cards.",
+        "section": "components"
+      }
+    ],
+    "dos": [
+      "Do pair #E27A2C fills strictly with #111214 ink, and shift inline amber text to #EA8D44 (obsidian) or #984306 (paper) for >= 4.5:1 AA contrast.",
+      "Do keep Paper/Obsidian toggling scoped to #aether-webos-mount via [data-aw-surface=\"obsidian\"|\"paper\"].",
+      "Do retain content-visibility: auto with contain-intrinsic-size and explicit width/height on WebP assets to hold CLS 0.00.",
+      "Do wire Pause shader (WCAG 2.2.2), prefers-reduced-motion static fallbacks, and offscreen/hidden rAF pausing on WebGL stages.",
+      "Do avoid em dashes (U+2014 or HTML mdash entity) across copy and docs, and cite only ./ or ~/ paths under Eloquent (@mjeanhudson-dev)."
+    ],
+    "donts": [
+      "Don't add [data-sc-progress] bars, 01 / 06 section counters, backdrop-filter blur, box-shadow glows, or border-radius above 2px.",
+      "Don't add kickers or eyebrows above headings, synthetic weights outside 400/700, or remote font CDN links.",
+      "Don't run multiple WebGL contexts or leave requestAnimationFrame active offscreen or under prefers-reduced-motion: reduce.",
+      "Don't mask mineral cutouts with CSS clip-path geometry instead of true RGBA alpha mattes.",
+      "Don't edit ./scrollcraft.js or ./scrollcraft.css, leak local OS usernames, or fabricate user quotes or metrics."
+    ]
+  }
+}
