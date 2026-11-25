@@ -10,9 +10,9 @@
   'use strict';
 
   var SINGLETON_KEY = '__AetherArtifactShaderState';
-  var MAX_DPR = 1.25;
-  var MAX_BACKING_W = 1440;
-  var MAX_BACKING_H = 900;
+  var MAX_DPR = 1.75;
+  var MAX_BACKING_W = 2560;
+  var MAX_BACKING_H = 1440;
   var DEFAULT_POINTER = 0.5;
   var REDUCED_SHOWCASE_PROGRESS = 0.56;
 
@@ -106,8 +106,9 @@
     '  vec2 uvCry = clamp(uv2 + flow * 0.12, 0.002, 0.998);',
     '',
     '  // Phase-gated texture sampling (3-5 taps instead of 9, aspect-invariant texel spacing)',
-    '  float tapTex = mix(2.8, 1.6, wCleav);',
-    '  vec2 px = vec2(tapTex / 1280.0, tapTex * activeAspect / 1280.0);',
+    '  float tapTex = mix(2.6, 1.45, wCleav);',
+    '  float resRef = clamp(u_res.x, 1280.0, 2560.0);',
+    '  vec2 px = vec2(tapTex / resRef, tapTex * activeAspect / resRef);',
     '  vec3 baseCol;',
     '  float lumR;',
     '  float lumD;',
@@ -391,7 +392,9 @@
   }
 
   function computeEffectiveDpr(state) {
-    var base = Math.min(global.devicePixelRatio || 1, MAX_DPR);
+    var base = typeof window !== 'undefined'
+      ? Math.min(window.devicePixelRatio || 1, MAX_DPR)
+      : Math.min(global.devicePixelRatio || 1, MAX_DPR);
     return Math.max(0.5, base * state.resScale);
   }
 
@@ -400,16 +403,19 @@
     var rect = state.canvas.getBoundingClientRect();
     if (rect.width <= 0 || rect.height <= 0) return;
     var effDpr = computeEffectiveDpr(state);
+    var maxGpuDim = state.maxGpuDim || MAX_BACKING_W;
+    var capW = Math.min(MAX_BACKING_W, maxGpuDim);
+    var capH = Math.min(MAX_BACKING_H, maxGpuDim);
     var w = Math.round(rect.width * effDpr);
     var h = Math.round(rect.height * effDpr);
-    if (w > MAX_BACKING_W) {
-      var sW = MAX_BACKING_W / w;
-      w = MAX_BACKING_W;
+    if (w > capW) {
+      var sW = capW / w;
+      w = capW;
       h = Math.max(1, Math.round(h * sW));
     }
-    if (h > MAX_BACKING_H) {
-      var sH = MAX_BACKING_H / h;
-      h = MAX_BACKING_H;
+    if (h > capH) {
+      var sH = capH / h;
+      h = capH;
       w = Math.max(1, Math.round(w * sH));
     }
     state.dpr = effDpr;
@@ -500,15 +506,15 @@
       var rawDtMs = now - state.lastMs;
       state.lastMs = now;
 
-      // Adaptive resolution governor: require 5 consecutive slow frames (ignore single hiccups)
-      if (rawDtMs > 30 && rawDtMs < 180) {
+      // Adaptive resolution governor: require 4 consecutive slow frames (>21ms)
+      if (rawDtMs > 21 && rawDtMs < 180) {
         state.slowStreak = (state.slowStreak || 0) + 1;
-        if (state.slowStreak >= 5 && state.resScale > 0.50) {
-          state.resScale = Math.max(0.45, state.resScale - 0.15);
+        if (state.slowStreak >= 4 && state.resScale > 0.55) {
+          state.resScale = Math.max(0.55, state.resScale - 0.15);
           state.needsResize = true;
           state.slowStreak = 0;
         }
-      } else if (rawDtMs <= 26) {
+      } else if (rawDtMs <= 19) {
         state.slowStreak = 0;
       }
 
@@ -742,6 +748,14 @@
 
     state.gl = gl;
     state.contextCount = 1;
+    try {
+      var vpDims = gl.getParameter(gl.MAX_VIEWPORT_DIMS);
+      var rbMax = gl.getParameter(gl.MAX_RENDERBUFFER_SIZE) || MAX_BACKING_W;
+      var vpMax = vpDims && vpDims.length >= 2 ? Math.min(vpDims[0], vpDims[1]) : MAX_BACKING_W;
+      state.maxGpuDim = Math.max(1024, Math.min(rbMax, vpMax));
+    } catch (e) {
+      state.maxGpuDim = MAX_BACKING_W;
+    }
 
     // Detect software renderers early and scale backing resolution proactively
     try {
@@ -875,15 +889,25 @@
       syncToggleButtons(state);
     }
 
-    // Warm-zone IntersectionObserver: defer ALL WebGL context/compile work until near Act 4
+    // Warm-zone IntersectionObserver + post-load idle pre-warm so Act 4 starts locked 60fps from Frame 1
     function scheduleIdleInit() {
       if (state.glInitialized || state.reducedMotion || state.fallback) return;
       if (typeof global.requestIdleCallback === 'function') {
         global.requestIdleCallback(function () {
           initWebGLLazy(state);
-        }, { timeout: 300 });
+        }, { timeout: 600 });
       } else {
-        setTimeout(function () { initWebGLLazy(state); }, 0);
+        setTimeout(function () { initWebGLLazy(state); }, 250);
+      }
+    }
+
+    if (typeof document !== 'undefined') {
+      if (document.readyState === 'complete') {
+        setTimeout(scheduleIdleInit, 200);
+      } else {
+        global.addEventListener('load', function () {
+          setTimeout(scheduleIdleInit, 200);
+        }, { once: true });
       }
     }
 

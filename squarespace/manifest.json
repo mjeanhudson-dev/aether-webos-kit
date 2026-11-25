@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-25T15:20:15.235Z",
+  "generatedAt": "2026-11-25T17:35:14.288Z",
   "target": {
     "siteUrl": "https://example.com",
     "editorUrl": "https://your-site.squarespace.com/config/pages",
@@ -46,27 +46,35 @@
       "over20MB": false
     },
     {
+      "source": "assets/meteor-preimpact.webp",
+      "uploadFile": "aether-webos-rollout-meteor-preimpact-85ff9ccb.webp",
+      "publicPath": "/s/aether-webos-rollout-meteor-preimpact-85ff9ccb.webp",
+      "bytes": 53288,
+      "sha256": "85ff9ccb33d024af7afcf0ee260a2ba376bdb67de7b4044fcecb427725063bc7",
+      "over20MB": false
+    },
+    {
       "source": "assets/meteorite-crust.webp",
-      "uploadFile": "aether-webos-rollout-meteorite-crust-e4c3bf03.webp",
-      "publicPath": "/s/aether-webos-rollout-meteorite-crust-e4c3bf03.webp",
-      "bytes": 140356,
-      "sha256": "e4c3bf036304dd4fbb1b5acb3e8b27b467c215e68b15d25d0a64e52a7872fffd",
+      "uploadFile": "aether-webos-rollout-meteorite-crust-38d09152.webp",
+      "publicPath": "/s/aether-webos-rollout-meteorite-crust-38d09152.webp",
+      "bytes": 460662,
+      "sha256": "38d09152f390b1daaddeca5b1c0eeadae289cbaca9b17ea53883e8ebadd0cbb2",
       "over20MB": false
     },
     {
       "source": "webos/refractory.css",
-      "uploadFile": "aether-webos-rollout-webos-refractory-4d65a151.css",
-      "publicPath": "/s/aether-webos-rollout-webos-refractory-4d65a151.css",
-      "bytes": 29631,
-      "sha256": "4d65a151d37f6aef48e16fe702eec885c311c0b5188a7b2d922b0ed694b689e4",
+      "uploadFile": "aether-webos-rollout-webos-refractory-9b40ce1f.css",
+      "publicPath": "/s/aether-webos-rollout-webos-refractory-9b40ce1f.css",
+      "bytes": 37672,
+      "sha256": "9b40ce1f49130d945a93c399d70740fb418491d5a9b49e29d79fe6a470ee220c",
       "over20MB": false
     },
     {
       "source": "styles/site.css",
-      "uploadFile": "aether-webos-rollout-styles-site-8b98e7c7.css",
-      "publicPath": "/s/aether-webos-rollout-styles-site-8b98e7c7.css",
-      "bytes": 35416,
-      "sha256": "8b98e7c7b6e58fb080125154509dcb2143cd7c6b600d1e6a52b4a46c1a1b6a6d",
+      "uploadFile": "aether-webos-rollout-styles-site-c865defe.css",
+      "publicPath": "/s/aether-webos-rollout-styles-site-c865defe.css",
+      "bytes": 56672,
+      "sha256": "c865defea0a41f55c46a53f381b58763fff225effe71669653a977b3c5057e19",
       "over20MB": false
     },
     {
@@ -79,18 +87,18 @@
     },
     {
       "source": "webos/exporter.js",
-      "uploadFile": "aether-webos-rollout-webos-exporter-d3476806.js",
-      "publicPath": "/s/aether-webos-rollout-webos-exporter-d3476806.js",
-      "bytes": 71657,
-      "sha256": "d3476806845e33a869cb13565049bc63e217df3d3fabe10a693c123593eccf0d",
+      "uploadFile": "aether-webos-rollout-webos-exporter-f317d51e.js",
+      "publicPath": "/s/aether-webos-rollout-webos-exporter-f317d51e.js",
+      "bytes": 79447,
+      "sha256": "f317d51edee7e56c7a2efd63b4d999e87f668341b5694e8e53513a3426016927",
       "over20MB": false
     },
     {
       "source": "webos/refractory.js",
-      "uploadFile": "aether-webos-rollout-webos-refractory-f4a6b440.js",
-      "publicPath": "/s/aether-webos-rollout-webos-refractory-f4a6b440.js",
-      "bytes": 146210,
-      "sha256": "f4a6b440a8995ee40364c6aea7b26a9be4796297579d6b8403791fb8646aa403",
+      "uploadFile": "aether-webos-rollout-webos-refractory-bbe3a546.js",
+      "publicPath": "/s/aether-webos-rollout-webos-refractory-bbe3a546.js",
+      "bytes": 154214,
+      "sha256": "bbe3a5465e428e269a12b9b8b5433ccbb573b11a03f385431be6f88e9d8a50ff",
       "over20MB": false
     },
     {
@@ -103,66 +111,74 @@
     },
     {
       "source": "webgl/artifact-shader.js",
-      "uploadFile": "aether-webos-rollout-webgl-artifact-shader-8d445956.js",
-      "publicPath": "/s/aether-webos-rollout-webgl-artifact-shader-8d445956.js",
-      "bytes": 41385,
-      "sha256": "8d4459569e0a2698fd2baadfc468acbf853fcbefe5129781b5e3b281c04cbec3",
+      "uploadFile": "aether-webos-rollout-webgl-artifact-shader-6c54674c.js",
+      "publicPath": "/s/aether-webos-rollout-webgl-artifact-shader-6c54674c.js",
+      "bytes": 42299,
+      "sha256": "6c54674cff46089f7421b1bd0774a098cf0ac74494acd8641627eea3eaa6193f",
       "over20MB": false
     },
     {
       "source": "scripts/stage-choreography.js",
-      "uploadFile": "aether-webos-rollout-scripts-stage-choreography-323b8d19.js",
-      "publicPath": "/s/aether-webos-rollout-scripts-stage-choreography-323b8d19.js",
-      "bytes": 20787,
-      "sha256": "323b8d19667c1803cd0c6b3111f93375489ee36c5bb585840667c72297d0e49d",
+      "uploadFile": "aether-webos-rollout-scripts-stage-choreography-be427c0c.js",
+      "publicPath": "/s/aether-webos-rollout-scripts-stage-choreography-be427c0c.js",
+      "bytes": 55457,
+      "sha256": "be427c0cd099b63cc42c700af6e3deba18954e26f45081b5407b7b84c8d0dbe9",
+      "over20MB": false
+    },
+    {
+      "source": "assets/meteor-detonation.webp",
+      "uploadFile": "aether-webos-rollout-meteor-detonation-8697d253.webp",
+      "publicPath": "/s/aether-webos-rollout-meteor-detonation-8697d253.webp",
+      "bytes": 429112,
+      "sha256": "8697d2530b4a417a537bd6de6b60ec6a7760acaf4d22b1f52a89bf8bece2f2ff",
       "over20MB": false
     },
     {
       "source": "assets/shard-01.webp",
-      "uploadFile": "aether-webos-rollout-shard-01-2e90580a.webp",
-      "publicPath": "/s/aether-webos-rollout-shard-01-2e90580a.webp",
-      "bytes": 64560,
-      "sha256": "2e90580a76394a977a2f812b575820d7c551ac7ada407433b86fb3e06e65bd0e",
+      "uploadFile": "aether-webos-rollout-shard-01-e1b9fa26.webp",
+      "publicPath": "/s/aether-webos-rollout-shard-01-e1b9fa26.webp",
+      "bytes": 302592,
+      "sha256": "e1b9fa26f766cb2b6d192d8e38ca14292143e3c5dc4cffd850488e56dc2c3a5e",
       "over20MB": false
     },
     {
       "source": "assets/shard-02.webp",
-      "uploadFile": "aether-webos-rollout-shard-02-4c93db59.webp",
-      "publicPath": "/s/aether-webos-rollout-shard-02-4c93db59.webp",
-      "bytes": 58124,
-      "sha256": "4c93db59a4b696e686c073c92f67a0f32f266047a728b59054c01c05827ffd59",
+      "uploadFile": "aether-webos-rollout-shard-02-68420de1.webp",
+      "publicPath": "/s/aether-webos-rollout-shard-02-68420de1.webp",
+      "bytes": 320576,
+      "sha256": "68420de1ad1f91e7e98a670811f770b7f8c012312ed2303adb98cc22b88b6557",
       "over20MB": false
     },
     {
       "source": "assets/impact-void.webp",
-      "uploadFile": "aether-webos-rollout-impact-void-ca9a53a8.webp",
-      "publicPath": "/s/aether-webos-rollout-impact-void-ca9a53a8.webp",
-      "bytes": 35174,
-      "sha256": "ca9a53a80969046a18a79cdeb49ba5e9e29cb7d3374c48e21266176af1384d91",
+      "uploadFile": "aether-webos-rollout-impact-void-96ee0f21.webp",
+      "publicPath": "/s/aether-webos-rollout-impact-void-96ee0f21.webp",
+      "bytes": 147656,
+      "sha256": "96ee0f2188ff0833b1c28529e5456e46b2273aafd03cf140d49b4bf2e823fda5",
       "over20MB": false
     },
     {
       "source": "assets/artifact-poster.webp",
-      "uploadFile": "aether-webos-rollout-artifact-poster-3c2ac240.webp",
-      "publicPath": "/s/aether-webos-rollout-artifact-poster-3c2ac240.webp",
-      "bytes": 58246,
-      "sha256": "3c2ac240f16c9ebadabdb51de51737e162da9b8cd9e9843bb1a6a5392f835415",
+      "uploadFile": "aether-webos-rollout-artifact-poster-2b0c8055.webp",
+      "publicPath": "/s/aether-webos-rollout-artifact-poster-2b0c8055.webp",
+      "bytes": 396490,
+      "sha256": "2b0c805516266becefad8f521ce7ba7a2b071f1405c42f1f9246a2df9d8db315",
       "over20MB": false
     },
     {
       "source": "assets/artifact-mercury.webp",
-      "uploadFile": "aether-webos-rollout-artifact-mercury-9f9f902a.webp",
-      "publicPath": "/s/aether-webos-rollout-artifact-mercury-9f9f902a.webp",
-      "bytes": 25796,
-      "sha256": "9f9f902ae998cacfc36512b22100e02e7719efa27d495ca8a48866dd8d18663a",
+      "uploadFile": "aether-webos-rollout-artifact-mercury-6777a058.webp",
+      "publicPath": "/s/aether-webos-rollout-artifact-mercury-6777a058.webp",
+      "bytes": 106586,
+      "sha256": "6777a058d8879b3fdb53c2b1502832d1e48736015fbd60e9132ded71263e86b0",
       "over20MB": false
     },
     {
       "source": "assets/artifact-crystal.webp",
-      "uploadFile": "aether-webos-rollout-artifact-crystal-7a7e83bf.webp",
-      "publicPath": "/s/aether-webos-rollout-artifact-crystal-7a7e83bf.webp",
-      "bytes": 54020,
-      "sha256": "7a7e83bf5164bba7e97bb75ce2b87a49e4b992adb70025c9e315e8ab56197235",
+      "uploadFile": "aether-webos-rollout-artifact-crystal-b639d6dd.webp",
+      "publicPath": "/s/aether-webos-rollout-artifact-crystal-b639d6dd.webp",
+      "bytes": 650748,
+      "sha256": "b639d6dd155e54ca5c8ffaa79ce6b738e59ce437226fa5edac53d9146bb235b3",
       "over20MB": false
     },
     {
@@ -190,6 +206,14 @@
       "over20MB": false
     },
     {
+      "source": "context/contact.json",
+      "uploadFile": "aether-webos-rollout-context-contact-bb816b02.json",
+      "publicPath": "/s/aether-webos-rollout-context-contact-bb816b02.json",
+      "bytes": 123,
+      "sha256": "bb816b0298f807687eb6cce0b59572d8502b91b8da8b97a0fa8be65b7870e936",
+      "over20MB": false
+    },
+    {
       "source": "fonts/RedHatMono-Regular.woff2",
       "uploadFile": "aether-webos-rollout-fonts-RedHatMono-Regular-d195bc97.woff2",
       "publicPath": "/s/aether-webos-rollout-fonts-RedHatMono-Regular-d195bc97.woff2",
@@ -206,14 +230,14 @@
       "over20MB": false
     },
     {
-      "source": "(generated) aether-webos-rollout-styles-site-embed-94ffd839.css",
-      "uploadFile": "aether-webos-rollout-styles-site-embed-94ffd839.css",
-      "publicPath": "/s/aether-webos-rollout-styles-site-embed-94ffd839.css",
-      "bytes": 33807,
-      "sha256": "94ffd8394bb4dbd12f2ec015aafa59f30b0fd5a4a913220add03119496f904b5",
+      "source": "(generated) aether-webos-rollout-styles-site-embed-4dbcd51b.css",
+      "uploadFile": "aether-webos-rollout-styles-site-embed-4dbcd51b.css",
+      "publicPath": "/s/aether-webos-rollout-styles-site-embed-4dbcd51b.css",
+      "bytes": 56719,
+      "sha256": "4dbcd51b213f535f23e307d36b03e58c0d537366d2eea2522bfa71409361d35c",
       "over20MB": false
     }
   ],
   "warnings": [],
-  "totalUploadBytes": 1102807
+  "totalUploadBytes": 3637951
 }

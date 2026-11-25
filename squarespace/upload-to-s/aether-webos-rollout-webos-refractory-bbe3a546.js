@@ -10,9 +10,9 @@
      - Requires window.AetherExporter (webos/exporter.js) for offline .html export
        (gracefully degrades to JSON/Markdown helper if omitted).
      - Exposes window.AetherRefractory:
-       { mount, selectDay, selectKit, selectTab, setSurface, exportKit,
-         exportHtml, copyShareNote, reloadContext, importContextJson,
-         getCapsule, rehydrateCapsule, selectCapsuleAspect,
+       { mount, selectDay, selectKit, selectTab, setSurface, setSpellcheck,
+         exportKit, exportHtml, copyShareNote, reloadContext,
+         importContextJson, getCapsule, rehydrateCapsule, selectCapsuleAspect,
          selectCapsuleFormat, getState, version }
      - Listens & dispatches CustomEvent('aether:day-select', { detail: {
          day, week, phase, title, prompt, deliverable, kitId } }).
@@ -31,8 +31,8 @@
   'use strict';
 
   var DEFAULT_META = {
-    version: '2.1.0',
-    updatedAt: '2026-11-24T13:30:00Z',
+    version: '2.4.0',
+    updatedAt: '2026-11-25T16:00:00Z',
     author: 'Eloquent (@mjeanhudson-dev)',
     kitName: 'Aether WebOS Kit',
     ctaLabel: 'Start Day 1: Free',
@@ -118,15 +118,24 @@
   var TABS = [
     { id: 'mindmap', label: 'Mind-Map Floorplan' },
     { id: 'dualview', label: 'Dual-View Reader' },
-    { id: 'lexicon', label: 'Lexicon · Wiki · Soul' },
+    { id: 'lexicon', label: 'Agenda · Lexicon · Soul' },
     { id: 'capsule', label: 'Rehydration Capsules' }
   ];
+
+  var EM_CHAR = String.fromCharCode(0x2014);
+  var EN_CHAR = String.fromCharCode(0x2013);
+  var EM_ENTITY_RE = new RegExp('&' + 'mdash;', 'gi');
+  var EN_ENTITY_RE = new RegExp('&' + 'ndash;', 'gi');
+  var EM_RE = new RegExp('\\s*' + EM_CHAR + '\\s*', 'g');
+  var EN_RE = new RegExp('\\s*' + EN_CHAR + '\\s*', 'g');
 
   /* ----------------------------------------------------------- utilities -- */
   function stripEmDashes(value) {
     return String(value == null ? '' : value)
-      .replace(new RegExp('&' + 'mdash;', 'gi'), ', ')
-      .replace(/\s*\u2014\s*/g, ', ');
+      .replace(EM_ENTITY_RE, ', ')
+      .replace(EN_ENTITY_RE, ' to ')
+      .replace(EM_RE, ', ')
+      .replace(EN_RE, ' - ');
   }
 
   function clampDay(day) {
@@ -149,6 +158,12 @@
 
   function cloneJson(val) {
     return JSON.parse(JSON.stringify(val));
+  }
+
+  function waveChipClass(wave) {
+    if (wave === 0) return 'aw-chip aw-chip--amber';
+    if (wave === 2) return 'aw-chip aw-chip--ok';
+    return 'aw-chip aw-chip--live';
   }
 
   function yieldToMain() {
@@ -564,23 +579,28 @@
       addSoul('Core Intent', firstSoul);
     }
 
-    /* Build Spatial SVG Mind-Map Tree */
+    /* Build Spatial SVG Mind-Map Tree (Sculpted Rounded Nodes + Full Arc Clearance) */
     var nodes = [];
     var edges = [];
     var rootId = 'node-root';
-    var boxW = 218;
-    var boxH = 44;
-    var colX = [24, 294, 566];
-    var rowGap = 10;
+    var boxW = 226;
+    var boxH = 52;
+    var padMargin = 48;
+    var colX = [padMargin, padMargin + 286, padMargin + 572];
+    var rowGap = 12;
 
-    var branchSections = sections.filter(function (s) {
+    var nonEmptySections = sections.filter(function (s) {
       return s.items.length || s.subtopics.length || s.paragraphs.length;
     });
+    var floorplanSections = nonEmptySections.filter(function (s) {
+      return !/^(lexicon|glossary|terms|wiki|guide|reference|soul|voice|invariant|rules)\b/i.test(s.title);
+    });
+    var branchSections = floorplanSections.length >= 2 ? floorplanSections : nonEmptySections;
     if (!branchSections.length) {
       branchSections = [{ id: 'empty', title: 'Write bullets or headings', wave: 1, items: [], subtopics: [], paragraphs: [] }];
     }
 
-    var cursorY = 28;
+    var cursorY = padMargin;
     var branchCenters = [];
 
     branchSections.forEach(function (sec, sIdx) {
@@ -661,12 +681,12 @@
         edges.push({ from: branchId, to: ln.id, kind: 'tree' });
       });
 
-      cursorY += 12;
+      cursorY += 16;
     });
 
     var midY = branchCenters.length
       ? Math.round((branchCenters[0] + branchCenters[branchCenters.length - 1] - boxH) / 2)
-      : 120;
+      : 140;
 
     var rootNode = {
       id: rootId,
@@ -678,13 +698,15 @@
       dependsOn: '',
       sectionId: '',
       x: colX[0],
-      y: Math.min(168, Math.max(28, midY)),
+      y: Math.max(padMargin, midY),
       w: boxW,
-      h: boxH + 6
+      h: boxH + 4
     };
     nodes.unshift(rootNode);
 
     /* Wire semantic (depends: ...) links between matching nodes */
+    var nodeLookup = {};
+    nodes.forEach(function (n) { nodeLookup[n.id] = n; });
     nodes.forEach(function (n) {
       if (!n.dependsOn) return;
       var needle = n.dependsOn.toLowerCase();
@@ -693,6 +715,30 @@
       });
       if (target) {
         edges.push({ from: target.id, to: n.id, kind: 'depends' });
+      }
+    });
+
+    /* Compute exact bounding box including right-hand arcX & bottom sweepY bezier curves */
+    var maxRight = colX[2] + boxW;
+    var maxBottom = cursorY - 16;
+    nodes.forEach(function (n) {
+      if (n.x + n.w > maxRight) maxRight = n.x + n.w;
+      if (n.y + n.h > maxBottom) maxBottom = n.y + n.h;
+    });
+    edges.forEach(function (e) {
+      if (e.kind !== 'depends') return;
+      var ea = nodeLookup[e.from];
+      var eb = nodeLookup[e.to];
+      if (!ea || !eb) return;
+      if (Math.abs(ea.x - eb.x) < 20) {
+        var rx1 = ea.x + ea.w;
+        var ry1 = ea.y + ea.h / 2;
+        var ry2 = eb.y + eb.h / 2;
+        var arcX = rx1 + Math.max(38, Math.min(72, Math.abs(ry2 - ry1) * 0.36));
+        if (arcX > maxRight) maxRight = arcX;
+      } else {
+        var sweepY = Math.max(ea.y + ea.h, eb.y + eb.h) + 34;
+        if (sweepY > maxBottom) maxBottom = sweepY;
       }
     });
 
@@ -720,8 +766,8 @@
       soul: soul,
       nodes: nodes,
       edges: edges,
-      mapWidth: colX[2] + boxW + 56,
-      mapHeight: Math.max(320, cursorY + 24),
+      mapWidth: Math.ceil(maxRight + padMargin),
+      mapHeight: Math.max(360, Math.ceil(maxBottom + padMargin)),
       metrics: {
         words: words,
         lines: lines.length,
@@ -958,12 +1004,63 @@
     return el;
   }
 
+  function buildCubicEdgePath(a, b, isDep) {
+    if (isDep && Math.abs(a.x - b.x) < 20) {
+      var rx1 = a.x + a.w;
+      var ry1 = a.y + a.h / 2;
+      var rx2 = b.x + b.w;
+      var ry2 = b.y + b.h / 2;
+      var arcX = rx1 + Math.max(38, Math.min(72, Math.abs(ry2 - ry1) * 0.36));
+      return 'M ' + rx1 + ' ' + ry1 + ' C ' + arcX + ' ' + ry1 + ', ' + arcX + ' ' + ry2 + ', ' + rx2 + ' ' + ry2;
+    }
+    if (isDep) {
+      var sx = a.x + a.w / 2;
+      var sy = a.y + a.h;
+      var tx = b.x + b.w / 2;
+      var ty = b.y + b.h;
+      var sweepY = Math.max(sy, ty) + 34;
+      return 'M ' + sx + ' ' + sy + ' C ' + sx + ' ' + sweepY + ', ' + tx + ' ' + sweepY + ', ' + tx + ' ' + ty;
+    }
+    var x1 = a.x + a.w;
+    var y1 = a.y + a.h / 2;
+    var x2 = b.x;
+    var y2 = b.y + b.h / 2;
+    var dx = Math.max(42, Math.round(Math.abs(x2 - x1) * 0.52));
+    return 'M ' + x1 + ' ' + y1 + ' C ' + (x1 + dx) + ' ' + y1 + ', ' + (x2 - dx) + ' ' + y2 + ', ' + x2 + ' ' + y2;
+  }
+
+  function createIconSvg(kind) {
+    var svg = svgEl('svg', {
+      class: 'aw-icon',
+      width: '14',
+      height: '14',
+      viewBox: '0 0 16 16',
+      fill: 'none',
+      stroke: 'currentColor',
+      'stroke-width': '1.4',
+      'stroke-linecap': 'round',
+      'stroke-linejoin': 'round',
+      'aria-hidden': 'true'
+    });
+    if (kind === 'minus') {
+      svg.appendChild(svgEl('path', { d: 'M3.5 8h9' }));
+    } else if (kind === 'plus') {
+      svg.appendChild(svgEl('path', { d: 'M8 3.5v9' }));
+      svg.appendChild(svgEl('path', { d: 'M3.5 8h9' }));
+    } else {
+      svg.appendChild(svgEl('path', { d: 'M3.5 8h9' }));
+      svg.appendChild(svgEl('path', { d: 'M8.5 4l4 4-4 4' }));
+    }
+    return svg;
+  }
+
   /* ---------------------------------------------------- controller factory -- */
   function createController() {
     var manifest = normalizeManifest(null);
     var state = {
       mountEl: null,
       surface: 'obsidian',
+      spellcheck: true,
       activeKitId: manifest.kits[0].id,
       activeTab: 'mindmap',
       activeDay: 1,
@@ -975,8 +1072,8 @@
       parsed: parseNote(manifest.kits[0].markdown, manifest.kits[0].title),
       selectedNodeId: 'node-root',
       mapZoom: 1,
-      mapPanX: 16,
-      mapPanY: 16,
+      mapPanX: 0,
+      mapPanY: 0,
       activeCapsuleAspect: 'session-passdown',
       activeCapsuleFormat: 'markdown',
       activeCapsuleText: '',
@@ -1134,6 +1231,27 @@
       dom.rehydrateFeedback.hidden = !state.rehydrateStatus;
     }
 
+    function setSpellcheck(enabled, opts) {
+      var options = opts || {};
+      state.spellcheck = typeof enabled === 'boolean' ? enabled : !state.spellcheck;
+      if (dom.textarea) {
+        dom.textarea.spellcheck = state.spellcheck;
+        dom.textarea.setAttribute('spellcheck', state.spellcheck ? 'true' : 'false');
+      }
+      if (dom.spellcheckBtn) {
+        dom.spellcheckBtn.setAttribute('aria-pressed', state.spellcheck ? 'true' : 'false');
+        dom.spellcheckBtn.textContent = state.spellcheck ? 'Spellcheck: On' : 'Spellcheck: Off';
+      }
+      if (!options.silentStatus) {
+        setStatus(
+          state.spellcheck
+            ? 'Spellcheck: On for plain-English & Markdown input.'
+            : 'Spellcheck: Off for plain-English & Markdown input.'
+        );
+      }
+      return state.spellcheck;
+    }
+
     function setSurface(nextSurface, opts) {
       var options = opts || {};
       state.surface = nextSurface === 'paper' ? 'paper' : 'obsidian';
@@ -1149,8 +1267,8 @@
       if (!options.silentStatus) {
         setStatus(
           state.surface === 'paper'
-            ? 'Studio surface switched to Warm Paper (#F2EFE8).'
-            : 'Studio surface switched to Deep Obsidian (#080A0E).'
+            ? 'Studio surface switched to Warm Paper (#F4F0E8).'
+            : 'Studio surface switched to Deep Obsidian (#090C12).'
         );
       }
       return state.surface;
@@ -1409,10 +1527,12 @@
       }
 
       if (activeBtn && dom.dayScroller.clientWidth > 0) {
-        dom.dayScroller.scrollLeft = Math.max(
-          0,
-          activeBtn.offsetLeft - (dom.dayScroller.clientWidth / 2) + (activeBtn.offsetWidth / 2)
-        );
+        dom.dayScroller.scrollLeft = dom.dayScroller.scrollWidth > dom.dayScroller.clientWidth
+          ? Math.max(
+              0,
+              (activeBtn.offsetLeft - dom.dayScroller.offsetLeft) - (dom.dayScroller.clientWidth / 2) + (activeBtn.offsetWidth / 2)
+            )
+          : 0;
       }
 
       if (dom.dayBannerTitle) {
@@ -1434,14 +1554,15 @@
     function updateMindMapViewBox() {
       if (!dom.mapSvg) return;
       var svg = dom.mapSvg;
-      var box = svg.parentElement;
-      var vw = (box && box.clientWidth > 200) ? box.clientWidth : 840;
-      var vh = (box && box.clientHeight > 180) ? box.clientHeight : 360;
-      var vbW = Math.max(840, vw);
-      var vbH = Math.round(vbW * (vh / vw));
+      var parsed = ensureParsed();
+      var vbW = Math.max(880, Number(parsed.mapWidth) || 960);
+      var vbH = Math.max(360, Number(parsed.mapHeight) || 620);
       var nextVb = '0 0 ' + vbW + ' ' + vbH;
       if (svg.getAttribute('viewBox') !== nextVb) {
         svg.setAttribute('viewBox', nextVb);
+      }
+      if (svg.getAttribute('preserveAspectRatio') !== 'xMidYMid meet') {
+        svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
       }
     }
 
@@ -1498,38 +1619,19 @@
       var byId = {};
       parsed.nodes.forEach(function (n) { byId[n.id] = n; });
 
-      /* Render edges first so nodes sit cleanly on top */
+      /* Render smooth organic cubic-bezier branch & dependency curves first */
       parsed.edges.forEach(function (edge) {
         var a = byId[edge.from];
         var b = byId[edge.to];
         if (!a || !b) return;
         var isDep = edge.kind === 'depends';
-        var x1 = a.x + a.w;
-        var y1 = a.y + a.h / 2;
-        var x2 = b.x;
-        var y2 = b.y + b.h / 2;
-        var cx = (x1 + x2) / 2;
-        var dPath;
-        if (isDep && Math.abs(a.x - b.x) < 20) {
-          var rx1 = a.x + a.w;
-          var ry1 = a.y + a.h / 2;
-          var rx2 = b.x + b.w;
-          var ry2 = b.y + b.h / 2;
-          var ctrlX = rx1 + 42;
-          dPath = 'M ' + rx1 + ' ' + ry1 + ' C ' + ctrlX + ' ' + ry1 + ', ' + ctrlX + ' ' + ry2 + ', ' + rx2 + ' ' + ry2;
-        } else if (isDep) {
-          dPath = 'M ' + (a.x + a.w / 2) + ' ' + (a.y + a.h) + ' Q ' + ((a.x + b.x) / 2) + ' ' + (Math.max(a.y, b.y) + a.h + 26) + ', ' + (b.x + b.w / 2) + ' ' + (b.y + b.h);
-        } else {
-          dPath = 'M ' + x1 + ' ' + y1 + ' C ' + cx + ' ' + y1 + ', ' + cx + ' ' + y2 + ', ' + x2 + ' ' + y2;
-        }
-
         gRoot.appendChild(svgEl('path', {
-          d: dPath,
+          d: buildCubicEdgePath(a, b, isDep),
           class: 'aw-map-edge ' + (isDep ? 'aw-map-edge--dep' : 'aw-map-edge--tree')
         }));
       });
 
-      /* Render nodes */
+      /* Render sculpted rounded nodes (rx=14, ry=14) with pill wave tags */
       var nodeMap = {};
       parsed.nodes.forEach(function (node) {
         var selected = node.id === state.selectedNodeId;
@@ -1548,14 +1650,27 @@
           y: node.y,
           width: node.w,
           height: node.h,
-          rx: 0,
+          rx: 14,
+          ry: 14,
           class: 'aw-map-node__box',
           'aria-hidden': 'true'
         }));
 
+        g.appendChild(svgEl('rect', {
+          x: node.x + 12,
+          y: node.y + 8,
+          width: 58,
+          height: 17,
+          rx: 8.5,
+          ry: 8.5,
+          class: 'aw-map-node__pill',
+          'aria-hidden': 'true'
+        }));
+
         var waveTag = svgEl('text', {
-          x: node.x + 11,
-          y: node.y + 15,
+          x: node.x + 41,
+          y: node.y + 19.5,
+          'text-anchor': 'middle',
           class: 'aw-map-node__wave',
           'aria-hidden': 'true'
         });
@@ -1563,8 +1678,8 @@
         g.appendChild(waveTag);
 
         var labelTxt = svgEl('text', {
-          x: node.x + 11,
-          y: node.y + 32,
+          x: node.x + 14,
+          y: node.y + 41,
           class: 'aw-map-node__label',
           'aria-hidden': 'true'
         });
@@ -1579,7 +1694,15 @@
         }
         g.addEventListener('click', handleSelect);
         g.addEventListener('keydown', function (ev) {
-          if (ev.key === 'Enter' || ev.key === ' ') {
+          if (ev.key === 'Enter') {
+            ev.preventDefault();
+            handleSelect(ev);
+          } else if (ev.key === ' ') {
+            ev.preventDefault();
+          }
+        });
+        g.addEventListener('keyup', function (ev) {
+          if (ev.key === ' ') {
             ev.preventDefault();
             handleSelect(ev);
           }
@@ -1601,6 +1724,7 @@
       var node = parsed.nodes.find(function (n) { return n.id === state.selectedNodeId; }) || parsed.nodes[0];
       if (!node) return;
 
+      dom.inspectorWave.className = waveChipClass(node.wave);
       dom.inspectorWave.textContent = 'Wave ' + node.wave + ' · ' + node.parentLabel;
       dom.inspectorTitle.textContent = node.label;
       dom.inspectorBody.textContent = node.detail || node.label;
@@ -1624,7 +1748,7 @@
       var m = p.metrics;
       dom.readerPanel.innerHTML = '';
 
-      /* Editorial header hierarchy */
+      /* Editorial header widget */
       var hero = document.createElement('header');
       hero.className = 'aw-reader__hero';
 
@@ -1638,7 +1762,9 @@
 
       var callout = document.createElement('div');
       callout.className = 'aw-reader__callout';
-      callout.textContent = 'Give this to your AI -> 25-Turn Rehydration Capsule (' + m.doneCount + '/' + m.totalSteps + ' steps done)';
+      callout.appendChild(document.createTextNode('Give this to your AI '));
+      callout.appendChild(createIconSvg('arrow-right'));
+      callout.appendChild(document.createTextNode(' 25-Turn Rehydration Capsule (' + m.doneCount + '/' + m.totalSteps + ' steps done)'));
 
       hero.appendChild(h3);
       hero.appendChild(meta);
@@ -1664,16 +1790,17 @@
         dom.readerPanel.appendChild(anchors);
       }
 
-      /* Interactive Plain-English Step Checklist */
+      /* Interactive Plain-English Step Checklist Card */
       if (p.steps.length) {
         var checkBox = document.createElement('div');
         checkBox.className = 'aw-checklist';
         var chHead = document.createElement('div');
         chHead.className = 'aw-section-head';
         var chTitle = document.createElement('strong');
+        chTitle.className = 'aw-checklist__heading';
         chTitle.textContent = 'Plain-English Action Checklist';
         var chCount = document.createElement('span');
-        chCount.className = 'aw-chip';
+        chCount.className = m.doneCount === m.totalSteps ? 'aw-chip aw-chip--ok' : 'aw-chip aw-chip--amber';
         chCount.textContent = m.doneCount + ' / ' + m.totalSteps + ' complete';
         chHead.appendChild(chTitle);
         chHead.appendChild(chCount);
@@ -1684,6 +1811,10 @@
           var lbl = document.createElement('label');
           lbl.className = 'aw-check-item' + (step.done ? ' aw-check-item--done' : '');
           lbl.setAttribute('for', cbId);
+
+          var lead = document.createElement('span');
+          lead.className = 'aw-check-item__lead';
+
           var cb = document.createElement('input');
           cb.type = 'checkbox';
           cb.id = cbId;
@@ -1692,10 +1823,19 @@
           cb.addEventListener('change', function () {
             toggleChecklistStep(step.lineIndex, cb.checked);
           });
+
           var span = document.createElement('span');
-          span.textContent = step.text + ' [Wave ' + step.wave + ']';
-          lbl.appendChild(cb);
-          lbl.appendChild(span);
+          span.className = 'aw-check-item__text';
+          span.textContent = step.text;
+
+          var wavePill = document.createElement('span');
+          wavePill.className = waveChipClass(step.wave);
+          wavePill.textContent = 'Wave ' + step.wave;
+
+          lead.appendChild(cb);
+          lead.appendChild(span);
+          lbl.appendChild(lead);
+          lbl.appendChild(wavePill);
           checkBox.appendChild(lbl);
         });
         dom.readerPanel.appendChild(checkBox);
@@ -1709,15 +1849,22 @@
         return;
       }
 
-      /* Editorial sections */
+      /* Breathable Editorial Section Widget Cards */
       p.sections.forEach(function (sec) {
         var secCard = document.createElement('article');
         secCard.className = 'aw-reader-sec';
         secCard.setAttribute('data-sec-id', sec.id);
 
+        var secHead = document.createElement('div');
+        secHead.className = 'aw-reader-sec__head';
         var sh = document.createElement('h4');
         sh.textContent = sec.title;
-        secCard.appendChild(sh);
+        var sBadge = document.createElement('span');
+        sBadge.className = waveChipClass(sec.wave);
+        sBadge.textContent = 'Wave ' + sec.wave;
+        secHead.appendChild(sh);
+        secHead.appendChild(sBadge);
+        secCard.appendChild(secHead);
 
         sec.paragraphs.forEach(function (pg) {
           var para = document.createElement('p');
@@ -1764,15 +1911,16 @@
       if (!dom.lwsGrid) return;
       dom.lwsGrid.innerHTML = '';
       var parsed = ensureParsed();
+      var m = parsed.metrics;
 
-      function makeCard(title, badgeText, entries, fullWidth, mapper, isSoul, emptyCopy) {
+      function makeCard(title, badgeText, badgeCls, entries, mapper, entryMod, emptyCopy) {
         var card = document.createElement('section');
-        card.className = 'aw-lws-card' + (fullWidth ? ' aw-lws-card--full' : '');
+        card.className = 'aw-lws-card';
         var h4 = document.createElement('h4');
         var tSpan = document.createElement('span');
         tSpan.textContent = title;
         var countChip = document.createElement('span');
-        countChip.className = 'aw-chip';
+        countChip.className = badgeCls || 'aw-chip';
         countChip.textContent = badgeText;
         h4.appendChild(tSpan);
         h4.appendChild(countChip);
@@ -1789,9 +1937,10 @@
 
         var ul = document.createElement('ul');
         ul.className = 'aw-lws-list';
+        ul.setAttribute('role', 'list');
         entries.forEach(function (item) {
           var li = document.createElement('li');
-          li.className = 'aw-lws-entry' + (isSoul ? ' aw-lws-entry--soul' : '');
+          li.className = 'aw-lws-entry' + (entryMod ? ' ' + entryMod : '');
           var mapped = mapper(item);
           var strong = document.createElement('strong');
           strong.textContent = mapped.head + ': ';
@@ -1804,32 +1953,47 @@
       }
 
       makeCard(
+        'Agenda · Wave Dossier',
+        m.doneCount + '/' + m.totalSteps + ' steps',
+        m.doneCount === m.totalSteps && m.totalSteps > 0 ? 'aw-chip aw-chip--ok' : 'aw-chip aw-chip--amber',
+        parsed.steps.slice(0, 6),
+        function (st, idx) {
+          return {
+            head: (st.done ? 'DONE · W' : 'OPEN · W') + st.wave,
+            body: st.text
+          };
+        },
+        'aw-lws-entry--agenda',
+        'Add - [ ] checklist tasks under Wave 0, Wave 1, or Wave 2 to populate your Agenda Dossier.'
+      );
+
+      makeCard(
         'Soul · Core Voice Invariants',
         parsed.soul.length + ' pinned',
+        'aw-chip aw-chip--amber',
         parsed.soul,
-        true,
         function (s) { return { head: s.label, body: s.rule }; },
-        true,
+        'aw-lws-entry--soul',
         'Add lines under ## Soul or start a bullet with Always/Never to pin invariants.'
       );
 
       makeCard(
         'Lexicon · Defined Terms',
         parsed.lexicon.length + ' terms',
+        'aw-chip aw-chip--live',
         parsed.lexicon,
-        false,
         function (l) { return { head: l.term, body: l.definition }; },
-        false,
+        '',
         'Write Term: meaning lines in your note to build your shared vocabulary.'
       );
 
       makeCard(
         'Wiki · Topic Floorplan',
         parsed.wiki.length + ' entries',
+        'aw-chip aw-chip--ok',
         parsed.wiki,
-        false,
         function (w) { return { head: w.title, body: w.summary }; },
-        false,
+        'aw-lws-entry--wiki',
         'Add ## Wiki headings or ### subtopics to store reusable reference cards.'
       );
     }
@@ -1853,7 +2017,6 @@
         btn.className = 'aw-aspect-btn' + (asp.kind === 'bundle' ? ' aw-aspect-btn--bundle' : '');
         btn.setAttribute('data-capsule-aspect', asp.id);
         btn.setAttribute('aria-pressed', asp.id === state.activeCapsuleAspect ? 'true' : 'false');
-        btn.setAttribute('title', asp.label + ': ' + asp.summary);
 
         var idxSpan = document.createElement('span');
         idxSpan.className = 'aw-aspect-btn__index';
@@ -1931,6 +2094,9 @@
         state.markdown = stripEmDashes(n.markdown);
         state.isDirty = true;
         state.needsReparse = true;
+        state.mapZoom = 1;
+        state.mapPanX = 0;
+        state.mapPanY = 0;
         state.activeCapsuleAspect = normalizeAspect(n.aspectId || state.activeCapsuleAspect);
 
         if (dom.textarea) {
@@ -1994,11 +2160,14 @@
       state.markdown = kit.markdown;
       state.isDirty = false;
       state.needsReparse = true;
+      state.mapZoom = 1;
+      state.mapPanX = 0;
+      state.mapPanY = 0;
       if (dom.textarea) dom.textarea.value = state.markdown;
       renderKitButtons(false);
 
       if (options.async) {
-        setStatus('Loading starter kit: ' + kit.title + '...');
+        setStatus('Loaded starter kit: ' + kit.title);
         reparseAndRenderAsync(false, 'Loaded starter kit: ' + kit.title);
       } else {
         reparseAndRender(false);
@@ -2009,11 +2178,22 @@
     function selectTab(tabId) {
       var valid = TABS.some(function (t) { return t.id === tabId; });
       state.activeTab = valid ? tabId : 'mindmap';
+      var activeBtn = null;
       if (dom.tabButtons) {
         dom.tabButtons.forEach(function (btn) {
           var isSel = btn.getAttribute('data-tab') === state.activeTab;
           btn.setAttribute('aria-selected', isSel ? 'true' : 'false');
+          btn.setAttribute('tabindex', isSel ? '0' : '-1');
+          if (isSel) activeBtn = btn;
         });
+      }
+      if (activeBtn && dom.tablist && dom.tablist.clientWidth > 0) {
+        dom.tablist.scrollLeft = dom.tablist.scrollWidth > dom.tablist.clientWidth
+          ? Math.max(
+              0,
+              (activeBtn.offsetLeft - dom.tablist.offsetLeft) - (dom.tablist.clientWidth / 2) + (activeBtn.offsetWidth / 2)
+            )
+          : 0;
       }
       if (dom.tabPanels) {
         Object.keys(dom.tabPanels).forEach(function (id) {
@@ -2047,6 +2227,9 @@
           state.activeKitId = targetKit.id;
           state.markdown = targetKit.markdown;
           state.isDirty = false;
+          state.mapZoom = 1;
+          state.mapPanX = 0;
+          state.mapPanY = 0;
           if (dom.textarea) dom.textarea.value = state.markdown;
           renderKitButtons(false);
         }
@@ -2125,6 +2308,8 @@
       var ta = document.createElement('textarea');
       ta.id = 'aw-clipboard-scratch';
       ta.name = 'aw-clipboard-scratch';
+      ta.spellcheck = false;
+      ta.setAttribute('spellcheck', 'false');
       ta.setAttribute('aria-hidden', 'true');
       ta.setAttribute('tabindex', '-1');
       ta.value = text;
@@ -2285,7 +2470,6 @@
       surfaceToggleBtn.className = 'aw-btn aw-btn--sm aw-btn--surface';
       surfaceToggleBtn.setAttribute('data-aw-surface-toggle', '');
       surfaceToggleBtn.setAttribute('aria-pressed', state.surface === 'paper' ? 'true' : 'false');
-      surfaceToggleBtn.setAttribute('title', 'Switch studio between Deep Obsidian (#080A0E) and Warm Paper (#F2EFE8)');
       surfaceToggleBtn.textContent = 'Paper Surface';
       surfaceToggleBtn.addEventListener('click', function () {
         setSurface(state.surface === 'paper' ? 'obsidian' : 'paper');
@@ -2315,12 +2499,6 @@
       var kitsBar = document.createElement('section');
       kitsBar.className = 'aw-kits-bar';
       kitsBar.setAttribute('aria-label', 'Starter Kits');
-      var kitsHead = document.createElement('div');
-      kitsHead.className = 'aw-section-head';
-      var kitsEyebrow = document.createElement('p');
-      kitsEyebrow.className = 'aw-eyebrow';
-      kitsEyebrow.textContent = '1-Click Starter Kits · Pick a real-world template or write plain English';
-      kitsHead.appendChild(kitsEyebrow);
 
       var kitGrid = document.createElement('div');
       kitGrid.className = 'aw-kit-grid';
@@ -2328,7 +2506,6 @@
       kitGrid.setAttribute('aria-label', 'Common-Man Starter Kits');
       dom.kitGrid = kitGrid;
 
-      kitsBar.appendChild(kitsHead);
       kitsBar.appendChild(kitGrid);
       shell.appendChild(kitsBar);
 
@@ -2339,15 +2516,11 @@
 
       var weekRow = document.createElement('div');
       weekRow.className = 'aw-week-row';
-      var mentEyebrow = document.createElement('p');
-      mentEyebrow.className = 'aw-eyebrow';
-      mentEyebrow.textContent = '30-Day Mentorship Sync · Linked with Weeks & Resolve';
       var weekPills = document.createElement('div');
       weekPills.className = 'aw-week-pills';
       weekPills.setAttribute('role', 'group');
       weekPills.setAttribute('aria-label', 'Mentorship Weeks');
       dom.weekPills = weekPills;
-      weekRow.appendChild(mentEyebrow);
       weekRow.appendChild(weekPills);
 
       var dayScroller = document.createElement('div');
@@ -2411,19 +2584,39 @@
       var edHead = document.createElement('div');
       edHead.className = 'aw-pane-head';
       var edLabel = document.createElement('label');
-      edLabel.className = 'aw-eyebrow aw-label';
+      edLabel.className = 'aw-field-label aw-label';
       edLabel.setAttribute('for', 'aw-note-input');
       edLabel.textContent = 'Plain-English & Markdown Input';
+
+      var edHeadControls = document.createElement('div');
+      edHeadControls.className = 'aw-pane-head__controls';
+
       var edMeta = document.createElement('span');
       edMeta.className = 'aw-pane-head__meta';
       dom.editorMeta = edMeta;
+
+      var spellcheckBtn = document.createElement('button');
+      spellcheckBtn.type = 'button';
+      spellcheckBtn.className = 'aw-pill-btn aw-spellcheck-btn';
+      spellcheckBtn.setAttribute('data-aw-spellcheck-toggle', '');
+      spellcheckBtn.setAttribute('aria-pressed', state.spellcheck ? 'true' : 'false');
+      spellcheckBtn.textContent = state.spellcheck ? 'Spellcheck: On' : 'Spellcheck: Off';
+      spellcheckBtn.addEventListener('click', function () {
+        setSpellcheck(!state.spellcheck);
+      });
+      dom.spellcheckBtn = spellcheckBtn;
+
+      edHeadControls.appendChild(edMeta);
+      edHeadControls.appendChild(spellcheckBtn);
       edHead.appendChild(edLabel);
-      edHead.appendChild(edMeta);
+      edHead.appendChild(edHeadControls);
 
       var textarea = document.createElement('textarea');
       textarea.className = 'aw-textarea';
       textarea.id = 'aw-note-input';
       textarea.name = 'aw-note-input';
+      textarea.spellcheck = state.spellcheck;
+      textarea.setAttribute('spellcheck', state.spellcheck ? 'true' : 'false');
       textarea.placeholder = 'Write plain English, # headings, - [ ] steps, Term: definition, or Soul: rules...';
       textarea.value = state.markdown;
       textarea.addEventListener('input', function () {
@@ -2472,15 +2665,20 @@
       var outputPane = document.createElement('div');
       outputPane.className = 'aw-output-pane';
 
+      var tablistWrap = document.createElement('div');
+      tablistWrap.className = 'aw-tablist-wrap';
+
       var tablist = document.createElement('div');
       tablist.className = 'aw-tablist';
       tablist.setAttribute('role', 'tablist');
       tablist.setAttribute('aria-label', 'Refractory Live Output Views');
+      dom.tablist = tablist;
 
       dom.tabButtons = [];
       dom.tabPanels = {};
 
       TABS.forEach(function (tab, idx) {
+        var isSel = tab.id === state.activeTab;
         var tb = document.createElement('button');
         tb.type = 'button';
         tb.className = 'aw-tab';
@@ -2488,7 +2686,8 @@
         tb.setAttribute('role', 'tab');
         tb.setAttribute('data-tab', tab.id);
         tb.setAttribute('aria-controls', 'aw-panel-' + tab.id);
-        tb.setAttribute('aria-selected', tab.id === state.activeTab ? 'true' : 'false');
+        tb.setAttribute('aria-selected', isSel ? 'true' : 'false');
+        tb.setAttribute('tabindex', isSel ? '0' : '-1');
         tb.textContent = tab.label;
 
         tb.addEventListener('click', function () { selectTab(tab.id); });
@@ -2507,10 +2706,11 @@
         tablist.appendChild(tb);
         dom.tabButtons.push(tb);
       });
-      outputPane.appendChild(tablist);
+      tablistWrap.appendChild(tablist);
+      outputPane.appendChild(tablistWrap);
 
       /* Panel 1: Mind-Map Floorplan */
-      var mapPanel = document.createElement('section');
+      var mapPanel = document.createElement('div');
       mapPanel.className = 'aw-tabpanel';
       mapPanel.id = 'aw-panel-mindmap';
       mapPanel.setAttribute('role', 'tabpanel');
@@ -2521,46 +2721,43 @@
       var mapLegend = document.createElement('div');
       mapLegend.className = 'aw-legend';
       mapLegend.innerHTML =
-        '<span class="aw-legend__item"><span class="aw-swatch aw-swatch--w0"></span>Wave 0</span>' +
-        '<span class="aw-legend__item"><span class="aw-swatch aw-swatch--w1"></span>Wave 1</span>' +
-        '<span class="aw-legend__item"><span class="aw-swatch aw-swatch--w2"></span>Wave 2</span>';
+        '<span class="aw-legend__item"><span class="aw-swatch aw-swatch--w0" aria-hidden="true"></span>Wave 0</span>' +
+        '<span class="aw-legend__item"><span class="aw-swatch aw-swatch--w1" aria-hidden="true"></span>Wave 1</span>' +
+        '<span class="aw-legend__item"><span class="aw-swatch aw-swatch--w2" aria-hidden="true"></span>Wave 2</span>';
 
       var mapControls = document.createElement('div');
       mapControls.className = 'aw-map-controls';
 
-      function makeMapBtn(label, fn) {
+      function makeMapBtn(label, iconKind, ariaLbl, fn) {
         var b = document.createElement('button');
         b.type = 'button';
         b.className = 'aw-btn aw-btn--sm';
-        b.textContent = label;
+        var txt = document.createElement('span');
+        txt.textContent = label;
+        b.appendChild(txt);
+        if (iconKind) b.appendChild(createIconSvg(iconKind));
+        if (ariaLbl) b.setAttribute('aria-label', ariaLbl);
         b.addEventListener('click', fn);
         return b;
       }
-      mapControls.appendChild(makeMapBtn('Zoom -', function () {
+      mapControls.appendChild(makeMapBtn('Zoom', 'minus', 'Zoom out mind-map', function () {
         state.mapZoom = Math.max(0.45, +(state.mapZoom - 0.15).toFixed(2));
         updateMindMapTransform();
       }));
-      mapControls.appendChild(makeMapBtn('100%', function () {
+      mapControls.appendChild(makeMapBtn('100%', null, '100% reset mind-map zoom', function () {
         state.mapZoom = 1;
-        state.mapPanX = 16;
-        state.mapPanY = 16;
-        updateMindMapTransform();
+        state.mapPanX = 0;
+        state.mapPanY = 0;
+        updateMindMapTransform(true);
       }));
-      mapControls.appendChild(makeMapBtn('Zoom +', function () {
+      mapControls.appendChild(makeMapBtn('Zoom', 'plus', 'Zoom in mind-map', function () {
         state.mapZoom = Math.min(2.2, +(state.mapZoom + 0.15).toFixed(2));
         updateMindMapTransform();
       }));
-      mapControls.appendChild(makeMapBtn('Fit', function () {
-        var box = dom.mapSvg && dom.mapSvg.parentElement;
-        var vw = (box && box.clientWidth > 200) ? box.clientWidth : 840;
-        var vh = (box && box.clientHeight > 180) ? box.clientHeight : 360;
-        var vbW = Math.max(840, vw);
-        var vbH = Math.round(vbW * (vh / vw));
-        var parsed = ensureParsed();
-        var fitScale = Math.min(vbW / (parsed.mapWidth || 860), vbH / (parsed.mapHeight || 360), 1.0);
-        state.mapZoom = Math.max(0.32, +fitScale.toFixed(2));
-        state.mapPanX = 12;
-        state.mapPanY = 10;
+      mapControls.appendChild(makeMapBtn('Fit', null, 'Fit mind-map to viewport', function () {
+        state.mapZoom = 1;
+        state.mapPanX = 0;
+        state.mapPanY = 0;
         updateMindMapTransform(true);
       }));
 
@@ -2577,15 +2774,18 @@
       dom.mapSelectedId = null;
       mapViewport.appendChild(mapSvg);
 
-      /* Pointer pan on background without hijacking node clicks or page scroll */
+      /* Pointer pan on background with multi-touch guard */
       var dragging = false;
+      var activePointerId = null;
       var dragStartX = 0;
       var dragStartY = 0;
       var basePanX = 0;
       var basePanY = 0;
       mapViewport.addEventListener('pointerdown', function (ev) {
+        if (dragging) return;
         if (ev.target && ev.target.closest && ev.target.closest('.aw-map-node')) return;
         dragging = true;
+        activePointerId = ev.pointerId;
         dragStartX = ev.clientX;
         dragStartY = ev.clientY;
         basePanX = state.mapPanX;
@@ -2595,14 +2795,21 @@
         }
       });
       mapViewport.addEventListener('pointermove', function (ev) {
-        if (!dragging) return;
-        state.mapPanX = Math.round(basePanX + (ev.clientX - dragStartX));
-        state.mapPanY = Math.round(basePanY + (ev.clientY - dragStartY));
+        if (!dragging || (activePointerId != null && ev.pointerId !== activePointerId)) return;
+        var parsed = ensureParsed();
+        var unitRatio = (parsed.mapWidth || 960) / Math.max(240, mapViewport.clientWidth || 640);
+        state.mapPanX = Math.round(basePanX + (ev.clientX - dragStartX) * unitRatio);
+        state.mapPanY = Math.round(basePanY + (ev.clientY - dragStartY) * unitRatio);
         updateMindMapTransform();
       });
-      var endDrag = function () { dragging = false; };
+      var endDrag = function (ev) {
+        if (activePointerId != null && ev && ev.pointerId != null && ev.pointerId !== activePointerId) return;
+        dragging = false;
+        activePointerId = null;
+      };
       mapViewport.addEventListener('pointerup', endDrag);
       mapViewport.addEventListener('pointercancel', endDrag);
+      mapViewport.addEventListener('lostpointercapture', endDrag);
 
       var inspector = document.createElement('div');
       inspector.className = 'aw-inspector';
@@ -2619,7 +2826,10 @@
       var insJump = document.createElement('button');
       insJump.type = 'button';
       insJump.className = 'aw-btn aw-btn--sm';
-      insJump.textContent = 'Jump in Reader';
+      var insJumpSpan = document.createElement('span');
+      insJumpSpan.textContent = 'Jump in Reader';
+      insJump.appendChild(insJumpSpan);
+      insJump.appendChild(createIconSvg('arrow-right'));
       dom.inspectorJumpBtn = insJump;
       insMeta.appendChild(insWave);
       insMeta.appendChild(insJump);
@@ -2639,7 +2849,7 @@
       outputPane.appendChild(mapPanel);
 
       /* Panel 2: Dual-View Reader */
-      var readerWrap = document.createElement('section');
+      var readerWrap = document.createElement('div');
       readerWrap.className = 'aw-tabpanel';
       readerWrap.id = 'aw-panel-dualview';
       readerWrap.setAttribute('role', 'tabpanel');
@@ -2652,8 +2862,8 @@
       dom.tabPanels.dualview = readerWrap;
       outputPane.appendChild(readerWrap);
 
-      /* Panel 3: Lexicon · Wiki · Soul */
-      var lwsWrap = document.createElement('section');
+      /* Panel 3: Agenda · Lexicon · Wiki · Soul */
+      var lwsWrap = document.createElement('div');
       lwsWrap.className = 'aw-tabpanel';
       lwsWrap.id = 'aw-panel-lexicon';
       lwsWrap.setAttribute('role', 'tabpanel');
@@ -2667,7 +2877,7 @@
       outputPane.appendChild(lwsWrap);
 
       /* Panel 4: Multi-Aspect Rehydration Capsules & Terminal Synthesis Slot */
-      var capWrap = document.createElement('section');
+      var capWrap = document.createElement('div');
       capWrap.className = 'aw-tabpanel';
       capWrap.id = 'aw-panel-capsule';
       capWrap.setAttribute('role', 'tabpanel');
@@ -2736,9 +2946,6 @@
       aspectBar.className = 'aw-aspect-section';
       var aspectHead = document.createElement('div');
       aspectHead.className = 'aw-section-head';
-      var aspectEyebrow = document.createElement('p');
-      aspectEyebrow.className = 'aw-eyebrow';
-      aspectEyebrow.textContent = 'Capsule Aspect (6 Specialized + Master Bundle)';
 
       var formatGroup = document.createElement('div');
       formatGroup.className = 'aw-format-toggle';
@@ -2765,7 +2972,6 @@
 
       formatGroup.appendChild(formatMdBtn);
       formatGroup.appendChild(formatJsonBtn);
-      aspectHead.appendChild(aspectEyebrow);
       aspectHead.appendChild(formatGroup);
 
       var aspectGrid = document.createElement('div');
@@ -2784,7 +2990,7 @@
       var capInfo = document.createElement('div');
       capInfo.className = 'aw-capsule-info';
       var capLabel = document.createElement('label');
-      capLabel.className = 'aw-eyebrow aw-label';
+      capLabel.className = 'aw-field-label aw-label';
       capLabel.setAttribute('for', 'aw-capsule-output');
       capLabel.textContent = 'Session Pass-Down (Markdown)';
       dom.capsuleAspectLabel = capLabel;
@@ -2875,17 +3081,19 @@
       capBox.id = 'aw-capsule-output';
       capBox.name = 'aw-capsule-output';
       capBox.readOnly = true;
+      capBox.spellcheck = false;
+      capBox.setAttribute('spellcheck', 'false');
       dom.capsuleBox = capBox;
 
       /* Rehydrate / Restore Workspace Panel */
-      var rehydratePanel = document.createElement('div');
+      var rehydratePanel = document.createElement('section');
       rehydratePanel.className = 'aw-rehydrate-panel';
       rehydratePanel.setAttribute('aria-label', 'Rehydrate or Restore Capsule');
 
       var rehHead = document.createElement('div');
       rehHead.className = 'aw-section-head';
       var rehLabel = document.createElement('label');
-      rehLabel.className = 'aw-eyebrow aw-label';
+      rehLabel.className = 'aw-field-label aw-label';
       rehLabel.setAttribute('for', 'aw-rehydrate-input');
       rehLabel.textContent = 'Rehydrate / Restore From Capsule JSON';
       var rehSchemaChip = document.createElement('span');
@@ -2898,6 +3106,8 @@
       rehInput.className = 'aw-rehydrate-box';
       rehInput.id = 'aw-rehydrate-input';
       rehInput.name = 'aw-rehydrate-input';
+      rehInput.spellcheck = false;
+      rehInput.setAttribute('spellcheck', 'false');
       rehInput.placeholder = 'Paste Aether Capsule JSON v2 (or legacy pass-down v1) here, or load a local .json capsule file...';
       dom.rehydrateInput = rehInput;
 
@@ -3199,6 +3409,7 @@
       var parsed = ensureParsed();
       return {
         surface: state.surface,
+        spellcheck: state.spellcheck,
         activeKitId: state.activeKitId,
         activeTab: state.activeTab,
         activeDay: state.activeDay,
@@ -3224,12 +3435,13 @@
     }
 
     var api = {
-      version: '2.1.0',
+      version: '2.4.0',
       mount: mount,
       selectDay: selectDay,
       selectKit: selectKit,
       selectTab: selectTab,
       setSurface: setSurface,
+      setSpellcheck: setSpellcheck,
       exportKit: exportKit,
       exportHtml: exportKit,
       copyShareNote: copyShareNote,

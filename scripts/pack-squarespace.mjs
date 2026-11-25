@@ -283,7 +283,7 @@ function verifyPackagedBundle(manifest, newSiteUploadFile, embedSiteUploadFile, 
   const textArtifacts = [
     ...htmlFiles.map((f) => path.join(OUT_DIR, f)),
     path.join(OUT_DIR, 'manifest.json'),
-    ...actualFiles.filter((f) => /\.(css|js)$/i.test(f)).map((f) => path.join(UPLOAD_DIR, f)),
+    ...actualFiles.filter((f) => /\.(css|js|json)$/i.test(f)).map((f) => path.join(UPLOAD_DIR, f)),
   ];
 
   for (const artifactPath of textArtifacts) {
@@ -333,8 +333,11 @@ async function main() {
   const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
   const uploadsBySource = new Map(manifest.uploads.map((u) => [u.source, u]));
 
-  // 1. Ensure webos/capsules.js is discovered and packaged with true SHA-256 parity
+  // 1. Ensure webos/capsules.js, HiDPI hero detonation plates, and context/contact.json are packaged with true SHA-256 parity
   const capsulesRec = registerSourceFile('webos/capsules.js', manifest, uploadsBySource);
+  registerSourceFile('assets/meteor-preimpact.webp', manifest, uploadsBySource);
+  registerSourceFile('assets/meteor-detonation.webp', manifest, uploadsBySource);
+  registerSourceFile('context/contact.json', manifest, uploadsBySource);
 
   // 2. Rewrite relative url(...) inside styles/site.css (and webos/refractory.css if present)
   const siteRec = uploadsBySource.get('styles/site.css');

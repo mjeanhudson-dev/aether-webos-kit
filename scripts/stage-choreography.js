@@ -1,14 +1,15 @@
 /* ==========================================================================
-   Aether WebOS Rollout v2.0 Stage Choreography
+   Aether WebOS Rollout v2.4 Stage Choreography & Smart Quote Synthesizer
    Author: Eloquent (@mjeanhudson-dev)
    Contract: Mounts ScrollCraft, drives GPU-composited leaf transforms for
-             Act 1 meteorite cleavage and Act 3 natural obsidian impact ->
-             reflective mirror dissolve, forwards pointer/progress directly
-             to AetherArtifactShader with zero ancestor CSS-var style thrash,
-             tracks data-sc-verify-state, ensures keyboard focus safety in
-             pinned/pan acts, drives inline floorplan-codex specimen preview,
+             Act 1 freeze-frame bolide + click-to-detonate fractured stage and
+             Act 3 natural obsidian impact -> reflective mirror dissolve,
+             forwards pointer/progress directly to AetherArtifactShader,
+             tracks data-sc-verify-state, ensures keyboard focus safety,
+             drives Smart AI Intent & Free Quote Router -> #act-contact
+             deterministic Wave 0..2 scope synthesizer + accessible validation,
              syncs aether:day-select across header, ledger, and colophon,
-             and wires optional context/funding.json channels into #act-support.
+             and wires optional context/funding.json + context/contact.json.
    ========================================================================== */
 (function (root, factory) {
   var funding = factory();
@@ -16,6 +17,60 @@
   if (root) root.AetherFunding = funding;
 }(typeof globalThis !== 'undefined' ? globalThis : (typeof window !== 'undefined' ? window : null), function () {
   'use strict';
+
+  var DEFAULT_PUBLIC_EMAIL = 'eloquent@eloquentwin.com';
+  var DEFAULT_RESPONSE_WINDOW = '1 to 2 business days';
+
+  var TRACK_CATALOG = {
+    'offline-workspace': {
+      label: 'Offline Workspace (1-file HTML + SHA-256)',
+      shortLabel: 'Offline Workspace',
+      routerHint: 'Wave 0..2 scope: Single-file workspace schema · SVG mind-map & lexicon · offline SHA-256 handoff capsule.',
+      w0: 'Plain-English Markdown schema, custom lexicon terms, and zero-login local state architecture',
+      w1: 'Sculpted single-file HTML workspace with interactive SVG dependency floorplan and dual obsidian/paper contrast',
+      w2: 'WebCrypto SHA-256 integrity capsule, airplane-mode verification suite, and full client-owned source bundle'
+    },
+    'local-ai-vault': {
+      label: 'Private Local AI Vault (on-device + parity gates)',
+      shortLabel: 'Private Local AI Vault',
+      routerHint: 'Wave 0..2 scope: Redaction & vault boundary · local FTS5 / MCP index · cryptographic claim-vs-diff parity check.',
+      w0: 'On-device vault boundary, secret/PII scrubbing rules, and deterministic Stage-0 document slice schema',
+      w1: 'Searchable local knowledge index and tool bridge with strict allowlisted workspace actions',
+      w2: 'Blind claim-vs-reality SHA-256 parity receipts, offline recovery runbook, and full source handoff'
+    },
+    'custom-webos-site': {
+      label: 'Custom Scroll / WebOS Site (60fps + source)',
+      shortLabel: 'Custom Scroll / WebOS Site',
+      routerHint: 'Wave 0..2 scope: Narrative & optical type architecture · 60fps GPU stage & interactive widgets · static/Squarespace pack.',
+      w0: 'Story spine, optical fluid typography ramp up to 4K, and perceptual WCAG AA mineral palette tokens',
+      w1: 'GPU-composited scroll choreography, interactive client estimator or WebOS tool surface, and mobile reflow',
+      w2: 'Lighthouse 100 performance/accessibility verification, portable static + embed bundle, and full source transfer'
+    },
+    'hybrid-suite': {
+      label: 'Hybrid Suite (Workspace + Local AI + Site)',
+      shortLabel: 'Hybrid Multi-Surface Suite',
+      routerHint: 'Wave 0..2 scope: Unified domain lexicon · public stage + private offline WebOS kit · local AI parity & SHA-256 handoff.',
+      w0: 'Unified domain model, public/private data boundary, and shared rehydration capsule contract',
+      w1: 'Public conversion stage paired with an offline-first team WebOS workspace and local AI indexing bridge',
+      w2: 'End-to-end SHA-256 parity gates, zero-lock-in deployment scripts, and complete source ownership'
+    }
+  };
+
+  var TIMELINE_LABELS = {
+    '2-to-4-weeks': 'Focused sprint (2 to 4 weeks)',
+    '1-to-2-months': 'Standard rollout (1 to 2 months)',
+    'quarter-roadmap': 'Phased roadmap (flexible quarter)',
+    'exploratory': 'Exploratory architecture review'
+  };
+
+  var STOP_WORDS = {
+    'a': 1, 'an': 1, 'and': 1, 'are': 1, 'as': 1, 'at': 1, 'be': 1, 'build': 1,
+    'by': 1, 'can': 1, 'for': 1, 'from': 1, 'have': 1, 'help': 1, 'how': 1, 'i': 1,
+    'in': 1, 'into': 1, 'is': 1, 'it': 1, 'like': 1, 'make': 1, 'my': 1, 'need': 1,
+    'of': 1, 'on': 1, 'or': 1, 'our': 1, 'so': 1, 'some': 1, 'that': 1, 'the': 1,
+    'their': 1, 'them': 1, 'this': 1, 'to': 1, 'us': 1, 'use': 1, 'want': 1, 'we': 1,
+    'with': 1, 'without': 1, 'would': 1, 'you': 1, 'your': 1
+  };
 
   function isSafeHttpsUrl(raw) {
     if (typeof raw !== 'string') return false;
@@ -27,6 +82,30 @@
     } catch (_err) {
       return false;
     }
+  }
+
+  function sanitizePlainText(raw, maxLen) {
+    if (typeof raw !== 'string') return '';
+    var cleaned = raw
+      .replace(/[\u2014\u2013]/g, '-')
+      .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+    if (typeof maxLen === 'number' && maxLen > 0 && cleaned.length > maxLen) {
+      cleaned = cleaned.slice(0, maxLen).trim();
+    }
+    return cleaned;
+  }
+
+  function isSafePublicEmail(raw) {
+    if (typeof raw !== 'string') return false;
+    var s = raw.trim().toLowerCase();
+    if (!s || s.length > 160 || /\s/.test(s)) return false;
+    var atIdx = s.indexOf('@');
+    if (atIdx < 1) return false;
+    var domain = s.slice(atIdx + 1);
+    if (domain.indexOf('gm' + 'ail.') === 0 || domain.indexOf('google' + 'mail.') === 0) return false;
+    return /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/.test(s);
   }
 
   function resolveFundingChannels(manifest) {
@@ -50,9 +129,157 @@
     return { active: actions.length > 0, actions: actions, statsEndpoint: statsEndpoint, posture: posture };
   }
 
+  function resolveContactConfig(manifest) {
+    var email = manifest && isSafePublicEmail(manifest.public_email)
+      ? manifest.public_email.trim()
+      : DEFAULT_PUBLIC_EMAIL;
+    var webhook = manifest && isSafeHttpsUrl(manifest.quote_webhook_url)
+      ? manifest.quote_webhook_url.trim()
+      : null;
+    var win = manifest && typeof manifest.response_window === 'string' && manifest.response_window.trim()
+      ? sanitizePlainText(manifest.response_window, 80)
+      : DEFAULT_RESPONSE_WINDOW;
+    return {
+      publicEmail: email,
+      quoteWebhookUrl: webhook,
+      responseWindow: win
+    };
+  }
+
+  function computeQuoteRef(seedText) {
+    var str = String(seedText || 'aether-default');
+    var h = 0x811c9dc5;
+    for (var i = 0; i < str.length; i++) {
+      h ^= str.charCodeAt(i);
+      h = Math.imul(h, 0x01000193) >>> 0;
+    }
+    var hex = ('00000000' + h.toString(16).toUpperCase()).slice(-8);
+    return 'AEQ-' + hex.slice(0, 4) + '-' + hex.slice(4, 8);
+  }
+
+  function extractFocusTerms(briefText, existingBaseText) {
+    var clean = sanitizePlainText(briefText, 600);
+    if (!clean) return [];
+    var baseLower = String(existingBaseText || '').toLowerCase();
+    var baseWords = {};
+    baseLower.split(/[^a-z0-9]+/).forEach(function (w) {
+      if (w) baseWords[w] = 1;
+    });
+    var tokens = clean.split(/[^a-zA-Z0-9+#/-]+/);
+    var seen = {};
+    var picks = [];
+    for (var i = 0; i < tokens.length; i++) {
+      var tok = tokens[i].replace(/^[-/]+|[-/]+$/g, '');
+      if (!tok || tok.length < 3 || tok.length > 24) continue;
+      var low = tok.toLowerCase();
+      if (STOP_WORDS[low] || seen[low]) continue;
+      if (baseWords[low] || baseLower.indexOf(low) !== -1) continue;
+      seen[low] = true;
+      picks.push(tok);
+      if (picks.length >= 4) break;
+    }
+    return picks;
+  }
+
+  function synthesizeQuoteScope(rawInput) {
+    var inp = rawInput && typeof rawInput === 'object' ? rawInput : {};
+    var trackKey = TRACK_CATALOG[inp.track] ? inp.track : 'offline-workspace';
+    var spec = TRACK_CATALOG[trackKey];
+    var timelineKey = TIMELINE_LABELS[inp.timeline] ? inp.timeline : '2-to-4-weeks';
+    var timelineLabel = TIMELINE_LABELS[timelineKey];
+    var name = sanitizePlainText(inp.name || '', 120);
+    var email = sanitizePlainText(inp.email || '', 160);
+    var company = sanitizePlainText(inp.company || '', 120);
+    var brief = sanitizePlainText(inp.brief || '', 2400);
+    var publicEmail = isSafePublicEmail(inp.publicEmail) ? inp.publicEmail.trim() : DEFAULT_PUBLIC_EMAIL;
+    var responseWindow = sanitizePlainText(inp.responseWindow || DEFAULT_RESPONSE_WINDOW, 80);
+
+    var seed = [trackKey, timelineKey, company.toLowerCase(), brief.toLowerCase()].join('|');
+    var refId = computeQuoteRef(seed);
+    var terms = extractFocusTerms(brief, spec.w0);
+    var focusSuffix = terms.length
+      ? ' tailored around ' + terms.join(', ')
+      : (company ? ' tailored for ' + company : '');
+
+    var wave0 = spec.w0 + focusSuffix + '.';
+    var wave1 = spec.w1 + ' (' + timelineLabel.toLowerCase() + ' cadence).';
+    var wave2 = spec.w2 + '.';
+
+    var whoLabel = company ? (name ? name + ' (' + company + ')' : company) : (name || 'Prospective Client');
+    var subject = '[' + refId + '] Free Quote Request: ' + spec.shortLabel + ' - ' + whoLabel;
+
+    var lines = [
+      'AETHER FREE QUOTE & ARCHITECTURE BRIEF (' + refId + ')',
+      'To: Eloquent (' + publicEmail + ')',
+      'From: ' + (name || '[Your Name]') + (email ? ' <' + email + '>' : ''),
+      company ? ('Organization: ' + company) : 'Organization: Independent / Unspecified',
+      'Track: ' + spec.label,
+      'Target Timeline: ' + timelineLabel,
+      '',
+      'PROJECT BRIEF:',
+      brief || '[Add 1 to 4 plain-English sentences describing your workflow and goal.]',
+      '',
+      'PROPOSED WAVE 0..2 BUILD SCOPE:',
+      '- Wave 0 (Foundation): ' + wave0,
+      '- Wave 1 (Core Surface): ' + wave1,
+      '- Wave 2 (Verified Handoff): ' + wave2,
+      '',
+      'Response window: ' + responseWindow + ' · Client keeps full source code.'
+    ];
+    var plainBrief = lines.join('\n');
+
+    var mailBody = plainBrief.length > 1500 ? (plainBrief.slice(0, 1490) + '\n[...]') : plainBrief;
+    var mailtoHref = 'mailto:' + publicEmail +
+      '?subject=' + encodeURIComponent(subject) +
+      '&body=' + encodeURIComponent(mailBody);
+
+    var capsule = {
+      schema: 'aether.quote.capsule.v1',
+      refId: refId,
+      recipient: publicEmail,
+      operator: 'Eloquent (@mjeanhudson-dev)',
+      responseWindow: responseWindow,
+      contact: {
+        name: name || null,
+        replyEmail: email || null,
+        company: company || null
+      },
+      project: {
+        track: trackKey,
+        trackLabel: spec.label,
+        timeline: timelineKey,
+        timelineLabel: timelineLabel,
+        brief: brief || ''
+      },
+      proposedScope: {
+        wave0: wave0,
+        wave1: wave1,
+        wave2: wave2
+      }
+    };
+
+    return {
+      refId: refId,
+      trackKey: trackKey,
+      trackLabel: spec.label,
+      shortTrackLabel: spec.shortLabel,
+      routerHint: spec.routerHint,
+      timelineKey: timelineKey,
+      timelineLabel: timelineLabel,
+      waves: [wave0, wave1, wave2],
+      subject: subject,
+      plainBrief: plainBrief,
+      mailtoHref: mailtoHref,
+      capsule: capsule
+    };
+  }
+
   return {
     isSafeHttpsUrl: isSafeHttpsUrl,
-    resolveFundingChannels: resolveFundingChannels
+    resolveFundingChannels: resolveFundingChannels,
+    resolveContactConfig: resolveContactConfig,
+    computeQuoteRef: computeQuoteRef,
+    synthesizeQuoteScope: synthesizeQuoteScope
   };
 }));
 
@@ -73,14 +300,26 @@ if (typeof window !== 'undefined' && typeof document !== 'undefined') (function 
     }
   }
 
-  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var reduceMotionMq = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var reduceMotion = reduceMotionMq.matches;
   var finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-  var mobileMq = window.matchMedia('(max-width: 760px)');
+  var mobileMq = window.matchMedia('(max-width: 860px)');
+
+  if (typeof reduceMotionMq.addEventListener === 'function') {
+    reduceMotionMq.addEventListener('change', function (e) {
+      reduceMotion = Boolean(e.matches);
+    });
+  }
 
   var cleaveAct = document.getElementById('act-cleave');
   var cleaveStage = document.getElementById('cleave-stage');
   var cleaveMeteor = document.getElementById('cleave-meteor');
   var cleaveReadout = document.getElementById('cleave-readout');
+  var cleaveTelemetryTag = document.querySelector('.cleave-telemetry__tag');
+  var cleaveFractureDeck = document.getElementById('cleave-fracture-deck');
+  var detonateBtns = Array.prototype.slice.call(document.querySelectorAll('[data-aether-detonate]'));
+  var detonateLabelEl = document.querySelector('[data-detonate-label]');
+  var resetBtns = Array.prototype.slice.call(document.querySelectorAll('[data-impact-reset]'));
 
   var corridorAct = document.getElementById('act-corridor');
   var corridorRail = document.getElementById('corridor-rail');
@@ -102,8 +341,43 @@ if (typeof window !== 'undefined' && typeof document !== 'undefined') (function 
   var colophonPromptEl = document.getElementById('colophon-day-prompt');
   var colophonDeliverableEl = document.getElementById('colophon-day-deliverable');
 
+  var impactState = (cleaveStage && cleaveStage.getAttribute('data-impact-state')) || 'frozen';
+
   function clamp01(v) {
     return v < 0 ? 0 : v > 1 ? 1 : v;
+  }
+
+  function smoothScrollToEl(el) {
+    if (!el) return;
+    el.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+  }
+
+  function copyTextSafe(text, onDone) {
+    if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+      navigator.clipboard.writeText(text).then(function () {
+        onDone(true);
+      }, function () {
+        fallbackCopy(text, onDone);
+      });
+    } else {
+      fallbackCopy(text, onDone);
+    }
+  }
+
+  function fallbackCopy(text, onDone) {
+    try {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.className = 'visually-hidden';
+      document.body.appendChild(ta);
+      ta.select();
+      var ok = document.execCommand('copy');
+      document.body.removeChild(ta);
+      onDone(Boolean(ok));
+    } catch (_err) {
+      onDone(false);
+    }
   }
 
   /* ---- 1. Track which interactive acts are actually in the viewport ------- */
@@ -139,7 +413,9 @@ if (typeof window !== 'undefined' && typeof document !== 'undefined') (function 
   /* ---- 2. Synchronize Act 1, Act 3, and Act 4 GPU layers & verify state --- */
   var lastCleaveSig = '';
   var lastCleaveLabel = '';
+  var lastCleaveTransform = '';
   var lastCleaveP = 0;
+  var detonateSettleTimer = 0;
   var lastMirrorSig = '';
   var lastMirrorOp = -1;
   var lastArtifactSig = '';
@@ -153,17 +429,22 @@ if (typeof window !== 'undefined' && typeof document !== 'undefined') (function 
   var ptrActive = false;
 
   function applyCleaveTransform() {
-    if (!cleaveMeteor || reduceMotion) return;
-    var isMob = mobileMq.matches;
-    if (isMob) {
-      var mobY = (lastCleaveP * -10).toFixed(2);
-      cleaveMeteor.style.transform = 'translate3d(0,' + mobY + 'px,0)';
-      return;
+    if (!cleaveMeteor) return;
+    var next = '';
+    if (!reduceMotion && impactState !== 'detonated') {
+      if (mobileMq.matches) {
+        next = 'translate3d(0,' + (lastCleaveP * -10).toFixed(2) + 'px,0)';
+      } else {
+        var dxPx = ((ptrCurX - 0.5) * 18).toFixed(2);
+        var dyPx = (lastCleaveP * -26 + (ptrCurY - 0.5) * 12).toFixed(2);
+        var sc = (1 + lastCleaveP * 0.04).toFixed(4);
+        next = 'translate3d(' + dxPx + 'px,' + dyPx + 'px,0) scale(' + sc + ')';
+      }
     }
-    var dxPx = ((ptrCurX - 0.5) * 16).toFixed(2);
-    var dyPx = (lastCleaveP * -28 + (ptrCurY - 0.5) * 11).toFixed(2);
-    var sc = (1 + lastCleaveP * 0.045).toFixed(4);
-    cleaveMeteor.style.transform = 'translate3d(calc(-12% + ' + dxPx + 'px),' + dyPx + 'px,0) scale(' + sc + ')';
+    if (next !== lastCleaveTransform) {
+      lastCleaveTransform = next;
+      cleaveMeteor.style.transform = next;
+    }
   }
 
   function applyMirrorSheenTransform() {
@@ -175,29 +456,36 @@ if (typeof window !== 'undefined' && typeof document !== 'undefined') (function 
     mirrorSheen.style.transform = 'translate3d(' + tx + 'px,' + ty + 'px,0)';
   }
 
+  function syncCleaveStageState() {
+    if (!cleaveAct || !cleaveStage) return;
+    var cp = parseFloat(cleaveAct.style.getPropertyValue('--sc-p')) || 0;
+    lastCleaveP = cp;
+    applyCleaveTransform();
+
+    var cleaveShift = Math.round(cp * 28);
+    var cSig = 'p:' + cp.toFixed(2) + '|cleave:' + cleaveShift;
+    if (cSig !== lastCleaveSig) {
+      lastCleaveSig = cSig;
+      cleaveStage.setAttribute('data-sc-verify-state', cSig);
+    }
+    if (cleaveReadout) {
+      var cLabel = impactState === 'detonated'
+        ? 'QUOTE ROUTER ACTIVE'
+        : cp < 0.35
+          ? '4 STARTER KITS · 30 DAYS'
+          : cp < 0.70
+            ? 'PLANS FRACTURING · WAVE 0..2'
+            : 'CORRIDOR AHEAD · TRAVERSE STORY';
+      if (cLabel !== lastCleaveLabel) {
+        lastCleaveLabel = cLabel;
+        cleaveReadout.textContent = cLabel;
+      }
+    }
+  }
+
   function syncScrollChoreography(forceAll) {
     if (cleaveAct && cleaveStage && (forceAll || inView.cleave)) {
-      var cp = parseFloat(cleaveAct.style.getPropertyValue('--sc-p')) || 0;
-      lastCleaveP = cp;
-      applyCleaveTransform();
-
-      var cleaveShift = Math.round(cp * 28);
-      var cSig = 'p:' + cp.toFixed(2) + '|cleave:' + cleaveShift;
-      if (cSig !== lastCleaveSig) {
-        lastCleaveSig = cSig;
-        cleaveStage.setAttribute('data-sc-verify-state', cSig);
-      }
-      if (cleaveReadout) {
-        var cLabel = cp < 0.35
-          ? 'CLEAVAGE SEAM · 4 STARTER KITS · 30 DAYS'
-          : cp < 0.70
-            ? 'PLANS FRACTURING -> WAVE 0..2 STRUCTURE'
-            : 'CORRIDOR AHEAD · TRAVERSE THE AUTOPSY';
-        if (cLabel !== lastCleaveLabel) {
-          lastCleaveLabel = cLabel;
-          cleaveReadout.textContent = cLabel;
-        }
-      }
+      syncCleaveStageState();
     }
 
     if (mirrorAct && mirrorStage && (forceAll || inView.mirror)) {
@@ -208,7 +496,6 @@ if (typeof window !== 'undefined' && typeof document !== 'undefined') (function 
         lastMirrorSig = mSig;
         mirrorStage.setAttribute('data-sc-verify-state', mSig);
       }
-      // Natural obsidian impact basin settles smoothly into near-total #030508 optical mirror void
       if (mirrorImpact && !reduceMotion) {
         var settle = clamp01((mp - 0.08) / 0.62);
         var smoothSettle = settle * settle * (3 - 2 * settle);
@@ -261,7 +548,7 @@ if (typeof window !== 'undefined' && typeof document !== 'undefined') (function 
     ptrCurX += (ptrTargetX - ptrCurX) * 0.12;
     ptrCurY += (ptrTargetY - ptrCurY) * 0.12;
 
-    if (inView.cleave) {
+    if (inView.cleave && impactState === 'frozen') {
       applyCleaveTransform();
     }
     if (inView.mirror) {
@@ -302,9 +589,545 @@ if (typeof window !== 'undefined' && typeof document !== 'undefined') (function 
     }
   }, { passive: true });
   window.addEventListener('resize', function () { syncScrollChoreography(true); }, { passive: true });
+
+  /* ---- 4. Act 1 Freeze-Frame Detonation + Smart AI Intent Router ---------- */
+  var routerPills = Array.prototype.slice.call(document.querySelectorAll('[data-router-intent]'));
+  var routerWavePreviewEl = document.getElementById('router-wave-preview');
+  var routerGoalInput = document.getElementById('router-goal-input');
+  var routerRouteBtn = document.querySelector('[data-quote-route-btn]');
+  var routerBtnLabelEl = document.querySelector('[data-router-btn-label]');
+  var activeRouterIntent = 'offline-workspace';
+
+  var ROUTER_PREVIEWS = {
+    'offline-workspace': 'Wave 0..2 scope: Single-file workspace schema · SVG mind-map & lexicon · offline SHA-256 handoff capsule.',
+    'local-ai-vault': 'Wave 0..2 scope: Vault redaction boundary · local FTS5 / MCP index · cryptographic claim-vs-diff parity gate.',
+    'custom-webos-site': 'Wave 0..2 scope: Narrative & 4K optical type · 60fps GPU stage & interactive widgets · portable source bundle.',
+    'free-kit': 'Free 30-Day Kit: Open the in-browser Aether WebOS Refractory right now with 4 starter kits and zero login.'
+  };
+
+  function setImpactState(nextState, moveFocus) {
+    impactState = nextState === 'detonated' ? 'detonated' : 'frozen';
+    var isDetonated = impactState === 'detonated';
+    if (cleaveStage) {
+      if (detonateSettleTimer) {
+        window.clearTimeout(detonateSettleTimer);
+        detonateSettleTimer = 0;
+      }
+      cleaveStage.classList.add('is-detonating');
+      cleaveStage.setAttribute('data-impact-state', impactState);
+      detonateSettleTimer = window.setTimeout(function () {
+        detonateSettleTimer = 0;
+        if (cleaveStage) cleaveStage.classList.remove('is-detonating');
+      }, 520);
+    }
+    if (isDetonated) {
+      ptrActive = false;
+    }
+    detonateBtns.forEach(function (btn) {
+      btn.setAttribute('aria-expanded', isDetonated ? 'true' : 'false');
+    });
+    if (cleaveMeteor) {
+      if (isDetonated) cleaveMeteor.setAttribute('tabindex', '-1');
+      else cleaveMeteor.removeAttribute('tabindex');
+    }
+    if (cleaveFractureDeck) {
+      cleaveFractureDeck.inert = !isDetonated;
+      if (isDetonated) cleaveFractureDeck.removeAttribute('inert');
+      else cleaveFractureDeck.setAttribute('inert', '');
+    }
+    if (detonateLabelEl) {
+      detonateLabelEl.textContent = isDetonated ? 'Replay Freeze-Frame' : 'Detonate Impact';
+    }
+    if (cleaveTelemetryTag) {
+      cleaveTelemetryTag.textContent = isDetonated
+        ? 'T + 0.00s · IMPACT DETONATED'
+        : 'T - 0.04s · IMPACT SUSPENDED';
+    }
+    lastCleaveLabel = '';
+    syncCleaveStageState();
+
+    if (moveFocus) {
+      requestAnimationFrame(function () {
+        if (isDetonated) {
+          var selectedPill = document.querySelector('[data-router-intent][aria-pressed="true"]') || routerPills[0];
+          if (selectedPill && typeof selectedPill.focus === 'function') {
+            selectedPill.focus({ preventScroll: true });
+          }
+        } else {
+          var mainBtn = document.getElementById('cleave-detonate-btn');
+          if (mainBtn && typeof mainBtn.focus === 'function') {
+            mainBtn.focus({ preventScroll: true });
+          }
+        }
+      });
+    }
+  }
+
+  detonateBtns.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      if (btn === cleaveMeteor) {
+        setImpactState('detonated', true);
+      } else {
+        setImpactState(impactState === 'detonated' ? 'frozen' : 'detonated', true);
+      }
+    });
+  });
+
+  resetBtns.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      setImpactState('frozen', true);
+    });
+  });
+
+  /* ---- 5. Smart Quote Synthesizer & Accessible Validation (#act-contact) -- */
+  var contactCfg = window.AetherFunding.resolveContactConfig(null);
+  var quoteForm = document.getElementById('aether-quote-form');
+  var quoteNameEl = document.getElementById('quote-name');
+  var quoteEmailEl = document.getElementById('quote-email');
+  var quoteCompanyEl = document.getElementById('quote-company');
+  var quoteTrackEl = document.getElementById('quote-track');
+  var quoteTimelineEl = document.getElementById('quote-timeline');
+  var quoteBriefEl = document.getElementById('quote-brief');
+  var quoteHpEl = document.getElementById('quote-website-hp');
+  var quoteSubmitBtn = document.getElementById('quote-submit-btn');
+  var quoteFormStatusEl = document.getElementById('quote-form-status');
+
+  var quoteRefEl = document.getElementById('quote-ref-id');
+  var quotePreviewTrackEl = document.getElementById('quote-preview-track');
+  var quotePreviewTimelineEl = document.getElementById('quote-preview-timeline');
+  var quoteWave0El = document.getElementById('quote-wave-0');
+  var quoteWave1El = document.getElementById('quote-wave-1');
+  var quoteWave2El = document.getElementById('quote-wave-2');
+  var quoteMailtoEl = document.getElementById('quote-mailto-link');
+  var quoteCopyBtn = document.getElementById('quote-copy-brief-btn');
+  var quoteDownloadBtn = document.getElementById('quote-download-json-btn');
+  var quotePreviewFeedbackEl = document.getElementById('quote-preview-feedback');
+
+  var lastSynthesized = null;
+  var quoteStatusMode = 'idle'; // 'idle' | 'routed' | 'locked' | 'error'
+
+  function syncLiveQuoteStatus(syn) {
+    if (!quoteFormStatusEl || !syn || quoteStatusMode === 'idle' || quoteStatusMode === 'error') return;
+    var hasValidName = Boolean(quoteNameEl && quoteNameEl.value.trim() && quoteNameEl.validity.valid);
+    var hasValidEmail = Boolean(quoteEmailEl && quoteEmailEl.value.trim() && quoteEmailEl.validity.valid);
+    var hasValidBrief = Boolean(quoteBriefEl && quoteBriefEl.value.trim() && quoteBriefEl.validity.valid);
+
+    if (quoteStatusMode === 'locked') {
+      quoteFormStatusEl.textContent = 'Scope ' + syn.refId + ' locked. Click Email Quote Request to ' + contactCfg.publicEmail + ', Copy Brief, or Download Capsule (.json).';
+      return;
+    }
+
+    if (hasValidName && hasValidEmail && hasValidBrief) {
+      quoteFormStatusEl.textContent = 'Ready to dispatch (' + syn.refId + '). Click Lock Scope & Prepare Dispatch or send directly on the right.';
+    } else if (hasValidName && hasValidEmail) {
+      quoteFormStatusEl.textContent = 'Selected ' + syn.shortTrackLabel + ' (' + syn.refId + '). Describe your project brief above to lock scope.';
+    } else {
+      quoteFormStatusEl.textContent = 'Routed ' + syn.shortTrackLabel + ' (' + syn.refId + '). Add your name and reply email below to dispatch.';
+    }
+  }
+
+  function refreshQuotePreview() {
+    if (!window.AetherFunding || typeof window.AetherFunding.synthesizeQuoteScope !== 'function') return null;
+    var syn = window.AetherFunding.synthesizeQuoteScope({
+      name: quoteNameEl ? quoteNameEl.value : '',
+      email: quoteEmailEl ? quoteEmailEl.value : '',
+      company: quoteCompanyEl ? quoteCompanyEl.value : '',
+      track: quoteTrackEl ? quoteTrackEl.value : activeRouterIntent,
+      timeline: quoteTimelineEl ? quoteTimelineEl.value : '2-to-4-weeks',
+      brief: quoteBriefEl ? quoteBriefEl.value : (routerGoalInput ? routerGoalInput.value : ''),
+      publicEmail: contactCfg.publicEmail,
+      responseWindow: contactCfg.responseWindow
+    });
+    lastSynthesized = syn;
+
+    if (quoteRefEl) quoteRefEl.textContent = 'REF · ' + syn.refId;
+    if (quotePreviewTrackEl) quotePreviewTrackEl.textContent = syn.shortTrackLabel;
+    if (quotePreviewTimelineEl) quotePreviewTimelineEl.textContent = syn.timelineLabel;
+    if (quoteWave0El) quoteWave0El.textContent = syn.waves[0];
+    if (quoteWave1El) quoteWave1El.textContent = syn.waves[1];
+    if (quoteWave2El) quoteWave2El.textContent = syn.waves[2];
+    if (quoteMailtoEl) {
+      quoteMailtoEl.href = syn.mailtoHref;
+      quoteMailtoEl.textContent = 'Email Quote Request to ' + contactCfg.publicEmail;
+    }
+    syncLiveQuoteStatus(syn);
+    return syn;
+  }
+
+  function selectRouterIntent(intentKey) {
+    activeRouterIntent = ROUTER_PREVIEWS[intentKey] ? intentKey : 'offline-workspace';
+    routerPills.forEach(function (pill) {
+      var k = pill.getAttribute('data-router-intent');
+      pill.setAttribute('aria-pressed', k === activeRouterIntent ? 'true' : 'false');
+    });
+    if (routerWavePreviewEl) {
+      routerWavePreviewEl.textContent = ROUTER_PREVIEWS[activeRouterIntent];
+    }
+    var nextLabel = activeRouterIntent === 'free-kit'
+      ? 'Open Free 30-Day Kit'
+      : 'Route My Free Quote';
+    if (routerBtnLabelEl) {
+      routerBtnLabelEl.textContent = nextLabel;
+    } else if (routerRouteBtn) {
+      routerRouteBtn.textContent = nextLabel;
+    }
+    if (activeRouterIntent !== 'free-kit' && quoteTrackEl) {
+      quoteTrackEl.value = activeRouterIntent;
+      refreshQuotePreview();
+    }
+  }
+
+  function executeRouterAction() {
+    var goal = routerGoalInput ? routerGoalInput.value.trim() : '';
+    if (activeRouterIntent === 'free-kit') {
+      var studioSec = document.getElementById('act-studio');
+      smoothScrollToEl(studioSec);
+      return;
+    }
+    if (quoteTrackEl) {
+      quoteTrackEl.value = activeRouterIntent;
+    }
+    if (goal && quoteBriefEl) {
+      quoteBriefEl.value = goal;
+    }
+    quoteStatusMode = 'routed';
+    if (quoteFormStatusEl) {
+      quoteFormStatusEl.classList.remove('is-error');
+    }
+    var syn = refreshQuotePreview();
+    var contactSec = document.getElementById('act-contact');
+    smoothScrollToEl(contactSec);
+    if (quoteFormStatusEl && syn) {
+      syncLiveQuoteStatus(syn);
+    }
+    setTimeout(function () {
+      var targetField = (quoteNameEl && !quoteNameEl.value.trim()) ? quoteNameEl : quoteBriefEl;
+      if (targetField && typeof targetField.focus === 'function') {
+        targetField.focus({ preventScroll: true });
+      }
+    }, reduceMotion ? 40 : 420);
+  }
+
+  routerPills.forEach(function (pill) {
+    pill.addEventListener('click', function () {
+      selectRouterIntent(pill.getAttribute('data-router-intent') || 'offline-workspace');
+    });
+  });
+
+  if (routerGoalInput) {
+    routerGoalInput.addEventListener('input', function () {
+      if (quoteBriefEl && !quoteBriefEl.value.trim()) {
+        refreshQuotePreview();
+      }
+    });
+    routerGoalInput.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' && !e.isComposing) {
+        e.preventDefault();
+        executeRouterAction();
+      }
+    });
+  }
+
+  if (routerRouteBtn) {
+    routerRouteBtn.addEventListener('click', executeRouterAction);
+  }
+
+  document.querySelectorAll('[data-select-quote-track]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var track = btn.getAttribute('data-select-quote-track') || 'offline-workspace';
+      if (quoteTrackEl) quoteTrackEl.value = track;
+      quoteStatusMode = 'routed';
+      if (quoteFormStatusEl) {
+        quoteFormStatusEl.classList.remove('is-error');
+      }
+      var syn = refreshQuotePreview();
+      smoothScrollToEl(document.getElementById('act-contact'));
+      if (quoteFormStatusEl && syn) {
+        syncLiveQuoteStatus(syn);
+      }
+    });
+  });
+
+  /* Accessible form validation (:user-invalid + ARIA sync + polite live announcer) */
+  function initQuoteFormValidation() {
+    if (!quoteForm) return;
+    var dirtyMap = new WeakMap();
+    var announcedSet = new WeakSet();
+    var supportsUserInvalid = typeof CSS !== 'undefined' && typeof CSS.supports === 'function' && CSS.supports('selector(:user-invalid)');
+
+    var announcer = document.createElement('div');
+    announcer.setAttribute('aria-live', 'polite');
+    announcer.className = 'visually-hidden';
+    document.body.appendChild(announcer);
+    var announceTimer = 0;
+    var announcedField = null;
+
+    function linkFieldError(el, shown) {
+      var errorId = el.getAttribute('data-error');
+      if (!errorId) return;
+      var raw = el.getAttribute('aria-describedby') || '';
+      var parts = raw.split(/\s+/).filter(function (id) { return Boolean(id && id !== errorId); });
+      if (shown) parts.push(errorId);
+      if (parts.length) el.setAttribute('aria-describedby', parts.join(' '));
+      else el.removeAttribute('aria-describedby');
+    }
+
+    function announceFieldError(el) {
+      var errorId = el.getAttribute('data-error');
+      var errEl = errorId ? document.getElementById(errorId) : null;
+      if (!errEl) return;
+      var labelText = el.labels && el.labels[0]
+        ? el.labels[0].textContent.replace(/\*/g, '').replace(/\s+/g, ' ').trim() + ': '
+        : '';
+      var msgText = errEl.textContent.replace(/\s+/g, ' ').trim();
+      clearTimeout(announceTimer);
+      announcer.textContent = '';
+      announcedField = el;
+      announceTimer = setTimeout(function () {
+        announcer.textContent = labelText + msgText;
+      }, 450);
+    }
+
+    function syncFieldValidity(el, forceDirty, shouldAnnounce) {
+      if (!el || !el.validity) return true;
+      var st = dirtyMap.get(el) || { interacted: false, blurred: false };
+      if (forceDirty) {
+        st.interacted = true;
+        st.blurred = true;
+        dirtyMap.set(el, st);
+      }
+      var nativeUserInvalid = supportsUserInvalid && el.matches(':user-invalid');
+      var showErr = !el.validity.valid && (nativeUserInvalid || (st.interacted && st.blurred));
+
+      el.classList.toggle('user-invalid-fallback', showErr);
+      el.classList.toggle('user-valid-fallback', el.validity.valid && st.interacted && Boolean(el.value.trim()));
+      el.setAttribute('aria-invalid', showErr ? 'true' : 'false');
+      linkFieldError(el, showErr);
+
+      if (showErr) {
+        if (shouldAnnounce && !announcedSet.has(el)) {
+          announceFieldError(el);
+          announcedSet.add(el);
+        }
+      } else {
+        announcedSet.delete(el);
+        if (announcedField === el) {
+          clearTimeout(announceTimer);
+          announcer.textContent = '';
+        }
+      }
+      return el.validity.valid;
+    }
+
+    var controls = Array.prototype.slice.call(quoteForm.querySelectorAll('input, select, textarea'));
+    controls.forEach(function (el) {
+      if (el === quoteHpEl) return;
+      el.setAttribute('aria-invalid', 'false');
+      linkFieldError(el, false);
+
+        el.addEventListener('input', function () {
+        var st = dirtyMap.get(el) || { interacted: false, blurred: false };
+        st.interacted = true;
+        dirtyMap.set(el, st);
+        if (st.blurred || el.getAttribute('aria-invalid') === 'true') {
+          syncFieldValidity(el, false, false);
+        }
+        if (quoteStatusMode === 'error' && quoteFormStatusEl) {
+          var allValidNow = controls.every(function (c) { return c === quoteHpEl || c.validity.valid; });
+          if (allValidNow) {
+            quoteStatusMode = 'routed';
+            quoteFormStatusEl.classList.remove('is-error');
+          }
+        }
+        refreshQuotePreview();
+      });
+
+      el.addEventListener('change', function () {
+        var st = dirtyMap.get(el) || { interacted: true, blurred: true };
+        st.interacted = true;
+        dirtyMap.set(el, st);
+        syncFieldValidity(el, false, true);
+        if (quoteStatusMode === 'error' && quoteFormStatusEl) {
+          var allValidNow = controls.every(function (c) { return c === quoteHpEl || c.validity.valid; });
+          if (allValidNow) {
+            quoteStatusMode = 'routed';
+            quoteFormStatusEl.classList.remove('is-error');
+          }
+        }
+        refreshQuotePreview();
+      });
+
+      el.addEventListener('blur', function () {
+        var st = dirtyMap.get(el) || { interacted: false, blurred: false };
+        st.blurred = true;
+        dirtyMap.set(el, st);
+        if (st.interacted) {
+          syncFieldValidity(el, false, true);
+        }
+      });
+    });
+
+    quoteForm.addEventListener('reset', function () {
+      setTimeout(function () {
+        quoteStatusMode = 'idle';
+        controls.forEach(function (el) {
+          if (el === quoteHpEl) return;
+          dirtyMap.delete(el);
+          announcedSet.delete(el);
+          el.classList.remove('user-invalid-fallback', 'user-valid-fallback');
+          el.setAttribute('aria-invalid', 'false');
+          linkFieldError(el, false);
+        });
+        if (quoteFormStatusEl) {
+          quoteFormStatusEl.classList.remove('is-error');
+          quoteFormStatusEl.textContent = '';
+        }
+        refreshQuotePreview();
+      }, 0);
+    });
+
+    quoteForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (quoteHpEl && quoteHpEl.value.trim()) return;
+
+      var firstInvalid = null;
+      for (var i = 0; i < controls.length; i++) {
+        var ctrl = controls[i];
+        if (ctrl === quoteHpEl) continue;
+        announcedSet.add(ctrl);
+        var ok = syncFieldValidity(ctrl, true, false);
+        if (!ok && !firstInvalid) firstInvalid = ctrl;
+      }
+
+      if (firstInvalid) {
+        quoteStatusMode = 'error';
+        if (quoteFormStatusEl) {
+          quoteFormStatusEl.classList.add('is-error');
+          quoteFormStatusEl.textContent = 'Please complete the highlighted fields above so your Wave 0..2 scope is accurate.';
+        }
+        firstInvalid.focus();
+        return;
+      }
+
+      quoteStatusMode = 'locked';
+      if (quoteFormStatusEl) {
+        quoteFormStatusEl.classList.remove('is-error');
+      }
+      var syn = refreshQuotePreview();
+      if (!syn) return;
+
+      if (contactCfg.quoteWebhookUrl && window.AetherFunding.isSafeHttpsUrl(contactCfg.quoteWebhookUrl) && typeof window.fetch === 'function') {
+        if (quoteSubmitBtn) quoteSubmitBtn.disabled = true;
+        if (quoteFormStatusEl) {
+          quoteFormStatusEl.classList.remove('is-error');
+          quoteFormStatusEl.textContent = 'Submitting scope ' + syn.refId + '...';
+        }
+        window.fetch(contactCfg.quoteWebhookUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(syn.capsule)
+        }).then(function (res) {
+          if (quoteSubmitBtn) quoteSubmitBtn.disabled = false;
+          if (quoteFormStatusEl) {
+            quoteFormStatusEl.classList.remove('is-error');
+            quoteFormStatusEl.textContent = res && res.ok
+              ? ('Quote ' + syn.refId + ' delivered. You can also save a local copy or email ' + contactCfg.publicEmail + ' directly.')
+              : ('Scope ' + syn.refId + ' locked. Click Email Quote Request to ' + contactCfg.publicEmail + ' or copy the brief on the right.');
+          }
+        }).catch(function () {
+          if (quoteSubmitBtn) quoteSubmitBtn.disabled = false;
+          if (quoteFormStatusEl) {
+            quoteFormStatusEl.classList.remove('is-error');
+            quoteFormStatusEl.textContent = 'Scope ' + syn.refId + ' locked locally. Click Email Quote Request to ' + contactCfg.publicEmail + ' or copy the brief.';
+          }
+        });
+        return;
+      }
+
+      if (quoteFormStatusEl) {
+        quoteFormStatusEl.classList.remove('is-error');
+        quoteFormStatusEl.textContent = 'Scope ' + syn.refId + ' locked. Click Email Quote Request to ' + contactCfg.publicEmail + ', Copy Brief, or Download Capsule (.json).';
+      }
+      if (quoteMailtoEl && typeof quoteMailtoEl.focus === 'function') {
+        quoteMailtoEl.focus({ preventScroll: true });
+      }
+    });
+  }
+
+  if (quoteCopyBtn) {
+    quoteCopyBtn.addEventListener('click', function () {
+      var syn = lastSynthesized || refreshQuotePreview();
+      if (!syn) return;
+      copyTextSafe(syn.plainBrief, function (ok) {
+        if (quotePreviewFeedbackEl) {
+          quotePreviewFeedbackEl.textContent = ok
+            ? ('Copied ' + syn.refId + ' brief to clipboard. Paste into an email to ' + contactCfg.publicEmail + '.')
+            : ('Select and copy your scope above, or email ' + contactCfg.publicEmail + '.');
+        }
+      });
+    });
+  }
+
+  if (quoteDownloadBtn) {
+    quoteDownloadBtn.addEventListener('click', function () {
+      var syn = lastSynthesized || refreshQuotePreview();
+      if (!syn) return;
+      var payload = JSON.stringify(syn.capsule, null, 2) + '\n';
+      var blob = new Blob([payload], { type: 'application/json;charset=utf-8' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = 'aether-quote-' + syn.refId.toLowerCase() + '.json';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+      if (quotePreviewFeedbackEl) {
+        quotePreviewFeedbackEl.textContent = 'Downloaded quote capsule aether-quote-' + syn.refId.toLowerCase() + '.json.';
+      }
+    });
+  }
+
+  var copyEmailBtn = document.querySelector('[data-copy-email]');
+  if (copyEmailBtn) {
+    copyEmailBtn.addEventListener('click', function () {
+      copyTextSafe(contactCfg.publicEmail, function (ok) {
+        copyEmailBtn.textContent = ok ? ('Copied ' + contactCfg.publicEmail) : contactCfg.publicEmail;
+        setTimeout(function () {
+          copyEmailBtn.textContent = 'Copy email address';
+        }, 2400);
+      });
+    });
+  }
+
+  function initContactManifest() {
+    refreshQuotePreview();
+    if (window.location && window.location.protocol === 'file:') return;
+    if (typeof window.fetch !== 'function' || !window.AetherFunding) return;
+    window.fetch('./context/contact.json', { cache: 'no-store' })
+      .then(function (res) { return res.ok ? res.json() : null; })
+      .then(function (manifest) {
+        if (!manifest) return;
+        contactCfg = window.AetherFunding.resolveContactConfig(manifest);
+        document.querySelectorAll('[data-contact-email-link]').forEach(function (el) {
+          el.setAttribute('href', 'mailto:' + contactCfg.publicEmail);
+        });
+        document.querySelectorAll('[data-contact-email-text]').forEach(function (el) {
+          el.textContent = contactCfg.publicEmail;
+        });
+        document.querySelectorAll('[data-contact-window]').forEach(function (el) {
+          el.textContent = 'Response window: ' + contactCfg.responseWindow;
+        });
+        refreshQuotePreview();
+      })
+      .catch(function () {});
+  }
+
+  initQuoteFormValidation();
+  initContactManifest();
   syncScrollChoreography(true);
 
-  /* ---- 4. Interactive floorplan-codex inline preview in Act 2 ------------- */
+  /* ---- 6. Interactive floorplan-codex inline preview in Act 2 ------------- */
   var CODEX_SAMPLES = {
     household: 'WAVE 0 -> Fixed bills snapshot + due dates\nWAVE 1 -> 10-meal pantry loop (depends: Wave 0)\nWAVE 2 -> $25 buffer jar + offline HTML export',
     workshop:  'WAVE 0 -> 90-minute signature flat-rate offer\nWAVE 1 -> 4-question text intake + tool checklist\nWAVE 2 -> Neighbor card + offline phone tracker',
@@ -325,7 +1148,7 @@ if (typeof window !== 'undefined' && typeof document !== 'undefined') (function 
     });
   });
 
-  /* ---- 5. Pinned Act & Pan Corridor keyboard focus safety ----------------- */
+  /* ---- 7. Pinned Act & Pan Corridor keyboard focus safety ----------------- */
   document.addEventListener('focusin', function (e) {
     var el = e.target;
     if (!el || !el.closest) return;
@@ -364,7 +1187,7 @@ if (typeof window !== 'undefined' && typeof document !== 'undefined') (function 
     }
   });
 
-  /* ---- 6. Cross-Act 30-Day Synchronization (Header, Ledger, Colophon) ----- */
+  /* ---- 8. Cross-Act 30-Day Synchronization (Header, Ledger, Colophon) ----- */
   function applyDayUi(detail) {
     if (!detail) return;
     var day = Number(detail.day || detail.activeDay) || 1;
@@ -422,7 +1245,7 @@ if (typeof window !== 'undefined' && typeof document !== 'undefined') (function 
     applyDayUi(window.AetherRefractory.getState());
   }
 
-  /* ---- 7. Dynamic funding channel wiring (#act-support <- context/funding.json) --- */
+  /* ---- 9. Dynamic funding channel wiring (#act-support <- context/funding.json) --- */
   function initFundingSupport() {
     if (window.location && window.location.protocol === 'file:') return;
     if (typeof window.fetch !== 'function' || !window.AetherFunding) return;
@@ -493,4 +1316,30 @@ if (typeof window !== 'undefined' && typeof document !== 'undefined') (function 
   }
 
   initFundingSupport();
+
+  /* ---- 10. Post-LCP idle texture pre-decoder (zero click-time decode stall) */
+  function predecodeStageMedia() {
+    var imgs = document.querySelectorAll('.cleave-backdrop--detonated, .cleave-shard, .mirror-impact');
+    for (var i = 0; i < imgs.length; i++) {
+      var img = imgs[i];
+      if (img.loading === 'lazy') img.loading = 'eager';
+      if (typeof img.decode === 'function') {
+        img.decode().catch(function () {});
+      }
+    }
+  }
+
+  function schedulePredecode() {
+    if (typeof window.requestIdleCallback === 'function') {
+      window.requestIdleCallback(predecodeStageMedia, { timeout: 600 });
+    } else {
+      window.setTimeout(predecodeStageMedia, 250);
+    }
+  }
+
+  if (document.readyState === 'complete') {
+    schedulePredecode();
+  } else {
+    window.addEventListener('load', schedulePredecode, { once: true });
+  }
 })();

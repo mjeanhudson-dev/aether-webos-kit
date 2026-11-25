@@ -1,21 +1,22 @@
 <!-- Paste into a Squarespace Code Block inside an existing Fluid Engine page -->
 <link rel="preload" href="/s/aether-webos-rollout-fonts-BricolageGrotesque-Bold-bd80f5a1.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/s/aether-webos-rollout-fonts-BricolageGrotesque-Regular-fb01cae7.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/s/aether-webos-rollout-meteorite-crust-e4c3bf03.webp" as="image" type="image/webp" fetchpriority="high">
+<link rel="preload" href="/s/aether-webos-rollout-meteor-preimpact-85ff9ccb.webp" as="image" type="image/webp" fetchpriority="high">
+<link rel="preload" href="/s/aether-webos-rollout-meteorite-crust-38d09152.webp" as="image" type="image/webp" fetchpriority="high">
 <link rel="stylesheet" href="/s/aether-webos-rollout-scrollcraft-embed-7b1c4a4d.css">
-<link rel="stylesheet" href="/s/aether-webos-rollout-webos-refractory-4d65a151.css">
-<link rel="stylesheet" href="/s/aether-webos-rollout-styles-site-embed-94ffd839.css">
+<link rel="stylesheet" href="/s/aether-webos-rollout-webos-refractory-9b40ce1f.css">
+<link rel="stylesheet" href="/s/aether-webos-rollout-styles-site-embed-4dbcd51b.css">
 <script defer src="/s/aether-webos-rollout-webos-capsules-84d51470.js"></script>
-<script defer src="/s/aether-webos-rollout-webos-exporter-d3476806.js"></script>
-<script defer src="/s/aether-webos-rollout-webos-refractory-f4a6b440.js"></script>
+<script defer src="/s/aether-webos-rollout-webos-exporter-f317d51e.js"></script>
+<script defer src="/s/aether-webos-rollout-webos-refractory-bbe3a546.js"></script>
 <script defer src="/s/aether-webos-rollout-webos-live-bridge-3cced3d2.js"></script>
-<script defer src="/s/aether-webos-rollout-webgl-artifact-shader-8d445956.js"></script>
-<script defer src="/s/aether-webos-rollout-scripts-stage-choreography-323b8d19.js"></script>
+<script defer src="/s/aether-webos-rollout-webgl-artifact-shader-6c54674c.js"></script>
+<script defer src="/s/aether-webos-rollout-scripts-stage-choreography-be427c0c.js"></script>
 <div id="sc-embed-aether-webos-rollout" data-sc-embed data-sc-load="direct">
 <header class="site-bar" aria-label="Primary Navigation">
   <a class="site-bar__brand" href="#top">
     <svg class="site-bar__mark" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M12 2.5L21.5 12L12 21.5L2.5 12Z" fill="none" stroke="#ECEAE4" stroke-width="1.6"/>
+      <path d="M12 2.5L21.5 12L12 21.5L2.5 12Z" fill="none" stroke="#F4F1EA" stroke-width="1.6"/>
       <path d="M12 2.5V21.5" stroke="#E27A2C" stroke-width="1.4"/>
       <circle cx="12" cy="12" r="2.2" fill="#E27A2C"/>
     </svg>
@@ -27,6 +28,7 @@
     <a class="site-bar__link" href="#act-artifact">Artifact</a>
     <a class="site-bar__link" href="#act-studio">Studio</a>
     <a class="site-bar__link" href="#act-solutions">Solutions</a>
+    <a class="site-bar__link site-bar__link--accent" href="#act-contact">Free Quote</a>
     <a class="site-bar__link" href="#act-support">Support</a>
     <a class="site-bar__link" href="#act-curriculum">Days</a>
   </nav>
@@ -39,45 +41,161 @@
 
 <main id="top">
 
-  <!-- ACT 1 : TENSION (pin 2.1, Warm Alabaster vs Deep Obsidian Split Cleavage) -->
+  <!-- ACT 1 : TENSION (pin 2.1, Freeze-Frame Pre-Impact -> Click-to-Detonate Fractured Stage + Smart Quote Router) -->
   <section id="act-cleave" data-sc-act="pin" data-sc-span="2.1">
-    <div data-sc-stage class="cleave-stage" id="cleave-stage" data-sc-verify-state="p:0.00|cleave:0">
-      <div class="cleave-left">
-        <div class="cleave-copy" data-sc-cue="0 1 0 0" data-sc-rise="0">
+    <div data-sc-stage class="cleave-stage" id="cleave-stage" data-impact-state="frozen" data-sc-verify-state="p:0.00|cleave:0">
+
+      <div class="cleave-media" aria-hidden="true">
+        <img
+          class="cleave-backdrop cleave-backdrop--frozen"
+          src="/s/aether-webos-rollout-meteor-preimpact-85ff9ccb.webp"
+          width="2560"
+          height="1440"
+          fetchpriority="high"
+          loading="eager"
+          decoding="async"
+          alt="">
+        <img
+          class="cleave-backdrop cleave-backdrop--detonated"
+          src="/s/aether-webos-rollout-meteor-detonation-8697d253.webp"
+          width="2560"
+          height="1440"
+          loading="eager"
+          decoding="async"
+          alt="">
+        <div class="cleave-shockwave"></div>
+        <div class="cleave-scrim"></div>
+      </div>
+
+      <div class="sc-wrap cleave-grid">
+        <div class="cleave-editorial" data-sc-cue="0 1 0 0" data-sc-rise="0">
           <h1 class="cleave-title">Your mind, cleaved into working software.</h1>
-          <p class="cleave-sub">Turn messy plain-English notes into a visual floorplan and a single offline HTML file. Works in a current desktop or phone browser.</p>
+          <p class="cleave-sub">Turn messy plain-English notes into a visual floorplan and a single offline HTML file. Start free in your browser, or detonate the suspended impact to scope a custom build.</p>
+
           <div class="cleave-actions">
             <a class="btn btn--primary cleave-cta" href="#act-studio" data-aether-start>Start Day 1: Free</a>
+            <button
+              type="button"
+              class="btn btn--detonate"
+              id="cleave-detonate-btn"
+              data-aether-detonate
+              aria-expanded="false"
+              aria-controls="cleave-fracture-deck">
+              <svg class="btn__icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M8 1.5L9.85 6.15L14.5 8L9.85 9.85L8 14.5L6.15 9.85L1.5 8L6.15 6.15L8 1.5Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+              </svg>
+              <span data-detonate-label>Detonate Impact</span>
+            </button>
+          </div>
+
+          <div class="cleave-telemetry">
+            <span class="cleave-telemetry__dot" aria-hidden="true"></span>
+            <span class="cleave-telemetry__tag">T - 0.04s · IMPACT SUSPENDED</span>
+            <span class="cleave-telemetry__sep" aria-hidden="true">·</span>
+            <span class="cleave-telemetry__readout" id="cleave-readout">4 STARTER KITS · 30 DAYS</span>
+          </div>
+        </div>
+
+        <div class="cleave-focal">
+          <button
+            type="button"
+            class="cleave-meteor"
+            id="cleave-meteor"
+            data-aether-detonate
+            aria-expanded="false"
+            aria-controls="cleave-fracture-deck"
+            aria-label="Detonate suspended meteorite impact to reveal the Smart Quote Router">
+            <img
+              class="cleave-meteor__img"
+              src="/s/aether-webos-rollout-meteorite-crust-38d09152.webp"
+              width="2048"
+              height="2048"
+              fetchpriority="high"
+              loading="eager"
+              decoding="async"
+              alt="Natural iron-nickel octahedrite meteorite specimen with regmaglypt fusion crust suspended in tension before impact.">
+            <span class="cleave-meteor__pill">
+              <span class="cleave-meteor__spark" aria-hidden="true"></span>
+              <span>T - 0.04s · Tap Bolide to Detonate</span>
+            </span>
+          </button>
+
+          <div class="cleave-shards" aria-hidden="true">
+            <img
+              class="cleave-shard cleave-shard--a"
+              src="/s/aether-webos-rollout-shard-01-e1b9fa26.webp"
+              width="1600"
+              height="1600"
+              loading="lazy"
+              decoding="async"
+              alt="">
+            <img
+              class="cleave-shard cleave-shard--b"
+              src="/s/aether-webos-rollout-shard-02-68420de1.webp"
+              width="1600"
+              height="1600"
+              loading="lazy"
+              decoding="async"
+              alt="">
+          </div>
+
+          <div class="cleave-fracture-deck" id="cleave-fracture-deck" inert>
+            <div class="fracture-specimens">
+              <div class="fracture-specimen fracture-specimen--alabaster">
+                <strong>Offline-First HTML</strong>
+                <span>Zero login · WebCrypto SHA-256 parity</span>
+              </div>
+              <div class="fracture-specimen fracture-specimen--obsidian">
+                <strong>Direct Custom Builds</strong>
+                <span>Scoped in writing by Eloquent · Full source</span>
+              </div>
+            </div>
+
+            <div class="quote-router" id="aether-quote-router" data-quote-router>
+              <div class="quote-router__head">
+                <h2 class="quote-router__title" id="quote-router-title">Smart Intent &amp; Free Quote Router</h2>
+                <button type="button" class="btn btn--ghost quote-router__replay" data-impact-reset>Replay freeze-frame</button>
+              </div>
+
+              <div class="quote-router__pills" role="group" aria-labelledby="quote-router-title">
+                <button type="button" class="intent-pill" data-router-intent="offline-workspace" aria-pressed="true">Offline Workspace</button>
+                <button type="button" class="intent-pill" data-router-intent="local-ai-vault" aria-pressed="false">Private Local AI Vault</button>
+                <button type="button" class="intent-pill" data-router-intent="custom-webos-site" aria-pressed="false">Custom Scroll / WebOS Site</button>
+                <button type="button" class="intent-pill" data-router-intent="free-kit" aria-pressed="false">Free 30-Day Kit</button>
+              </div>
+
+              <p class="quote-router__preview" id="router-wave-preview" aria-live="polite">
+                Wave 0..2 scope: Single-file workspace schema · SVG mind-map &amp; lexicon · offline SHA-256 handoff capsule.
+              </p>
+
+              <div class="quote-router__form">
+                <label class="quote-router__label" for="router-goal-input">One-line goal (optional, pre-fills your quote)</label>
+                <div class="quote-router__row">
+                  <input
+                    type="text"
+                    id="router-goal-input"
+                    class="quote-router__input"
+                    maxlength="220"
+                    spellcheck="true"
+                    enterkeyhint="go"
+                    placeholder="e.g., Offline iPad checklist for 12 techs">
+                  <button type="button" class="btn btn--primary quote-router__submit" id="router-route-btn" data-quote-route-btn>
+                    <span data-router-btn-label>Route My Free Quote</span>
+                    <svg class="btn__icon" width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                      <path d="M3.5 8H12.5M8.75 4.25L12.5 8L8.75 11.75" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="cleave-right">
-        <div class="cleave-seam" aria-hidden="true"></div>
-        <div class="cleave-meteor" id="cleave-meteor">
-          <img
-            class="cleave-meteor__img"
-            src="/s/aether-webos-rollout-meteorite-crust-e4c3bf03.webp"
-            width="1200"
-            height="1200"
-            fetchpriority="high"
-            loading="eager"
-            decoding="async"
-            alt="Natural iron-nickel octahedrite meteorite specimen with regmaglypt fusion crust and cleaved acid-etched Widmanstatten crystal face.">
-        </div>
-
-        <div class="cleave-annot" data-sc-cue="0 1 0 0" data-sc-rise="0">
-          <span class="cleave-annot__rule" aria-hidden="true"></span>
-          <div class="cleave-annot__meta">
-            <span class="cleave-annot__tag">FE-NI FUSION CRUST · 60° WIDMANSTATTEN</span>
-            <span class="cleave-annot__readout" id="cleave-readout">CLEAVAGE SEAM · 4 STARTER KITS · 30 DAYS</span>
-          </div>
-        </div>
-      </div>
     </div>
   </section>
 
-  <!-- ACT 2 : WIT & MOMENTUM (pan 4.2, Unboxed 6-Plate Horizontal Corridor) -->
+  <!-- ACT 2 : WIT & MOMENTUM (pan 4.2, Sculpted 6-Plate Horizontal Corridor) -->
   <section id="act-corridor" data-sc-act="pan" data-sc-span="4.2">
     <div data-sc-stage class="corridor-stage" aria-label="Horizontal narrative corridor">
       <div class="corridor-rail" data-sc-pan="0.04" id="corridor-rail">
@@ -98,9 +216,9 @@
           </div>
           <div class="corridor-plate__art">
             <img
-              src="/s/aether-webos-rollout-shard-01-2e90580a.webp"
-              width="640"
-              height="640"
+              src="/s/aether-webos-rollout-shard-01-e1b9fa26.webp"
+              width="1600"
+              height="1600"
               loading="lazy"
               decoding="async"
               alt="Natural torn Sikhote-Alin iron-nickel meteorite shrapnel fragment on transparent field.">
@@ -112,7 +230,7 @@
           <p class="corridor-body">Nickel-iron meteorites show sixty-degree Widmanstatten bands because they cooled very slowly. Plain notes also sort out more easily when you slow down and write them plainly.</p>
           <div class="corridor-datum">
             <span class="corridor-datum__row">60° / 120° LAMELLAR BANDS</span>
-            <span class="corridor-datum__row corridor-datum__row--amber">PLAIN PROSE -> FLOORPLAN TREE</span>
+            <span class="corridor-datum__row corridor-datum__row--amber">PLAIN PROSE · FLOORPLAN TREE</span>
           </div>
         </article>
 
@@ -123,9 +241,9 @@
           </div>
           <div class="corridor-plate__art">
             <img
-              src="/s/aether-webos-rollout-shard-02-4c93db59.webp"
-              width="640"
-              height="640"
+              src="/s/aether-webos-rollout-shard-02-68420de1.webp"
+              width="1600"
+              height="1600"
               loading="lazy"
               decoding="async"
               alt="Organic liquid mercury droplets solidifying over rough jagged blackened meteoric iron on transparent field.">
@@ -141,11 +259,16 @@
               <button type="button" class="codex-preview__btn" data-codex-sample="workshop" aria-pressed="false">Workshop</button>
               <button type="button" class="codex-preview__btn" data-codex-sample="creator" aria-pressed="false">Creator</button>
             </div>
-            <pre class="codex-preview__out" id="codex-preview-out">WAVE 0 -> Fixed bills snapshot + due dates
-WAVE 1 -> 10-meal pantry loop (depends: Wave 0)
-WAVE 2 -> $25 buffer jar + offline HTML export</pre>
+            <pre class="codex-preview__out" id="codex-preview-out">WAVE 0 -&gt; Fixed bills snapshot + due dates
+WAVE 1 -&gt; 10-meal pantry loop (depends: Wave 0)
+WAVE 2 -&gt; $25 buffer jar + offline HTML export</pre>
           </div>
-          <a class="corridor-link" href="https://github.com/mjeanhudson-dev/floorplan-codex" target="_blank" rel="noopener noreferrer">Inspect floorplan-codex on GitHub -></a>
+          <a class="corridor-link" href="https://github.com/mjeanhudson-dev/floorplan-codex" target="_blank" rel="noopener noreferrer">
+            <span>Inspect floorplan-codex on GitHub</span>
+            <svg class="btn__icon" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M3.5 8H12.5M8.75 4.25L12.5 8L8.75 11.75" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
         </article>
 
         <article class="corridor-plate">
@@ -166,9 +289,9 @@ WAVE 2 -> $25 buffer jar + offline HTML export</pre>
       <img
         class="mirror-impact"
         id="mirror-impact"
-        src="/s/aether-webos-rollout-impact-void-ca9a53a8.webp"
-        width="1440"
-        height="900"
+        src="/s/aether-webos-rollout-impact-void-96ee0f21.webp"
+        width="2560"
+        height="1600"
         loading="lazy"
         decoding="async"
         alt="">
@@ -185,16 +308,16 @@ WAVE 2 -> $25 buffer jar + offline HTML export</pre>
     <div data-sc-stage class="artifact-stage" id="artifact-stage" data-sc-verify-state="phase:mercury|step:0|p:0.00">
       <img
         class="artifact-poster"
-        src="/s/aether-webos-rollout-artifact-poster-3c2ac240.webp"
-        width="1440"
-        height="900"
+        src="/s/aether-webos-rollout-artifact-poster-2b0c8055.webp"
+        width="2560"
+        height="1600"
         loading="lazy"
         decoding="async"
         alt="Molten liquid mercury streaming across a jagged cleaved iron-nickel Widmanstatten meteorite core on dark obsidian.">
       <template id="aether-artifact-plates">
-        <img data-plate="mercury" src="/s/aether-webos-rollout-artifact-mercury-9f9f902a.webp" alt="">
-        <img data-plate="cleave" src="/s/aether-webos-rollout-artifact-poster-3c2ac240.webp" alt="">
-        <img data-plate="crystal" src="/s/aether-webos-rollout-artifact-crystal-7a7e83bf.webp" alt="">
+        <img data-plate="mercury" src="/s/aether-webos-rollout-artifact-mercury-6777a058.webp" alt="">
+        <img data-plate="cleave" src="/s/aether-webos-rollout-artifact-poster-2b0c8055.webp" alt="">
+        <img data-plate="crystal" src="/s/aether-webos-rollout-artifact-crystal-b639d6dd.webp" alt="">
       </template>
       <canvas id="aether-artifact-canvas" aria-label="Interactive liquid-mercury Widmanstatten mineral relighting shader"></canvas>
 
@@ -236,22 +359,37 @@ WAVE 2 -> $25 buffer jar + offline HTML export</pre>
         <div class="artifact-unlocks" aria-label="Unlockable Artifacts">
           <div class="artifact-unlock">
             <span class="artifact-unlock__id">Artifact 01: floorplan-codex</span>
-            <a class="artifact-unlock__link" href="https://github.com/mjeanhudson-dev/floorplan-codex" target="_blank" rel="noopener noreferrer">Open-source parser repo -></a>
+            <a class="artifact-unlock__link" href="https://github.com/mjeanhudson-dev/floorplan-codex" target="_blank" rel="noopener noreferrer">
+              <span>Open-source parser repo</span>
+              <svg class="btn__icon" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M3.5 8H12.5M8.75 4.25L12.5 8L8.75 11.75" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
           </div>
           <div class="artifact-unlock">
             <span class="artifact-unlock__id">Artifact 02: Aether WebOS Refractory Kit</span>
-            <a class="artifact-unlock__link" href="#act-studio" data-aether-start>Open offline studio -></a>
+            <a class="artifact-unlock__link" href="#act-studio" data-aether-start>
+              <span>Open offline studio</span>
+              <svg class="btn__icon" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M3.5 8H12.5M8.75 4.25L12.5 8L8.75 11.75" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
           </div>
           <div class="artifact-unlock">
             <span class="artifact-unlock__id">Artifact 03: Portable Single-File HTML Kit</span>
-            <button type="button" class="artifact-unlock__btn" data-aether-export>Export My Kit (.html) -></button>
+            <button type="button" class="artifact-unlock__btn" data-aether-export>
+              <span>Export My Kit (.html)</span>
+              <svg class="btn__icon" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M3.5 8H12.5M8.75 4.25L12.5 8L8.75 11.75" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ACT 5 : CLARITY / OPERATE MODE (flow, Borderless Offline WebOS Refractory) -->
+  <!-- ACT 5 : CLARITY / OPERATE MODE (flow, Sculpted Offline WebOS Refractory) -->
   <section id="act-studio" class="studio-section" data-sc-act="flow">
     <div class="sc-wrap">
       <header class="studio-head">
@@ -286,65 +424,283 @@ WAVE 2 -> $25 buffer jar + offline HTML export</pre>
     </div>
   </section>
 
-  <!-- ACT 5b : SOLUTIONS (flow, borderless three-row ledger for B2B and turn-key work) -->
+  <!-- ACT 5b : SOLUTIONS (flow, Sculpted three-card bento for B2B and turn-key work) -->
   <section id="act-solutions" class="solutions-section" data-sc-act="flow">
     <div class="sc-wrap">
       <header class="solutions-head">
-        <p class="solutions-kicker">Work with Eloquent</p>
         <h2 class="solutions-title">The free kit is a working sample. A custom build is shaped around your business.</h2>
-        <p class="solutions-lede">Everything above runs in your browser with no account. If you want the same idea built around your business, your data, and your customers, here is what I can make.</p>
+        <p class="solutions-lede">Everything above runs in your browser with no account. If you want the same architecture shaped around your workflows, your private files, and your customers, here is what Eloquent builds.</p>
       </header>
 
-      <ol class="solutions-list">
+      <ul class="solutions-list">
         <li class="solutions-row">
-          <span class="solutions-row__num">01</span>
           <h3 class="solutions-row__title">Offline workspaces from one file</h3>
           <p class="solutions-row__body">A private workspace that opens from one file on any laptop or phone. <strong>Mind-map floorplans, plain-English notes, and handoff files with a checksum</strong> so you can tell if anyone changed them. Keep them, email them, or carry them on a USB stick.</p>
+          <button type="button" class="btn btn--ghost solutions-row__cta" data-select-quote-track="offline-workspace">
+            <span>Scope an offline workspace</span>
+            <svg class="btn__icon" width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M3.5 8H12.5M8.75 4.25L12.5 8L8.75 11.75" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
         </li>
         <li class="solutions-row">
-          <span class="solutions-row__num">02</span>
-          <h3 class="solutions-row__title">Private AI assistants that run on your machine</h3>
-          <p class="solutions-row__body">Assistants that read files on your own computer. <strong>I can set up a searchable local vault, strip passwords and keys before anything is shared, and add checks that compare what an agent reports against what it actually changed.</strong> Useful for teams that should not paste client data into a public chat. Not a fixed package yet: tell me your case and we agree scope and limits in writing first. You can read two working pieces now: the <a class="site-foot__link" href="webos/live-bridge.js">live voice co-pilot bridge</a> and the <a class="site-foot__link" href="https://github.com/mjeanhudson-dev/aether-webos-kit/blob/main/workers/funding-webhook.js" target="_blank" rel="noopener noreferrer">signed-webhook worker</a>.</p>
+          <h3 class="solutions-row__title">Private AI assistants on your machine</h3>
+          <p class="solutions-row__body">Assistants that read files on your own computer. <strong>Searchable local vaults, credential scrubbing before anything leaves, and parity checks comparing agent claims against real file diffs.</strong> Read two open pieces now: the <a class="site-foot__link" href="webos/live-bridge.js">live voice co-pilot bridge</a> and the <a class="site-foot__link" href="https://github.com/mjeanhudson-dev/aether-webos-kit/blob/main/workers/funding-webhook.js" target="_blank" rel="noopener noreferrer">signed-webhook worker</a>.</p>
+          <button type="button" class="btn btn--ghost solutions-row__cta" data-select-quote-track="local-ai-vault">
+            <span>Scope a private AI vault</span>
+            <svg class="btn__icon" width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M3.5 8H12.5M8.75 4.25L12.5 8L8.75 11.75" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
         </li>
         <li class="solutions-row">
-          <span class="solutions-row__num">03</span>
           <h3 class="solutions-row__title">Websites and tools you own</h3>
-          <p class="solutions-row__body">A scroll-driven site or a toolkit for your clients, delivered ready to run with the source code. <strong>You can host it yourself</strong>, and some hosts have free plans, so running it can cost nothing to begin with. Hosting terms are set by the host.</p>
+          <p class="solutions-row__body">A scroll-driven site or client toolkit delivered ready to run with full source code. <strong>Host it yourself</strong> on any static host or existing domain without recurring platform lock-in. Hosting terms are set by your chosen host.</p>
+          <button type="button" class="btn btn--ghost solutions-row__cta" data-select-quote-track="custom-webos-site">
+            <span>Scope a custom site or tool</span>
+            <svg class="btn__icon" width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M3.5 8H12.5M8.75 4.25L12.5 8L8.75 11.75" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
         </li>
-      </ol>
+      </ul>
 
       <div class="solutions-cta">
-        <a class="btn btn--primary" href="https://github.com/mjeanhudson-dev/aether-webos-kit/issues/new?title=Scoping%20request&amp;body=What%20are%20you%20trying%20to%20build%3F%0AWho%20will%20use%20it%3F%0AAny%20deadline%3F" target="_blank" rel="noopener noreferrer">Open a scoping request</a>
-        <p class="solutions-cta__note">Opens a public GitHub issue and needs a free GitHub account. Leave out private business details. There is no price list yet; I quote after I understand the job.</p>
+        <a class="btn btn--primary" href="#act-contact">Start a Free Quote Below</a>
+        <a class="btn btn--ghost" href="https://github.com/mjeanhudson-dev/aether-webos-kit/issues/new?title=Scoping%20request&amp;body=What%20are%20you%20trying%20to%20build%3F%0AWho%20will%20use%20it%3F%0AAny%20deadline%3F" target="_blank" rel="noopener noreferrer">Or open a public GitHub issue</a>
+        <p class="solutions-cta__note">Private details belong in direct email below (<a class="site-foot__link" href="mailto:eloquent@eloquentwin.com">eloquent@eloquentwin.com</a>), never in a public issue.</p>
       </div>
     </div>
   </section>
 
-  <!-- ACT 5c : SUPPORT (flow, honest backing paths and transparency) -->
+  <!-- ACT 5c : CONTACT & FREE QUOTE SYSTEM (flow, zero-login Wave 0..2 scope synthesizer + eloquent@eloquentwin.com) -->
+  <section id="act-contact" class="contact-section" data-sc-act="flow">
+    <div class="sc-wrap">
+      <header class="contact-head">
+        <h2 class="contact-title" id="contact-section-title">Request a free written scope and quote.</h2>
+        <p class="contact-lede">No login, no sales funnel, and no fixed-tier guesswork. Describe your project in plain English to generate a structured Wave 0 to Wave 2 architecture brief, then send it straight to Eloquent.</p>
+
+        <div class="contact-direct-bar" aria-label="Direct email contact">
+          <a class="btn btn--ghost contact-direct-bar__mail" href="mailto:eloquent@eloquentwin.com" data-contact-email-link>
+            <svg class="btn__icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <rect x="1.75" y="3.25" width="12.5" height="9.5" rx="2.25" stroke="currentColor" stroke-width="1.4"/>
+              <path d="M2.5 4.5L8 8.5L13.5 4.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span data-contact-email-text>eloquent@eloquentwin.com</span>
+          </a>
+          <button type="button" class="btn btn--ghost" id="contact-copy-email-btn" data-copy-email>Copy email address</button>
+          <span class="contact-direct-bar__meta" data-contact-window>Response window: 1 to 2 business days</span>
+        </div>
+      </header>
+
+      <div class="contact-grid">
+        <form class="quote-form" id="aether-quote-form" aria-labelledby="contact-form-heading" action="mailto:eloquent@eloquentwin.com" method="post" novalidate>
+          <div class="quote-form__head">
+            <h3 class="quote-form__title" id="contact-form-heading">Smart Free Quote Intake</h3>
+            <span class="quote-form__badge">Zero account required</span>
+          </div>
+
+          <div class="visually-hidden" aria-hidden="true">
+            <label for="quote-website-hp">Leave this field blank</label>
+            <input type="text" id="quote-website-hp" name="website_hp" tabindex="-1" autocomplete="off">
+          </div>
+
+          <div class="quote-form__row">
+            <div class="quote-field">
+              <label class="quote-field__label" for="quote-name">Your name <span class="quote-field__req" aria-hidden="true">*</span></label>
+              <span id="quote-name-hint" class="quote-field__hint">Person or lead contact</span>
+              <input
+                type="text"
+                id="quote-name"
+                name="name"
+                class="quote-field__control"
+                required
+                maxlength="120"
+                autocomplete="name"
+                enterkeyhint="next"
+                aria-describedby="quote-name-hint"
+                aria-invalid="false"
+                data-error="quote-name-error">
+              <div id="quote-name-error" class="quote-field__error">
+                <svg class="quote-field__err-icon" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.5"/>
+                  <path d="M8 4.75V8.75M8 11.25H8.01" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                </svg>
+                <span>Error: Enter your name so Eloquent knows who this scope is for.</span>
+              </div>
+            </div>
+
+            <div class="quote-field">
+              <label class="quote-field__label" for="quote-email">Reply email <span class="quote-field__req" aria-hidden="true">*</span></label>
+              <span id="quote-email-hint" class="quote-field__hint">Format: you@domain.com</span>
+              <input
+                type="email"
+                id="quote-email"
+                name="email"
+                class="quote-field__control"
+                required
+                maxlength="160"
+                autocomplete="email"
+                autocorrect="off"
+                autocapitalize="none"
+                spellcheck="false"
+                enterkeyhint="next"
+                aria-describedby="quote-email-hint"
+                aria-invalid="false"
+                data-error="quote-email-error">
+              <div id="quote-email-error" class="quote-field__error">
+                <svg class="quote-field__err-icon" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.5"/>
+                  <path d="M8 4.75V8.75M8 11.25H8.01" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                </svg>
+                <span>Error: Enter a valid email address in the format you@domain.com.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="quote-field">
+            <label class="quote-field__label" for="quote-company">Company, studio, or team (optional)</label>
+            <input
+              type="text"
+              id="quote-company"
+              name="company"
+              class="quote-field__control"
+              maxlength="120"
+              autocomplete="organization"
+              enterkeyhint="next"
+              aria-invalid="false">
+          </div>
+
+          <div class="quote-form__row">
+            <div class="quote-field">
+              <label class="quote-field__label" for="quote-track">Build track <span class="quote-field__req" aria-hidden="true">*</span></label>
+              <select id="quote-track" name="track" class="quote-field__control quote-field__select" required aria-invalid="false">
+                <option value="offline-workspace">Offline Workspace</option>
+                <option value="local-ai-vault">Private Local AI Vault</option>
+                <option value="custom-webos-site">Custom Scroll / WebOS Site</option>
+                <option value="hybrid-suite">Hybrid Multi-Surface Suite</option>
+              </select>
+            </div>
+
+            <div class="quote-field">
+              <label class="quote-field__label" for="quote-timeline">Target timeline <span class="quote-field__req" aria-hidden="true">*</span></label>
+              <select id="quote-timeline" name="timeline" class="quote-field__control quote-field__select" required aria-invalid="false">
+                <option value="2-to-4-weeks">2 to 4 weeks (sprint)</option>
+                <option value="1-to-2-months">1 to 2 months (standard)</option>
+                <option value="quarter-roadmap">Flexible quarter roadmap</option>
+                <option value="exploratory">Architecture review first</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="quote-field">
+            <label class="quote-field__label" for="quote-brief">Plain-English project brief <span class="quote-field__req" aria-hidden="true">*</span></label>
+            <span id="quote-brief-hint" class="quote-field__hint">Write 1 to 4 plain sentences about who will use this, what is tedious right now, and what done looks like (12+ characters).</span>
+            <textarea
+              id="quote-brief"
+              name="brief"
+              class="quote-field__control quote-field__textarea"
+              rows="4"
+              required
+              minlength="12"
+              maxlength="2400"
+              spellcheck="true"
+              aria-describedby="quote-brief-hint"
+              aria-invalid="false"
+              data-error="quote-brief-error"></textarea>
+            <div id="quote-brief-error" class="quote-field__error">
+              <svg class="quote-field__err-icon" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M8 4.75V8.75M8 11.25H8.01" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+              </svg>
+              <span>Error: Describe your project goal in at least 12 characters so we can scope Wave 0 to Wave 2 accurately.</span>
+            </div>
+          </div>
+
+          <div class="quote-form__actions">
+            <button type="submit" class="btn btn--primary" id="quote-submit-btn">Lock Scope &amp; Prepare Dispatch</button>
+            <button type="reset" class="btn btn--ghost" id="quote-reset-btn">Clear fields</button>
+          </div>
+
+          <p class="quote-form__status" id="quote-form-status" role="status" aria-live="polite"></p>
+        </form>
+
+        <aside class="quote-preview" id="aether-quote-preview" aria-labelledby="quote-preview-heading">
+          <div class="quote-preview__head">
+            <h3 class="quote-preview__title" id="quote-preview-heading">Live Proposed Build Scope</h3>
+            <span class="quote-preview__ref" id="quote-ref-id" data-quote-ref>REF · AEQ-0100</span>
+          </div>
+
+          <div class="quote-preview__chips">
+            <span class="quote-preview__chip" id="quote-preview-track">Offline Workspace</span>
+            <span class="quote-preview__chip" id="quote-preview-timeline">Focused sprint (2 to 4 weeks)</span>
+          </div>
+
+          <ol class="quote-waves" id="quote-preview-waves" aria-live="polite">
+            <li class="quote-wave quote-wave--w0">
+              <span class="quote-wave__tag">WAVE 0 · FOUNDATION</span>
+              <p class="quote-wave__text" id="quote-wave-0">Domain lexicon, plain-English Markdown schema, and zero-account local data contract.</p>
+            </li>
+            <li class="quote-wave quote-wave--w1">
+              <span class="quote-wave__tag">WAVE 1 · CORE SURFACE</span>
+              <p class="quote-wave__text" id="quote-wave-1">Interactive single-file HTML studio with SVG dependency floorplan and dual obsidian/paper contrast.</p>
+            </li>
+            <li class="quote-wave quote-wave--w2">
+              <span class="quote-wave__tag">WAVE 2 · VERIFIED HANDOFF</span>
+              <p class="quote-wave__text" id="quote-wave-2">WebCrypto SHA-256 capsule verification, airplane-mode audit, and full MIT/client-owned source delivery.</p>
+            </li>
+          </ol>
+
+          <div class="quote-preview__delivery">
+            <a
+              class="btn btn--primary quote-preview__mailto"
+              id="quote-mailto-link"
+              data-quote-mailto
+              href="mailto:eloquent@eloquentwin.com?subject=Aether%20Free%20Quote%20Request">
+              Email Quote Request to eloquent@eloquentwin.com
+            </a>
+            <div class="quote-preview__subactions">
+              <button type="button" class="btn btn--ghost" id="quote-copy-brief-btn" data-quote-copy>Copy Scoped Quote Brief</button>
+              <button type="button" class="btn btn--ghost" id="quote-download-json-btn" data-quote-download>Download Quote Capsule (.json)</button>
+            </div>
+          </div>
+
+          <p class="quote-preview__feedback" id="quote-preview-feedback" aria-live="polite"></p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACT 5d : SUPPORT (flow, honest backing paths and transparency) -->
   <section id="act-support" class="support-section" data-sc-act="flow">
     <div class="sc-wrap">
       <header class="solutions-head">
-        <p class="solutions-kicker">Support the work</p>
         <h2 class="solutions-title">Free and MIT licensed. Help is welcome, nothing is locked behind it.</h2>
         <p class="solutions-lede">The kit stays free. If it saved you time, you can help in two ways today, and telling a friend counts too.</p>
       </header>
 
       <div class="support-grid">
         <article class="support-path">
-          <p class="support-path__label">Open now</p>
-          <h3 class="support-path__title">Star and share the repo</h3>
+          <div class="support-path__head">
+            <h3 class="support-path__title">Star and share the repo</h3>
+            <span class="support-path__label">Open now</span>
+          </div>
           <p class="support-path__body">Free for you, and it helps other people find the project.</p>
           <a class="btn btn--ghost" href="https://github.com/mjeanhudson-dev/aether-webos-kit" target="_blank" rel="noopener noreferrer">Open the repository</a>
         </article>
         <article class="support-path">
-          <p class="support-path__label">Open now</p>
-          <h3 class="support-path__title">Hire a custom build</h3>
-          <p class="support-path__body">I write the scope down before any work starts, and you keep the source code. Start with a scoping request.</p>
-          <a class="btn btn--ghost" href="#act-solutions">See what I build</a>
+          <div class="support-path__head">
+            <h3 class="support-path__title">Hire a custom build</h3>
+            <span class="support-path__label">Open now</span>
+          </div>
+          <p class="support-path__body">Eloquent writes the scope down before any work starts, and you keep the source code. Start with a free quote above.</p>
+          <a class="btn btn--ghost" href="#act-contact">Request a free quote</a>
         </article>
         <article class="support-path" data-funding-slot="backing">
-          <p class="support-path__label">Not available yet</p>
-          <h3 class="support-path__title">Back the project</h3>
+          <div class="support-path__head">
+            <h3 class="support-path__title">Back the project</h3>
+            <span class="support-path__label">Not available yet</span>
+          </div>
           <p class="support-path__body" id="funding-note">No sponsor or tip page exists yet. When one does, a link will appear here.</p>
           <button type="button" class="btn btn--ghost" aria-disabled="true" aria-describedby="funding-note">Not available yet</button>
         </article>
@@ -357,7 +713,7 @@ WAVE 2 -> $25 buffer jar + offline HTML export</pre>
     </div>
   </section>
 
-  <!-- ACT 6 : RESOLVE (flow, Unboxed 4-Week Hairline Ledger + Non-Fading 472px Colophon) -->
+  <!-- ACT 6 : RESOLVE (flow, Sculpted 4-Week Ledger + 472px Colophon Card) -->
   <section id="act-curriculum" class="curriculum-section" data-sc-act="flow">
     <div class="sc-wrap curriculum-cv-shell">
 
@@ -439,25 +795,28 @@ WAVE 2 -> $25 buffer jar + offline HTML export</pre>
       </div>
 
       <section class="colophon" aria-label="Active Day Summary and Export">
-        <div class="colophon__measure">
-          <h3 class="colophon__title" id="colophon-day-title">Empty the Kitchen-Table Brain Dump</h3>
-          <p class="colophon__day" id="colophon-day-badge">DAY 1 · WEEK 1 · VOICE &amp; PERSONAL LEXICON</p>
-          <p class="colophon__prompt" id="colophon-day-prompt">Write 10 messy bullet points about the one weekly headache eating your peace right now. Do not polish grammar yet; just name bills, tasks, or unfinished promises.</p>
-          <p class="colophon__deliverable" id="colophon-day-deliverable">Deliverable: Raw 10-line plain-English note loaded inside the Refractory editor.</p>
+        <div class="colophon__card">
+          <div class="colophon__measure">
+            <h3 class="colophon__title" id="colophon-day-title">Empty the Kitchen-Table Brain Dump</h3>
+            <p class="colophon__day" id="colophon-day-badge">DAY 1 · WEEK 1 · VOICE &amp; PERSONAL LEXICON</p>
+            <p class="colophon__prompt" id="colophon-day-prompt">Write 10 messy bullet points about the one weekly headache eating your peace right now. Do not polish grammar yet; just name bills, tasks, or unfinished promises.</p>
+            <p class="colophon__deliverable" id="colophon-day-deliverable">Deliverable: Raw 10-line plain-English note loaded inside the Refractory editor.</p>
 
-          <div class="colophon__actions">
-            <a class="btn btn--primary" href="#act-studio" data-aether-start>Start Day 1: Free</a>
-            <button type="button" class="btn btn--ghost" id="colophon-export-btn" data-aether-export>Export My Kit (.html)</button>
-            <button type="button" class="btn btn--ghost" id="colophon-share-btn" data-aether-share>Copy 472px Brief</button>
+            <div class="colophon__actions">
+              <a class="btn btn--primary" href="#act-studio" data-aether-start>Start Day 1: Free</a>
+              <button type="button" class="btn btn--ghost" id="colophon-export-btn" data-aether-export>Export My Kit (.html)</button>
+              <button type="button" class="btn btn--ghost" id="colophon-share-btn" data-aether-share>Copy 472px Brief</button>
+            </div>
+
+            <p class="colophon__feedback" id="colophon-feedback" data-aether-feedback aria-live="polite"></p>
           </div>
-
-          <p class="colophon__feedback" id="colophon-feedback" data-aether-feedback aria-live="polite"></p>
         </div>
 
         <footer class="site-foot">
           <span>
             <a class="site-foot__link" href="https://github.com/mjeanhudson-dev/floorplan-codex" target="_blank" rel="noopener noreferrer">Artifact 01: floorplan-codex</a>
             · Built by Eloquent (@mjeanhudson-dev)
+            · <a class="site-foot__link" href="mailto:eloquent@eloquentwin.com">eloquent@eloquentwin.com</a>
           </span>
           <span>MIT License · Zero-Install Offline WebOS · Start Day 1: Free</span>
         </footer>

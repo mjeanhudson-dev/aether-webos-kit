@@ -1,8 +1,6 @@
-# Payment and backing channels. Nothing is connected yet.
-# GitHub shows a Sponsor button only for channels listed here, so a dead slug
-# becomes a dead button. Uncomment a line ONLY after that account is live.
-#
-# GitHub Sponsors listing check on 2026-11-25: hasSponsorsListing = false.
-# github: [mjeanhudson-dev]
+# Payment and backing channels for Aether WebOS Kit.
+# GitHub Sponsors activates automatically once banking & W-9 onboarding is approved
+# at https://github.com/sponsors/accounts.
+github: [mjeanhudson-dev]
 # polar: mjeanhudson-dev
 # custom: ["https://buy.stripe.com/REPLACE_WITH_REAL_PAYMENT_LINK"]

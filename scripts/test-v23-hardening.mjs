@@ -311,3 +311,141 @@ test('funding loader: rejects javascript, http, placeholder, and malformed URLs'
   assert.deepEqual(res.actions, []);
   assert.equal(res.statsEndpoint, null);
 });
+
+test('v2.4 contact manifest & quote synthesizer: eloquent@eloquentwin.com, zero gmail, deterministic Wave 0..2 scope', () => {
+  const fs = require('node:fs');
+  const rawContact = fs.readFileSync(new URL('../context/contact.json', import.meta.url), 'utf8');
+  assert.equal(/gmail\.com|googlemail\.com/i.test(rawContact), false);
+  const contactJson = JSON.parse(rawContact);
+  assert.equal(contactJson.public_email, 'eloquent@eloquentwin.com');
+  assert.equal(contactJson.quote_webhook_url, null);
+  assert.equal(contactJson.response_window, '1 to 2 business days');
+
+  const cfg = funding.resolveContactConfig(contactJson);
+  assert.equal(cfg.publicEmail, 'eloquent@eloquentwin.com');
+  assert.equal(cfg.quoteWebhookUrl, null);
+  assert.equal(cfg.responseWindow, '1 to 2 business days');
+
+  const rejectedGmail = funding.resolveContactConfig({ public_email: 'someone@gmail.com', quote_webhook_url: 'http://insecure.test' });
+  assert.equal(rejectedGmail.publicEmail, 'eloquent@eloquentwin.com');
+  assert.equal(rejectedGmail.quoteWebhookUrl, null);
+
+  const syn = funding.synthesizeQuoteScope({
+    name: 'Morgan Vance',
+    email: 'morgan@vancelabs.example',
+    company: 'Vance Field Systems',
+    track: 'local-ai-vault',
+    timeline: '1-to-2-months',
+    brief: 'Local vault with SHA-256 parity checks for 14 field engineers.'
+  });
+  assert.match(syn.refId, /^AEQ-[0-9A-F]{4}-[0-9A-F]{4}$/);
+  assert.equal(syn.refId, funding.synthesizeQuoteScope({
+    name: 'Another Name',
+    track: 'local-ai-vault',
+    timeline: '1-to-2-months',
+    company: 'Vance Field Systems',
+    brief: 'Local vault with SHA-256 parity checks for 14 field engineers.'
+  }).refId);
+  assert.equal(syn.waves.length, 3);
+  assert.match(syn.waves[0], /SHA-256|field|engineers|vault/i);
+  assert.match(syn.mailtoHref, /^mailto:eloquent@eloquentwin\.com\?subject=/);
+  assert.equal(syn.capsule.schema, 'aether.quote.capsule.v1');
+  assert.equal(syn.capsule.recipient, 'eloquent@eloquentwin.com');
+  assert.equal(/[\u2014\u2013]/.test(syn.plainBrief), false);
+});
+
+test('v2.4 hero & stage markup: pre-impact freeze-frame, detonation hooks, AI quote router, and #act-contact form', () => {
+  const fs = require('node:fs');
+  const html = fs.readFileSync(new URL('../index.html', import.meta.url), 'utf8');
+  assert.match(html, /id="cleave-stage"[^>]*data-impact-state="frozen"/);
+  assert.match(html, /src="assets\/meteor-preimpact\.webp"[^>]*width="2560"[^>]*height="1440"/);
+  assert.match(html, /src="assets\/meteor-detonation\.webp"[^>]*width="2560"[^>]*height="1440"/);
+  assert.match(html, /id="cleave-detonate-btn"[\s\S]*?data-aether-detonate[\s\S]*?aria-expanded="false"/);
+  assert.match(html, /id="cleave-meteor"[\s\S]*?data-aether-detonate[\s\S]*?aria-expanded="false"/);
+  assert.match(html, /id="aether-quote-router"\s+data-quote-router/);
+  for (const intent of ['offline-workspace', 'local-ai-vault', 'custom-webos-site', 'free-kit']) {
+    assert.match(html, new RegExp(`data-router-intent="${intent}"`));
+  }
+  assert.match(html, /id="router-route-btn"\s+data-quote-route-btn/);
+  assert.match(html, /data-impact-reset/);
+  assert.match(html, /id="act-contact"\s+class="contact-section"/);
+  assert.match(html, /id="aether-quote-form"[^>]*action="mailto:eloquent@eloquentwin\.com"/);
+  assert.match(html, /id="quote-brief"[\s\S]*?spellcheck="true"/);
+  assert.match(html, /id="aether-quote-preview"/);
+  assert.match(html, /id="quote-wave-0"/);
+  assert.match(html, /id="quote-wave-1"/);
+  assert.match(html, /id="quote-wave-2"/);
+  assert.equal(/[\u2014\u2013]/.test(html), false);
+});
+
+test('v2.4 refractory studio: live native spellcheck toggle and sculpted SVG bezier floorplan', () => {
+  const fs = require('node:fs');
+  const refObj = require('../webos/refractory.js');
+  assert.equal(typeof refObj.setSpellcheck, 'function');
+  assert.equal(refObj.getState().spellcheck, true);
+  assert.equal(refObj.setSpellcheck(false, { silentStatus: true }), false);
+  assert.equal(refObj.getState().spellcheck, false);
+  assert.equal(refObj.setSpellcheck(true, { silentStatus: true }), true);
+  assert.equal(refObj.getState().spellcheck, true);
+
+  const refSrc = fs.readFileSync(new URL('../webos/refractory.js', import.meta.url), 'utf8');
+  assert.match(refSrc, /data-aw-spellcheck-toggle/);
+  assert.match(refSrc, /Spellcheck: On/);
+  assert.match(refSrc, /Spellcheck: Off/);
+  assert.match(refSrc, /rx:\s*14,\s*ry:\s*14/);
+  assert.match(refSrc, /function buildCubicEdgePath\(/);
+  assert.equal(/[\u2014\u2013]/.test(refSrc), false);
+});
+
+test('v2.4 sculpted widget radii & perceptual mineral palette: zero 2px sharp button regressions', () => {
+  const fs = require('node:fs');
+  const siteCss = fs.readFileSync(new URL('../styles/site.css', import.meta.url), 'utf8');
+  const refCss = fs.readFileSync(new URL('../webos/refractory.css', import.meta.url), 'utf8');
+  const expSrc = fs.readFileSync(new URL('../webos/exporter.js', import.meta.url), 'utf8');
+
+  assert.match(siteCss, /--aether-r-shell:\s*28px/);
+  assert.match(siteCss, /--aether-r-pill:\s*999px/);
+  assert.match(refCss, /--aw-r-shell:\s*28px/);
+  assert.match(refCss, /--aw-r-card:\s*20px/);
+  assert.match(refCss, /--aw-r-dossier:\s*18px/);
+  assert.match(refCss, /--aw-r-ctrl:\s*12px/);
+  assert.match(refCss, /--aw-r-pill:\s*999px/);
+
+  for (const [name, src] of [['styles/site.css', siteCss], ['webos/refractory.css', refCss], ['webos/exporter.js', expSrc]]) {
+    assert.equal(/border-radius:\s*2px/i.test(src), false, `2px border-radius regression in ${name}`);
+    assert.equal(/#67CEFA|#4ADE80|#F87171/i.test(src), false, `stock color regression in ${name}`);
+    assert.equal(/transition:\s*all\b/i.test(src), false, `transition: all in ${name}`);
+    assert.equal(/backdrop-filter|drop-shadow|mask-image/i.test(src), false, `expensive blur/filter/mask rule in ${name}`);
+    assert.equal(/[\u2014\u2013]/.test(src), false, `em/en dash in ${name}`);
+  }
+});
+
+test('v2.4 HiDPI / 4K geological assets & provenance sidecars exist on disk', () => {
+  const fs = require('node:fs');
+  const assets = [
+    'meteor-preimpact.webp',
+    'meteor-detonation.webp',
+    'meteorite-crust.webp',
+    'shard-01.webp',
+    'shard-02.webp',
+    'impact-void.webp',
+    'artifact-poster.webp',
+    'artifact-mercury.webp',
+    'artifact-crystal.webp'
+  ];
+  for (const file of assets) {
+    const webpUrl = new URL(`../assets/${file}`, import.meta.url);
+    const jsonUrl = new URL(`../assets/${file}.json`, import.meta.url);
+    assert.equal(fs.existsSync(webpUrl), true, `missing ${file}`);
+    assert.ok(fs.statSync(webpUrl).size > 20000, `${file} too small`);
+    assert.equal(fs.existsSync(jsonUrl), true, `missing sidecar ${file}.json`);
+    const sidecar = JSON.parse(fs.readFileSync(jsonUrl, 'utf8'));
+    assert.ok(typeof sidecar.prompt === 'string' && sidecar.prompt.length > 20, `invalid prompt in ${file}.json`);
+  }
+  const shaderSrc = fs.readFileSync(new URL('../webgl/artifact-shader.js', import.meta.url), 'utf8');
+  assert.match(shaderSrc, /MAX_DPR\s*=\s*1\.75/);
+  assert.match(shaderSrc, /MAX_BACKING_W\s*=\s*2560/);
+  const stageSrc = fs.readFileSync(new URL('../scripts/stage-choreography.js', import.meta.url), 'utf8');
+  assert.match(stageSrc, /predecodeStageMedia/);
+});
+
