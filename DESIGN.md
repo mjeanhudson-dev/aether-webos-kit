@@ -1,6 +1,6 @@
 ---
 name: "Aether WebOS Kit"
-description: "Cleaved warm alabaster and reflective obsidian design system for Aether WebOS Kit v2.0 by Eloquent (@mjeanhudson-dev)."
+description: "Cleaved warm alabaster and reflective obsidian design system for Aether WebOS Kit v2.1 by Eloquent (@mjeanhudson-dev)."
 colors:
   troilite-amber: "#E27A2C"
   troilite-amber-hover: "#EA8E47"
@@ -165,3 +165,15 @@ Don't:
 - Don't mask mineral cutouts with CSS `clip-path` geometry instead of true RGBA alpha mattes.
 - Don't edit `./scrollcraft.js` or `./scrollcraft.css`, leak local OS usernames, or fabricate user quotes or metrics.
 Full: .impeccable/design-full.md (read a section when you need its detail)
+
+---
+
+## v2.1 Runtime, Rehydration Capsules & Packaging Parity
+
+- **Author & Primary CTA:** Sole author `Eloquent (@mjeanhudson-dev)`; primary CTA locked verbatim across nav, hero, studio, colophon, and offline exports as `Start Day 1: Free`.
+- **Self-Hosted Typography (`./fonts/`):** 4 WOFF2 faces (`BricolageGrotesque-Bold.woff2` `37,656` B, `BricolageGrotesque-Regular.woff2` `38,064` B, `RedHatMono-Regular.woff2` `13,568` B, `RedHatMono-Bold.woff2` `13,716` B; `103,004` bytes total, zero external font requests).
+- **Geological Media & Single-Pass Sobel PBR Shader:** 7 macro WebP assets (`meteorite-crust.webp` `1200x1200`, `shard-01.webp` `640x640`, `shard-02.webp` `640x640`, `impact-void.webp` `1440x900`, `artifact-poster.webp` `1440x900`, `artifact-mercury.webp` `1280x720`, `artifact-crystal.webp` `1280x720`) paired with `./webgl/artifact-shader.js` (single-pass, loop-free Sobel PBR relighting with `fitCover` cursor meniscus, static paused redraws via `Pause shader` / `Resume shader`, and 3-plate CSS cross-fade fallback).
+- **Tab 4 Rehydration Capsules UI (`./webos/capsules.js`, `./webos/refractory.js`, `./webos/refractory.css`, `./context/terminal-synthesis.json` `v2.1.0`):**
+  - Borderless 1px-hairline 4-column desktop / 2-column mobile aspect grid (`.aw-aspect-grid`, `.aw-aspect-btn`, `.aw-aspect-btn--bundle`) across 6 specialized aspects (`session-passdown`, `floorplan-waves`, `lexicon-soul`, `swarm-handoff`, `offline-portability`, `compact-prompt` under `500` tokens) + `master-bundle` (`aria-pressed`), segmented `Markdown` / `JSON v2` toggle (`.aw-format-toggle`, `aether.rehydration.capsule.v2` + legacy `aether.compaction.passdown.v1`), live SHA-256 + `~N tokens` + UTF-8 byte telemetry chips, Copy/Download handlers, and 1-click Rehydrate/Restore panel (`.aw-rehydrate-panel`, `.aw-rehydrate-feedback--ok` `#4ADE80` obsidian / `#145A32` paper, `.aw-rehydrate-feedback--error` `#F87171` obsidian / `#B42318` paper).
+- **Offline Export Capsules (`./webos/exporter.js` `v2.1.0`):** Standalone single-file `.html` exports embed all 6 aspects + Master Bundle (`Markdown` & `JSON v2`) in an interactive offline Capsules tab with `aria-pressed` selectors, clipboard fallback, `.md`/`.json` `Blob` downloads, zero-rebuild SVG pan + `Fit`, Obsidian/Paper surface switch, and `472px` transactional email dispatch.
+- **Squarespace `/s/` Bundle (`./scripts/pack-squarespace.mjs`, `./squarespace/`):** `22` hashed upload files under `./squarespace/upload-to-s/` totaling `1,058,554` bytes mapped in `./squarespace/manifest.json` with WOFF2 `url()` rewrites, scoped `[data-sc-embed]` isolation, stylesheet cascade `scrollcraft*.css -> webos-refractory-*.css -> styles-site*.css`, and deferred script order `capsules -> exporter -> refractory -> artifact-shader -> stage-choreography`.

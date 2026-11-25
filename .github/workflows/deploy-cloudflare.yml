@@ -1,0 +1,38 @@
+name: Deploy to Cloudflare Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cloudflare-pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      CF_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Skip notice
+        if: env.CF_TOKEN == ''
+        run: echo "CLOUDFLARE_API_TOKEN not set, skipping Cloudflare deploy."
+      - name: Assemble site (runtime files only)
+        if: env.CF_TOKEN != ''
+        run: |
+          mkdir -p _site/scripts
+          cp index.html scrollcraft.css scrollcraft.js _headers _site/
+          cp -r assets fonts styles webgl webos context _site/
+          cp scripts/stage-choreography.js _site/scripts/
+      - name: Publish
+        if: env.CF_TOKEN != ''
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy _site --project-name=aether-webos-kit

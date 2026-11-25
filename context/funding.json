@@ -1,0 +1,22 @@
+{
+  "schema": "aether.funding.v1",
+  "updated_at": "2026-11-25T08:30:00-05:00",
+  "license": "MIT",
+  "posture": "No payment account connected. Nothing is being collected.",
+  "channels": {
+    "github_sponsors": { "url": null, "status": "not_listed", "checked": "2026-11-25" },
+    "polar": { "url": null, "status": "not_set_up" },
+    "stripe_one_time": { "url": null, "status": "not_set_up" },
+    "billing_portal_url": null
+  },
+  "live_stats_endpoint": null,
+  "engagement": {
+    "scoping_request_url": "https://github.com/mjeanhudson-dev/aether-webos-kit/issues/new",
+    "tracks": ["offline-first WebOS kits", "private AI agent suites", "turn-key sites and tools"]
+  },
+  "milestones": [
+    { "label": "Aether WebOS Kit v2.1.0 shipped, Lighthouse 100/100/100/100", "verified": true },
+    { "label": "Payment channel connected", "verified": false },
+    { "label": "Funding webhook worker deployed", "verified": false }
+  ]
+}

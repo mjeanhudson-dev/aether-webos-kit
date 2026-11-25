@@ -3,10 +3,11 @@
 <link rel="preload" href="/s/aether-webos-rollout-fonts-BricolageGrotesque-Regular-fb01cae7.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/s/aether-webos-rollout-meteorite-crust-e4c3bf03.webp" as="image" type="image/webp" fetchpriority="high">
 <link rel="stylesheet" href="/s/aether-webos-rollout-scrollcraft-embed-7b1c4a4d.css">
-<link rel="stylesheet" href="/s/aether-webos-rollout-webos-refractory-02a5a37e.css">
-<link rel="stylesheet" href="/s/aether-webos-rollout-styles-site-embed-95a25a32.css">
-<script defer src="/s/aether-webos-rollout-webos-exporter-c2c33702.js"></script>
-<script defer src="/s/aether-webos-rollout-webos-refractory-4f31394a.js"></script>
+<link rel="stylesheet" href="/s/aether-webos-rollout-webos-refractory-4d65a151.css">
+<link rel="stylesheet" href="/s/aether-webos-rollout-styles-site-embed-d237838f.css">
+<script defer src="/s/aether-webos-rollout-webos-capsules-84d51470.js"></script>
+<script defer src="/s/aether-webos-rollout-webos-exporter-d3476806.js"></script>
+<script defer src="/s/aether-webos-rollout-webos-refractory-f4a6b440.js"></script>
 <script defer src="/s/aether-webos-rollout-webgl-artifact-shader-8d445956.js"></script>
 <script defer src="/s/aether-webos-rollout-scripts-stage-choreography-5d830aa9.js"></script>
 <div id="sc-embed-aether-webos-rollout" data-sc-embed data-sc-load="direct">
@@ -24,6 +25,8 @@
     <a class="site-bar__link" href="#act-corridor">Story</a>
     <a class="site-bar__link" href="#act-artifact">Artifact</a>
     <a class="site-bar__link" href="#act-studio">Studio</a>
+    <a class="site-bar__link" href="#act-solutions">Solutions</a>
+    <a class="site-bar__link" href="#act-support">Support</a>
     <a class="site-bar__link" href="#act-curriculum">Days</a>
   </nav>
 
@@ -41,7 +44,7 @@
       <div class="cleave-left">
         <div class="cleave-copy" data-sc-cue="0 1 0 0" data-sc-rise="0">
           <h1 class="cleave-title">Your mind, cleaved into working software.</h1>
-          <p class="cleave-sub">Turn messy plain English notes into a working visual floorplan and single file offline tool on any device.</p>
+          <p class="cleave-sub">Turn messy plain-English notes into a visual floorplan and a single offline HTML file. Works in a current desktop or phone browser.</p>
           <div class="cleave-actions">
             <a class="btn btn--primary cleave-cta" href="#act-studio" data-aether-start>Start Day 1: Free</a>
           </div>
@@ -79,11 +82,11 @@
       <div class="corridor-rail" data-sc-pan="0.04" id="corridor-rail">
 
         <article class="corridor-plate corridor-plate--lead">
-          <h2 class="corridor-title">Your chatbot forgot your name at turn twenty-six.</h2>
-          <p class="corridor-body">By turn twenty-five, the cloud chat politely asks what project you are building. Again. Every Tuesday morning starts with a hostage negotiation over pasted old transcripts.</p>
+          <h2 class="corridor-title">Long chats forget what you told them.</h2>
+          <p class="corridor-body">After enough turns, many chat tools lose track of earlier details and ask again. Starting over means pasting old transcripts back in.</p>
           <div class="corridor-datum">
-            <span class="corridor-datum__row">TURN 01: Sharp plan.</span>
-            <span class="corridor-datum__row corridor-datum__row--amber">TURN 25: Polite stranger.</span>
+            <span class="corridor-datum__row">TURN 01: Clear plan.</span>
+            <span class="corridor-datum__row corridor-datum__row--amber">LATER: Lost context.</span>
           </div>
         </article>
 
@@ -104,8 +107,8 @@
         </article>
 
         <article class="corridor-plate">
-          <h2 class="corridor-title">Iron needs a million quiet years to crystallize.</h2>
-          <p class="corridor-body">Nickel-iron meteorites grow sixty-degree Widmanstatten bands only when molten chaos cools undisturbed. Plain notes cleave into order the moment the noise drops.</p>
+          <h2 class="corridor-title">Meteorite iron cools for millions of years before bands form.</h2>
+          <p class="corridor-body">Nickel-iron meteorites show sixty-degree Widmanstatten bands because they cooled very slowly. Plain notes also sort out more easily when you slow down and write them plainly.</p>
           <div class="corridor-datum">
             <span class="corridor-datum__row">60° / 120° LAMELLAR BANDS</span>
             <span class="corridor-datum__row corridor-datum__row--amber">PLAIN PROSE -> FLOORPLAN TREE</span>
@@ -115,7 +118,7 @@
         <article class="corridor-plate corridor-plate--media">
           <div class="corridor-plate__text">
             <h2 class="corridor-title">Plain English in. Dependency geometry out.</h2>
-            <p class="corridor-body">Write how you speak across a kitchen table. Aether extracts your Lexicon, splits Wave 0 from Wave 2, and seals a WebCrypto SHA-256 digest in browser memory.</p>
+            <p class="corridor-body">Write the way you would explain it across a kitchen table. Aether pulls out your key terms, sorts tasks into stages, and computes a checksum in your browser so you can tell if the file changed.</p>
           </div>
           <div class="corridor-plate__art">
             <img
@@ -129,8 +132,8 @@
         </article>
 
         <article class="corridor-plate">
-          <h2 class="corridor-title">floorplan-codex is real, public, and inspectable.</h2>
-          <p class="corridor-body">Preview how plain sentences cleave into deterministic Wave nodes right here, or inspect the open-source parser repository directly on GitHub.</p>
+          <h2 class="corridor-title">floorplan-codex is public and open source.</h2>
+          <p class="corridor-body">Try how plain sentences become a staged task list here, or read the parser code on GitHub.</p>
           <div class="codex-preview" data-codex-preview>
             <div class="codex-preview__tabs" role="group" aria-label="Floorplan Codex specimen preview">
               <button type="button" class="codex-preview__btn" data-codex-sample="household" aria-pressed="true">Household</button>
@@ -145,8 +148,8 @@ WAVE 2 -> $25 buffer jar + offline HTML export</pre>
         </article>
 
         <article class="corridor-plate">
-          <h2 class="corridor-title">Works at 36,000 feet with Wi-Fi switched off.</h2>
-          <p class="corridor-body">Export one self-contained HTML file to your drive. Double-click it on a borrowed laptop, in a quiet library, or over the ocean without an account.</p>
+          <h2 class="corridor-title">Works with Wi-Fi switched off.</h2>
+          <p class="corridor-body">Export one self-contained HTML file. Double-click it on any laptop, with no account and no connection.</p>
           <div class="corridor-plate__cta">
             <a class="btn btn--primary" href="#act-studio" data-aether-start>Start Day 1: Free</a>
           </div>
@@ -264,7 +267,7 @@ WAVE 2 -> $25 buffer jar + offline HTML export</pre>
             </div>
             <div class="studio-skeleton__grid">
               <div class="studio-skeleton__col">
-                <p>Loading plain-English editor and Wave 0..2 dependency parser...</p>
+                <p>Warming up your editor. Type or paste a few messy lines and watch them turn into a map.</p>
                 <a class="btn btn--primary" href="#act-studio" data-aether-start>Start Day 1: Free</a>
               </div>
               <div class="studio-skeleton__col">
@@ -274,6 +277,77 @@ WAVE 2 -> $25 buffer jar + offline HTML export</pre>
           </div>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- ACT 5b : SOLUTIONS (flow, borderless three-row ledger for B2B and turn-key work) -->
+  <section id="act-solutions" class="solutions-section" data-sc-act="flow">
+    <div class="sc-wrap">
+      <header class="solutions-head">
+        <p class="solutions-kicker">Work with Eloquent</p>
+        <h2 class="solutions-title">The free kit is a working sample. A custom build is shaped around your business.</h2>
+        <p class="solutions-lede">Everything above runs in your browser with no account. If you want the same idea built around your business, your data, and your customers, here is what I can make.</p>
+      </header>
+
+      <ol class="solutions-list">
+        <li class="solutions-row">
+          <span class="solutions-row__num">01</span>
+          <h3 class="solutions-row__title">Offline workspaces from one file</h3>
+          <p class="solutions-row__body">A private workspace that opens from one file on any laptop or phone. <strong>Mind-map floorplans, plain-English notes, and handoff files with a checksum</strong> so you can tell if anyone changed them. Keep them, email them, or carry them on a USB stick.</p>
+        </li>
+        <li class="solutions-row">
+          <span class="solutions-row__num">02</span>
+          <h3 class="solutions-row__title">Private AI assistants that run on your machine</h3>
+          <p class="solutions-row__body">Assistants that read files on your own computer. <strong>I can set up a searchable local vault, strip passwords and keys before anything is shared, and add checks that compare what an agent reports against what it actually changed.</strong> Useful for teams that should not paste client data into a public chat. Not a fixed package yet: tell me your case and we agree scope and limits in writing first.</p>
+        </li>
+        <li class="solutions-row">
+          <span class="solutions-row__num">03</span>
+          <h3 class="solutions-row__title">Websites and tools you own</h3>
+          <p class="solutions-row__body">A scroll-driven site or a toolkit for your clients, delivered ready to run with the source code. <strong>You can host it yourself</strong>, and some hosts have free plans, so running it can cost nothing to begin with. Hosting terms are set by the host.</p>
+        </li>
+      </ol>
+
+      <div class="solutions-cta">
+        <a class="btn btn--primary" href="https://github.com/mjeanhudson-dev/aether-webos-kit/issues/new?title=Scoping%20request&amp;body=What%20are%20you%20trying%20to%20build%3F%0AWho%20will%20use%20it%3F%0AAny%20deadline%3F" target="_blank" rel="noopener noreferrer">Open a scoping request</a>
+        <p class="solutions-cta__note">Opens a public GitHub issue and needs a free GitHub account. Leave out private business details. There is no price list yet; I quote after I understand the job.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACT 5c : SUPPORT (flow, honest backing paths and transparency) -->
+  <section id="act-support" class="support-section" data-sc-act="flow">
+    <div class="sc-wrap">
+      <header class="solutions-head">
+        <p class="solutions-kicker">Support the work</p>
+        <h2 class="solutions-title">Free and MIT licensed. Help is welcome, nothing is locked behind it.</h2>
+        <p class="solutions-lede">The kit stays free. If it saved you time, you can help in two ways today, and telling a friend counts too.</p>
+      </header>
+
+      <div class="support-grid">
+        <article class="support-path">
+          <p class="support-path__label">Open now</p>
+          <h3 class="support-path__title">Star and share the repo</h3>
+          <p class="support-path__body">Free for you, and it helps other people find the project.</p>
+          <a class="btn btn--ghost" href="https://github.com/mjeanhudson-dev/aether-webos-kit" target="_blank" rel="noopener noreferrer">Open the repository</a>
+        </article>
+        <article class="support-path">
+          <p class="support-path__label">Open now</p>
+          <h3 class="support-path__title">Hire a custom build</h3>
+          <p class="support-path__body">I write the scope down before any work starts, and you keep the source code. Start with a scoping request.</p>
+          <a class="btn btn--ghost" href="#act-solutions">See what I build</a>
+        </article>
+        <article class="support-path" data-funding-slot="backing">
+          <p class="support-path__label">Not available yet</p>
+          <h3 class="support-path__title">Back the project</h3>
+          <p class="support-path__body" id="funding-note">No sponsor or tip page exists yet. When one does, a link will appear here.</p>
+          <button type="button" class="btn btn--ghost" aria-disabled="true" aria-describedby="funding-note">Not available yet</button>
+        </article>
+      </div>
+
+      <p class="support-ledger">
+        <span><strong>Funding:</strong> no payment account is connected, and nothing is being collected.</span>
+        <span><a class="site-foot__link" href="https://github.com/mjeanhudson-dev/aether-webos-kit/blob/main/docs/MONETIZATION_AND_PAYMENTS.md" target="_blank" rel="noopener noreferrer">See how funding is planned (GitHub)</a></span>
+      </p>
     </div>
   </section>
 

@@ -12,28 +12,32 @@ Everyday builders, families, freelancers, solo operators, teachers, and local or
 
 ## Product Purpose
 
-Aether WebOS Kit turns messy plain-English notes into an interactive visual SVG Mind-Map Floorplan, Dual-View editorial reader, structured Lexicon/Wiki/Soul knowledge base, WebCrypto SHA-256 25-Turn Pass-Down Capsule, and a portable single-file offline `.html` application that works in airplane mode and exports a crisp `472px` transactional summary.
+Aether WebOS Kit turns messy plain-English notes into an interactive visual SVG Mind-Map Floorplan, Dual-View editorial reader, structured Lexicon/Wiki/Soul knowledge base, 6-aspect + Master Bundle Rehydration Capsules (`Markdown` and `JSON v2` with live WebCrypto/FIPS 180-4 SHA-256 digests, `~N tokens` estimates, and 1-click Rehydrate/Restore), and a portable single-file offline `.html` application that preserves interactive multi-aspect capsules in airplane mode alongside a crisp `472px` transactional summary.
 
 ## Positioning
 
-Unlike subscription cloud note apps, rigid boxed dashboard builders, or ephemeral AI chat threads that forget context after 25 turns, Aether parses plain human language directly inside the browser into navigable multi-wave structure with zero installs, zero logins, zero telemetry lock-in, and full single-file ownership on local disk.
+Unlike subscription cloud note apps, rigid boxed dashboard builders, or ephemeral AI chat threads that forget context after 25 turns, Aether parses plain human language directly inside the browser into navigable multi-wave structure and portable rehydration capsules with zero installs, zero logins, zero telemetry lock-in, and full single-file ownership on local disk (`Start Day 1: Free`).
 
 ## Operating Context
 
-- Zero-install browser execution (`http://` local server or exported standalone `.html` double-clicked directly from local disk in airplane mode).
+- Zero-install browser execution (`http://` local server or exported standalone `.html` double-clicked directly from local disk in airplane mode) plus Squarespace `/s/` deployment (`22` hashed upload files totaling `1,058,554` bytes under `squarespace/upload-to-s/`).
 - Side-by-side plain-English authoring paired with live SVG dependency trees (`Wave 0`, `Wave 1`, `Wave 2`), 4 Starter Kits (`Household & Cashflow Clarity`, `Local Service & Workshop Launch`, `30-Day Creator & Newsletter System`, `Community & Teaching Hub`), and a 30-day progressive mentorship track (`Days 1 to 30` across `Weeks 1 to 4`).
-- Context preservation via SHA-256 checksum receipts and `./context/terminal-synthesis.json` hot-swap loading (`window.AetherRefractory`).
-- Artifact continuity across shipped works by Eloquent (`@mjeanhudson-dev`), opening with `Artifact 01: floorplan-codex` (`https://github.com/mjeanhudson-dev/floorplan-codex`) and `Artifact 02: Aether WebOS Refractory Kit`.
+- Multi-aspect context preservation via `webos/capsules.js` (`window.AetherCapsules`, `v2.1.0`, schema `aether.rehydration.capsule.v2` + legacy `aether.compaction.passdown.v1`) and `./context/terminal-synthesis.json` `v2.1.0` hot-swap loading (`window.AetherRefractory`).
+- Artifact continuity across shipped works by Eloquent (`@mjeanhudson-dev`), opening with `Artifact 01: floorplan-codex` (`https://github.com/mjeanhudson-dev/floorplan-codex`), `Artifact 02: Aether WebOS Refractory Kit`, and `Artifact 03: Portable Single-File HTML Kit`.
 
 ## Capabilities and Constraints
 
-- Client-side live workspace (`#aether-webos-mount`) built in dependency-free UMD JavaScript (`webos/refractory.js`, `webos/exporter.js`) with preserved public API (`mount`, `selectDay`, `selectKit`, `selectTab`, `exportKit`, `exportHtml`, `copyShareNote`, `reloadContext`, `importContextJson`, `getState`, `version`).
+- Client-side live workspace (`#aether-webos-mount`) built in dependency-free UMD JavaScript (`webos/capsules.js`, `webos/exporter.js`, `webos/refractory.js`) with preserved public API:
+  - `window.AetherCapsules`: `version`, `SCHEMA_VERSION`, `LEGACY_SCHEMA_VERSION`, `DEFAULT_ASPECT_ID`, `ASPECTS`, `getAspect`, `normalizeAspectId`, `stripEmDashes`, `computeByteLength`, `estimateTokens`, `computeCapsuleDigest`, `computeCapsuleDigestSync`, `buildCapsuleMarkdown`, `buildCapsuleJson`, `serializeCapsuleJson`, `buildAllCapsules`, `parseCapsuleForRehydrate`.
+  - `window.AetherRefractory`: `version`, `mount`, `selectDay`, `selectKit`, `selectTab`, `setSurface`, `exportKit`, `exportHtml`, `copyShareNote`, `reloadContext`, `importContextJson`, `getCapsule`, `rehydrateCapsule`, `selectCapsuleAspect`, `selectCapsuleFormat`, `getState`.
+  - `window.AetherExporter`: `version`, `stripEmDashes`, `escapeHtml`, `safeJsonForHtml`, `buildShareNote`, `buildPlainLetterDispatch`, `buildEmailDispatchHtml`, `buildOfflineHtml`, `downloadKitHtml`.
+- Tab 4 (`Rehydration Capsules`) in the live studio and standalone offline `.html` exports provides `6` specialized aspects (`session-passdown`, `floorplan-waves`, `lexicon-soul`, `swarm-handoff`, `offline-portability`, `compact-prompt` under `500` tokens) + `master-bundle`, `Markdown` <-> `JSON v2` toggle, live SHA-256 + token counts + byte counts, copy/download handlers, and 1-click Rehydrate/Restore (JSON paste or local `.json` file pick) that safely validates `v2` and legacy `v1` capsules without losing editor state on invalid input.
 - Scroll engine files (`scrollcraft.js` and `scrollcraft.css`) remain unmodified.
 - Strict zero visible em dashes (`\u2014` or HTML entity mdash) across all copy, code comments, and exports.
 - Primary CTA label locked verbatim across navigation, hero, studio, and close: `Start Day 1: Free`.
-- Zero invented testimonials, fake user counts, or synthetic pricing claims; only real structural parameters (`4` Starter Kits, `30` mentorship days, `4` weekly phases, `472px` transactional dispatch width, `25-Turn` pass-down capsule).
+- Zero invented testimonials, fake user counts, or synthetic pricing claims; only real structural parameters (`4` Starter Kits, `30` mentorship days, `4` weekly phases, `7` capsule aspects, `472px` transactional dispatch width).
 - Zero predictive top scroll-progress bar (`[data-sc-progress]` omitted intentionally so scroll transitions unfold by discovery rather than countdown).
-- Offline-friendly assets: all fonts, media, shaders, and interactive studio modules self-hosted with zero external network dependencies required after load.
+- Offline-friendly self-hosted media & shaders: 4 WOFF2 font faces (`103,004` bytes total), 7 macro geological WebP plates (`meteorite-crust.webp`, `shard-01.webp`, `shard-02.webp`, `impact-void.webp`, `artifact-mercury.webp`, `artifact-poster.webp`, `artifact-crystal.webp`), and a single-pass, loop-free Sobel PBR WebGL shader (`webgl/artifact-shader.js`) with 3-plate CSS cross-fade fallback and zero external network dependencies required after load.
 
 ## Brand Commitments
 
@@ -44,8 +48,8 @@ Unlike subscription cloud note apps, rigid boxed dashboard builders, or ephemera
 ## Evidence on Hand
 
 - Reference Figma file `Wxvtf802wbhHa9GsUEKJZc` (`45+ Best Email Designs of 2026`, curated specimens across `99:2`, `99:3`, `99:4` including `Stripe` 472px measure, `Claude` warm paper restraint, `Apple` luminous obsidian focus, `MONA` editorial type + hairline separation, `Collaborative Fund` tactile material texture, and `True Botanicals` fluid texture).
-- Reference `scroll-craft` (`v0.3.1`) fingerprints and craft rules under local downloads reference workspace.
-- Working codebase and live `AetherRefractory` / `AetherExporter` modules under project root, plus shipped `Artifact 01` repository (`https://github.com/mjeanhudson-dev/floorplan-codex`).
+- Reference `scroll-craft` (`v0.3.1`) fingerprints and craft rules under local workspace configuration.
+- Working `v2.1.0` codebase (`webos/capsules.js`, `webos/refractory.js`, `webos/exporter.js`, `webgl/artifact-shader.js`, `context/terminal-synthesis.json`, `scripts/pack-squarespace.mjs`, `squarespace/manifest.json` with `22` upload assets totaling `1,058,554` bytes), plus shipped `Artifact 01` repository (`https://github.com/mjeanhudson-dev/floorplan-codex`).
 
 ## Product Principles
 
@@ -57,3 +61,9 @@ Unlike subscription cloud note apps, rigid boxed dashboard builders, or ephemera
 ## Accessibility & Inclusion
 
 - WCAG AA contrast (`>= 4.5:1` body, `>= 3:1` large display) across all dark and paper modes, zero horizontal overflow down to `360x640`, full keyboard reachability across `content-visibility: auto` sections, explicit pause control on ambient shader loops (`WCAG 2.2.2`), and complete readable static fallback under `prefers-reduced-motion: reduce`.
+
+## v2.2.0 product notes
+
+- **Offer ladder:** free MIT-licensed kit (proof of work), custom builds scoped in writing (offline workspaces, private AI assistants that run on the buyer's machine, websites and tools the buyer owns), optional backing once a real payment channel exists.
+- **Honesty rules carried forward:** no invented testimonials, customer counts, prices, or payment links. The AI assistant row is described as not yet a fixed package.
+- **Open items:** connect a real payment channel (GitHub Sponsors listing is not approved, Polar and Stripe not set up), deploy and test `workers/funding-webhook.js` with real deliveries, and source a higher-resolution image pipeline before claiming Retina assets.

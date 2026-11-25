@@ -1,10 +1,11 @@
 {
   "meta": {
-    "version": "1.0.1",
-    "updatedAt": "2026-11-23T11:22:00Z",
+    "version": "2.1.0",
+    "updatedAt": "2026-11-24T13:30:00Z",
     "author": "Eloquent (@mjeanhudson-dev)",
     "kitName": "Aether WebOS Kit",
     "ctaLabel": "Start Day 1: Free",
+    "capsuleSchemaVersion": "aether.rehydration.capsule.v2",
     "routingMode": "Stage-0 -> Stage-Apex (FLASH_SHUNT_ENGAGED)",
     "compactionGate": "25:1 Exodia",
     "pinnedToolsCount": 15,
@@ -23,6 +24,155 @@
       ]
     }
   },
+  "capsuleAspects": [
+    {
+      "id": "session-passdown",
+      "order": 1,
+      "label": "Session Pass-Down",
+      "shortLabel": "Pass-Down",
+      "kind": "specialized",
+      "tokenBudget": 900,
+      "summary": "Executive resume state, Day/Week milestone, git/build invariants, and immediate next steps.",
+      "sections": [
+        "Executive Resume State",
+        "Milestone & Active Prompt",
+        "Git & Build Invariants",
+        "Immediate Next Steps"
+      ],
+      "invariants": [
+        "Sole author identity: Eloquent (@mjeanhudson-dev)",
+        "Zero OS usernames, zero local home paths, and zero em dashes across code and exports",
+        "Stage-0 deterministic browser parsing -> Stage-Apex synthesis under 25:1 Exodia compaction"
+      ]
+    },
+    {
+      "id": "floorplan-waves",
+      "order": 2,
+      "label": "Floorplan Waves",
+      "shortLabel": "Waves 0-2",
+      "kind": "specialized",
+      "tokenBudget": 1000,
+      "summary": "Wave 0/1/2 dependency tree, critical path, and completed vs pending checklist tasks.",
+      "sections": [
+        "Wave 0: Baseline & Foundation",
+        "Wave 1: Core Execution",
+        "Wave 2: Verification & Ship Gate",
+        "Critical Path & Dependency Edges"
+      ],
+      "invariants": [
+        "Wave 0 baseline anchors unlock Wave 1 execution; Wave 1 unlocks Wave 2 verification and export",
+        "Explicit (depends: ...) links define the blocking critical path in the spatial SVG Floorplan",
+        "Completed vs pending task counts stay synchronized between Markdown checklists and Mind-Map nodes"
+      ]
+    },
+    {
+      "id": "lexicon-soul",
+      "order": 3,
+      "label": "Lexicon & Soul",
+      "shortLabel": "Lexicon · Soul",
+      "kind": "specialized",
+      "tokenBudget": 850,
+      "summary": "Domain vocabulary terms, Wiki reference rules, and voice/design Soul invariants.",
+      "sections": [
+        "Domain Lexicon",
+        "Pocket Wiki Rules",
+        "Voice & Design Soul Invariants"
+      ],
+      "invariants": [
+        "Write like a clear, helpful neighbor across a kitchen table without corporate jargon",
+        "Borderless 1px-hairline Obsidian (#07090D) and Warm Paper (#F2EFE8) surfaces with Troilite Amber (#E27A2C)",
+        "Zero box-shadow, zero backdrop-filter, zero pure #000000, and zero em dashes"
+      ]
+    },
+    {
+      "id": "swarm-handoff",
+      "order": 4,
+      "label": "Swarm Handoff",
+      "shortLabel": "Swarm",
+      "kind": "specialized",
+      "tokenBudget": 900,
+      "summary": "Multi-worker ownership boundaries, pinned models/quotas, and board coordination protocol.",
+      "sections": [
+        "Worker Ownership Boundaries",
+        "Pinned Models & Token Quotas",
+        "Board Coordination Protocol",
+        "Active Handoff Queue"
+      ],
+      "invariants": [
+        "Strict single-writer file ownership per worker slice; never edit outside assigned paths",
+        "Model floor locked at gemini-4-hydrogen-xhigh and up (FLASH_SHUNT_ENGAGED); Neon/Argon/Carbon capped at high by default",
+        "10,000,000 daily token sentinel and immediate pause on HTTP 429 without tight retry loops"
+      ]
+    },
+    {
+      "id": "offline-portability",
+      "order": 5,
+      "label": "Offline Portability",
+      "shortLabel": "Offline HTML",
+      "kind": "specialized",
+      "tokenBudget": 800,
+      "summary": "Standalone HTML capsule rules, WebCrypto SHA-256 parity, and zero-CDN offline guarantee.",
+      "sections": [
+        "Standalone HTML Capsule Rules",
+        "WebCrypto SHA-256 Parity",
+        "Zero-CDN Offline Guarantee"
+      ],
+      "invariants": [
+        "Single-file exported .html studios run offline over file:// and airplane mode with zero external CDNs",
+        "WebCrypto SHA-256 digest matches pure-JS FIPS 180-4 SHA-256 fallback byte-for-byte",
+        "All embedded JSON payloads escape angle brackets, ampersands, and line separators against XSS"
+      ]
+    },
+    {
+      "id": "compact-prompt",
+      "order": 6,
+      "label": "Compact Prompt",
+      "shortLabel": "Compact <500t",
+      "kind": "specialized",
+      "tokenBudget": 480,
+      "summary": "Dense single-turn drop-in prompt (< 500 tokens) ready to paste into any cold AI session after turn 25.",
+      "sections": [
+        "Cold-Start Context Header",
+        "Non-Negotiable Voice & Soul Rules",
+        "Wave Topology Snapshot",
+        "Immediate Next Action Trigger"
+      ],
+      "invariants": [
+        "Strictly under 500 estimated tokens so cold sessions retain maximum working context",
+        "Preserves LOD-0 Soul guardrails, LOD-1 Lexicon anchors, and exact next open checklist step",
+        "Ready to paste verbatim into any cold LLM chat window after turn 25"
+      ]
+    },
+    {
+      "id": "master-bundle",
+      "order": 7,
+      "label": "Master Bundle",
+      "shortLabel": "Master Bundle",
+      "kind": "bundle",
+      "tokenBudget": 3600,
+      "includes": [
+        "session-passdown",
+        "floorplan-waves",
+        "lexicon-soul",
+        "swarm-handoff",
+        "offline-portability",
+        "compact-prompt"
+      ],
+      "summary": "Complete unified multi-aspect rehydration envelope combining all 6 specialized aspects.",
+      "sections": [
+        "Session Pass-Down",
+        "Floorplan Waves",
+        "Lexicon & Soul",
+        "Swarm Handoff",
+        "Offline Portability",
+        "Compact Prompt (<500t)"
+      ],
+      "invariants": [
+        "Embeds all 6 specialized aspects plus lossless workspace Markdown, kitId, Day, and surface state",
+        "Round-trips cleanly via parseCapsuleForRehydrate() alongside legacy aether.compaction.passdown.v1 files"
+      ]
+    }
+  ],
   "kits": [
     {
       "id": "household-clarity",
@@ -43,7 +193,7 @@
       "title": "30-Day Creator & Newsletter System",
       "audience": "First-time writers, teachers, makers, and independent builders sharing honest notes without chasing algorithms.",
       "outcome": "Builds a repeatable weekly writing habit with a living topic map, personal voice anchor, and zero-loss 25-turn AI handoff capsule.",
-      "markdown": "# 30-Day Creator & Newsletter System\n\nLightweight publishing floorplan for ordinary makers who want to write useful essays, guides, or dispatches in under 4 hours a week.\n\n## Wave 0: Voice Anchor & Reader Promise\n- [ ] Name the exact kind of neighbor or beginner you are writing to [Wave 0]\n- [ ] Capture 5 real questions friends asked you in the last 30 days [Wave 0] (depends: Name the exact kind of neighbor)\n- [ ] Write 3 tone rules describing how you talk in real life [Wave 0]\n\n## Wave 1: Idea Map & Drafting Loop\n- [ ] Turn one real question into a 3-step plain-English outline [Wave 1] (depends: Capture 5 real questions)\n- [ ] Collect one real example, number, or photo from your own bench or notebook [Wave 1] (depends: Turn one real question into a 3-step plain-English outline)\n- [ ] Draft messy first pass in 25 uninterrupted minutes before editing a word [Wave 1] (depends: Write 3 tone rules)\n\n## Wave 2: Package, Ship & Rehydrate\n- [ ] Strip buzzwords and verify zero inflated claims or filler intros [Wave 2] (depends: Draft messy first pass)\n- [ ] Generate a 25-Turn Pass-Down capsule so next week's AI assistant remembers your voice [Wave 2] (depends: Strip buzzwords)\n\n## Lexicon\n- **Bench Note**: A short firsthand observation from doing real work rather than summarizing someone else's thread.\n- **Voice Guardrail**: Three concrete words you use and three clichés you ban from every draft.\n- **Pass-Down Capsule**: A compact plain-text digest preserving decisions and open threads before context fills up.\n- **One-Click Keep**: Exporting your finished guide as a portable HTML kit readers can save offline.\n\n## Wiki\n### The 3-Beat Dispatch Structure\nStart with a concrete friction you actually ran into, walk through the small fix step by step, and end with one printable action.\n### Context Hygiene Across Sessions\nNever paste 40 pages of old chat logs into a fresh AI session. Paste only your Soul rules, Lexicon, and current active outline.\n\n## Soul\n- Invariant: Write like a helpful neighbor across a kitchen table, never like a corporate press release.\n- Invariant: Teach one real thing you tested yourself instead of repackaging hype.\n- Invariant: Own your subscriber list and notes as plain files on your own drive."
+      "markdown": "# 30-Day Creator & Newsletter System\n\nLightweight publishing floorplan for ordinary makers who want to write useful essays, guides, or dispatches in under 4 hours a week.\n\n## Wave 0: Voice Anchor & Reader Promise\n- [ ] Name the exact kind of neighbor or beginner you are writing to [Wave 0]\n- [ ] Capture 5 real questions friends asked you in the last 30 days [Wave 0] (depends: Name the exact kind of neighbor)\n- [ ] Write 3 tone rules describing how you talk in real life [Wave 0]\n\n## Wave 1: Idea Map & Drafting Loop\n- [ ] Turn one real question into a 3-step plain-English outline [Wave 1] (depends: Capture 5 real questions)\n- [ ] Collect one real example, number, or photo from your own bench or notebook [Wave 1] (depends: Turn one real question into a 3-step plain-English outline)\n- [ ] Draft messy first pass in 25 uninterrupted minutes before editing a word [Wave 1] (depends: Write 3 tone rules)\n\n## Wave 2: Package, Ship & Rehydrate\n- [ ] Strip buzzwords and verify zero inflated claims or filler intros [Wave 2] (depends: Draft messy first pass)\n- [ ] Generate a 25-Turn Pass-Down capsule so next week's AI assistant remembers your voice [Wave 2] (depends: Strip buzzwords)\n\n## Lexicon\n- **Bench Note**: A short firsthand observation from doing real work rather than summarizing someone else's thread.\n- **Voice Guardrail**: Three concrete words you use and three cliches you ban from every draft.\n- **Pass-Down Capsule**: A compact plain-text digest preserving decisions and open threads before context fills up.\n- **One-Click Keep**: Exporting your finished guide as a portable HTML kit readers can save offline.\n\n## Wiki\n### The 3-Beat Dispatch Structure\nStart with a concrete friction you actually ran into, walk through the small fix step by step, and end with one printable action.\n### Context Hygiene Across Sessions\nNever paste 40 pages of old chat logs into a fresh AI session. Paste only your Soul rules, Lexicon, and current active outline.\n\n## Soul\n- Invariant: Write like a helpful neighbor across a kitchen table, never like a corporate press release.\n- Invariant: Teach one real thing you tested yourself instead of repackaging hype.\n- Invariant: Own your subscriber list and notes as plain files on your own drive."
     },
     {
       "id": "community-teaching-hub",
@@ -64,7 +214,6 @@
         "daysRange": "Days 1 to 7",
         "summary": "Dump the mental clutter, capture how you actually speak, define 10 personal terms, and lock in your everyday boundaries.",
         "deliverable": "Verified Voice Anchor & Personal Lexicon saved in your kit.",
-        "image": "assets/week-1.webp",
         "kitId": "household-clarity"
       },
       {
@@ -74,7 +223,6 @@
         "daysRange": "Days 8 to 15",
         "summary": "Break overwhelming goals into Wave 0, Wave 1, and Wave 2 dependencies you can see on one calm Floorplan screen.",
         "deliverable": "Interactive SVG Mind-Map & Dual-View Reader layout.",
-        "image": "assets/week-2.webp",
         "kitId": "local-service-launch"
       },
       {
@@ -84,7 +232,6 @@
         "daysRange": "Days 16 to 23",
         "summary": "Use the 25-Turn Pass-Down capsule and SHA-256 memory digest so free AI tools never forget your rules mid-project.",
         "deliverable": "Portable 25-Turn Rehydration Capsule & Weekly Sprint Loop.",
-        "image": "assets/week-3.webp",
         "kitId": "creator-30day-system"
       },
       {
@@ -94,7 +241,6 @@
         "daysRange": "Days 24 to 30",
         "summary": "Export a self-contained single-file HTML WebOS studio you keep offline forever and share with friends at zero cost.",
         "deliverable": "Single-file Offline WebOS HTML Kit & Community Pass-On Note.",
-        "image": "assets/week-4.webp",
         "kitId": "community-teaching-hub"
       }
     ],
@@ -158,7 +304,7 @@
         "week": 1,
         "phase": "Voice & Personal Lexicon",
         "title": "Week 1 Review & Clean SHA-256 Snapshot",
-        "prompt": "Open the 25-Turn Capsule tab, verify your first SHA-256 fingerprint, and save a clean Week 1 offline backup HTML file.",
+        "prompt": "Open the Rehydration Capsules tab, verify your first SHA-256 fingerprint, and save a clean Week 1 offline backup HTML file.",
         "deliverable": "Signed Week 1 offline HTML kit stored locally.",
         "kitId": "household-clarity"
       },
@@ -239,7 +385,7 @@
         "week": 3,
         "phase": "Zero-Code Agentic Sprints",
         "title": "Build Your First 25-Turn Pass-Down Capsule",
-        "prompt": "Generate a compact Rehydration Capsule in Tab 4 and see how a 300-word brief carries your entire project into a fresh chat window.",
+        "prompt": "Generate a compact Rehydration Capsule in Tab 4 and see how a focused brief carries your entire project into a fresh chat window.",
         "deliverable": "Compact Pass-Down Markdown brief with SHA-256 receipt.",
         "kitId": "creator-30day-system"
       },
@@ -265,9 +411,9 @@
         "day": 19,
         "week": 3,
         "phase": "Zero-Code Agentic Sprints",
-        "title": "Test Hot-Swapping a Terminal Context Manifest",
-        "prompt": "Inspect or edit a local synthesis JSON snapshot and use Reload Terminal Context / Import JSON to swap curated prompts without touching code.",
-        "deliverable": "Verified JSON hot-swap roundtrip inside Refractory Tab 4.",
+        "title": "Test Hot-Swapping a Rehydration Capsule",
+        "prompt": "Export a JSON v2 capsule in Tab 4, then test Rehydrate / Restore or Import JSON to verify lossless roundtrip restoration without touching code.",
+        "deliverable": "Verified JSON v2 rehydration roundtrip inside Refractory Tab 4.",
         "kitId": "creator-30day-system"
       },
       {
@@ -293,7 +439,7 @@
         "week": 3,
         "phase": "Zero-Code Agentic Sprints",
         "title": "Practice Mid-Project Handoff Across Tools",
-        "prompt": "Copy your 25-Turn Pass-Down Capsule into a completely blank notebook or fresh AI tab and confirm it resumes at the exact next task.",
+        "prompt": "Copy your Compact Prompt (<500t) capsule into a completely blank notebook or fresh AI tab and confirm it resumes at the exact next task.",
         "deliverable": "Zero-drift cold-start handoff verification.",
         "kitId": "creator-30day-system"
       },
@@ -320,7 +466,7 @@
         "week": 4,
         "phase": "Ship & Share Offline Kit",
         "title": "Run the Airplane-Mode Independence Test",
-        "prompt": "Click Export My Kit (.html), turn off Wi-Fi or open the saved file directly from disk, and verify every heading, map node, and checklist still works.",
+        "prompt": "Click Export My Kit (.html), turn off Wi-Fi or open the saved file directly from disk, and verify every heading, map node, checklist, and capsule still works.",
         "deliverable": "Verified offline single-file HTML WebOS bundle.",
         "kitId": "community-teaching-hub"
       },
@@ -347,7 +493,7 @@
         "week": 4,
         "phase": "Ship & Share Offline Kit",
         "title": "Create a Monthly Refresh Ritual",
-        "prompt": "Schedule one 30-minute end-of-month calendar block to export a fresh archive and roll open Wave 2 tasks into next month's Wave 0.",
+        "prompt": "Schedule one 30-minute end-of-month calendar block to export a fresh Master Bundle and roll open Wave 2 tasks into next month's Wave 0.",
         "deliverable": "Sustainable monthly maintenance anchor.",
         "kitId": "community-teaching-hub"
       },
@@ -356,7 +502,7 @@
         "week": 4,
         "phase": "Ship & Share Offline Kit",
         "title": "Bundle Your Final 30-Day Capstone Kit",
-        "prompt": "Combine your sharpest Soul rules, active Floorplan, Lexicon, and best Wiki notes into one clean master snapshot.",
+        "prompt": "Combine your sharpest Soul rules, active Floorplan, Lexicon, and best Wiki notes into one clean Master Bundle snapshot.",
         "deliverable": "Final Capstone WebOS HTML kit with verified digest.",
         "kitId": "community-teaching-hub"
       },

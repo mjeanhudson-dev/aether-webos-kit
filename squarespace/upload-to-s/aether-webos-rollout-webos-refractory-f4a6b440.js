@@ -4,11 +4,16 @@
    Contract:
      - Mounts into #aether-webos-mount (auto-mounts on DOMContentLoaded +
        idempotent window.AetherRefractory.mount('#aether-webos-mount')).
+     - Uses window.AetherCapsules (webos/capsules.js) for 6-aspect + Master
+       Bundle Rehydration Capsules & JSON v2/v1 restore (graceful fallback if
+       omitted).
      - Requires window.AetherExporter (webos/exporter.js) for offline .html export
        (gracefully degrades to JSON/Markdown helper if omitted).
      - Exposes window.AetherRefractory:
-       { mount, selectDay, selectKit, selectTab, exportKit, exportHtml,
-         copyShareNote, reloadContext, importContextJson, getState, version }
+       { mount, selectDay, selectKit, selectTab, setSurface, exportKit,
+         exportHtml, copyShareNote, reloadContext, importContextJson,
+         getCapsule, rehydrateCapsule, selectCapsuleAspect,
+         selectCapsuleFormat, getState, version }
      - Listens & dispatches CustomEvent('aether:day-select', { detail: {
          day, week, phase, title, prompt, deliverable, kitId } }).
    ========================================================================== */
@@ -16,19 +21,22 @@
   if (typeof module === 'object' && module.exports) {
     var exporter = null;
     try { exporter = require('./exporter.js'); } catch (e) {}
-    module.exports = factory(exporter);
+    var capsules = null;
+    try { capsules = require('./capsules.js'); } catch (e) {}
+    module.exports = factory(exporter, capsules);
   } else {
-    root.AetherRefractory = factory(root.AetherExporter || null);
+    root.AetherRefractory = factory(root.AetherExporter || null, root.AetherCapsules || null);
   }
-}(typeof globalThis !== 'undefined' ? globalThis : window, function (ExporterDep) {
+}(typeof globalThis !== 'undefined' ? globalThis : window, function (ExporterDep, CapsulesDep) {
   'use strict';
 
   var DEFAULT_META = {
-    version: '1.0.0',
-    updatedAt: '2026-11-23T10:05:00Z',
+    version: '2.1.0',
+    updatedAt: '2026-11-24T13:30:00Z',
     author: 'Eloquent (@mjeanhudson-dev)',
     kitName: 'Aether WebOS Kit',
     ctaLabel: 'Start Day 1: Free',
+    capsuleSchemaVersion: 'aether.rehydration.capsule.v2',
     routingMode: 'Stage-0 -> Stage-Apex (FLASH_SHUNT_ENGAGED)',
     compactionGate: '25:1 Exodia',
     pinnedToolsCount: 15,
@@ -111,7 +119,7 @@
     { id: 'mindmap', label: 'Mind-Map Floorplan' },
     { id: 'dualview', label: 'Dual-View Reader' },
     { id: 'lexicon', label: 'Lexicon · Wiki · Soul' },
-    { id: 'capsule', label: '25-Turn Capsule' }
+    { id: 'capsule', label: 'Rehydration Capsules' }
   ];
 
   /* ----------------------------------------------------------- utilities -- */
@@ -726,6 +734,62 @@
   }
 
   /* ----------------------------------------------- 25-turn capsule builder -- */
+  var FALLBACK_CAPSULE_SCHEMA = 'aether.rehydration.capsule.v2';
+  var FALLBACK_LEGACY_SCHEMA = 'aether.compaction.passdown.v1';
+  var FALLBACK_ASPECTS = [
+    { id: 'session-passdown', order: 1, label: 'Session Pass-Down', shortLabel: 'Pass-Down', kind: 'specialized', tokenBudget: 900, summary: 'Executive resume state, Day/Week milestone, git/build invariants, and immediate next steps.' },
+    { id: 'floorplan-waves', order: 2, label: 'Floorplan Waves', shortLabel: 'Waves 0-2', kind: 'specialized', tokenBudget: 1000, summary: 'Wave 0/1/2 dependency tree, critical path, and completed vs pending checklist tasks.' },
+    { id: 'lexicon-soul', order: 3, label: 'Lexicon & Soul', shortLabel: 'Lexicon · Soul', kind: 'specialized', tokenBudget: 850, summary: 'Domain vocabulary terms, Wiki reference rules, and voice/design Soul invariants.' },
+    { id: 'swarm-handoff', order: 4, label: 'Swarm Handoff', shortLabel: 'Swarm', kind: 'specialized', tokenBudget: 900, summary: 'Multi-worker ownership boundaries, pinned models/quotas, and board coordination protocol.' },
+    { id: 'offline-portability', order: 5, label: 'Offline Portability', shortLabel: 'Offline HTML', kind: 'specialized', tokenBudget: 800, summary: 'Standalone HTML capsule rules, WebCrypto SHA-256 parity, and zero-CDN offline guarantee.' },
+    { id: 'compact-prompt', order: 6, label: 'Compact Prompt', shortLabel: 'Compact <500t', kind: 'specialized', tokenBudget: 480, summary: 'Dense single-turn drop-in prompt (< 500 tokens) ready to paste into any cold AI session after turn 25.' },
+    { id: 'master-bundle', order: 7, label: 'Master Bundle', shortLabel: 'Master Bundle', kind: 'bundle', tokenBudget: 3600, summary: 'Complete unified multi-aspect rehydration envelope combining all 6 specialized aspects.' }
+  ];
+
+  function fallbackNormalizeAspectId(aspectId) {
+    var raw = String(aspectId || '').toLowerCase().trim();
+    for (var i = 0; i < FALLBACK_ASPECTS.length; i++) {
+      if (FALLBACK_ASPECTS[i].id === raw) return FALLBACK_ASPECTS[i].id;
+    }
+    if (raw === 'master' || raw === 'bundle' || raw === 'all') return 'master-bundle';
+    if (raw === 'waves' || raw === 'floorplan') return 'floorplan-waves';
+    if (raw === 'lexicon' || raw === 'soul') return 'lexicon-soul';
+    if (raw === 'swarm') return 'swarm-handoff';
+    if (raw === 'offline' || raw === 'html') return 'offline-portability';
+    if (raw === 'compact' || raw === 'prompt') return 'compact-prompt';
+    return 'session-passdown';
+  }
+
+  function fallbackGetAspect(aspectId) {
+    var id = fallbackNormalizeAspectId(aspectId);
+    for (var i = 0; i < FALLBACK_ASPECTS.length; i++) {
+      if (FALLBACK_ASPECTS[i].id === id) return FALLBACK_ASPECTS[i];
+    }
+    return FALLBACK_ASPECTS[0];
+  }
+
+  function fallbackByteLength(text) {
+    var s = String(text == null ? '' : text);
+    if (!s) return 0;
+    if (typeof TextEncoder !== 'undefined') {
+      return new TextEncoder().encode(s).byteLength;
+    }
+    return unescape(encodeURIComponent(s)).length;
+  }
+
+  function fallbackEstimateTokens(text) {
+    var s = String(text == null ? '' : text).trim();
+    if (!s) return 0;
+    var words = s.split(/\s+/).filter(Boolean).length;
+    var punct = (s.match(/[{}[\](),.:;#*`"'/-]/g) || []).length;
+    return Math.max(1, Math.ceil(((s.length / 4) + (words * 1.32 + punct * 0.24)) / 2));
+  }
+
+  function formatByteCount(bytes) {
+    var n = Math.max(0, Math.round(Number(bytes) || 0));
+    return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' B';
+  }
+
   function buildCapsuleMarkdown(state, parsed, meta) {
     var m = meta || DEFAULT_META;
     var dayObj = state.activeDayObj;
@@ -772,6 +836,117 @@
     ].join('\n'));
   }
 
+  function buildFallbackCapsuleJson(aspectId, state, parsed, meta) {
+    var desc = fallbackGetAspect(aspectId);
+    var md = buildCapsuleMarkdown(state, parsed, meta);
+    var srcHex = state.digestHex || sha256FallbackHex(state.markdown || '');
+    var capHex = sha256FallbackHex(md);
+    var dayObj = state.activeDayObj || DEFAULT_DAYS[0];
+    return {
+      schema: FALLBACK_CAPSULE_SCHEMA,
+      schemaVersion: FALLBACK_CAPSULE_SCHEMA,
+      meta: Object.assign({}, DEFAULT_META, meta || {}),
+      aspect: {
+        id: desc.id,
+        label: desc.label,
+        shortLabel: desc.shortLabel,
+        kind: desc.kind,
+        tokenBudget: desc.tokenBudget,
+        estimatedTokens: fallbackEstimateTokens(md),
+        summary: desc.summary
+      },
+      workspace: {
+        kitId: state.activeKitId,
+        title: parsed.title,
+        day: dayObj.day,
+        week: dayObj.week,
+        phase: dayObj.phase,
+        dayTitle: dayObj.title,
+        dayPrompt: dayObj.prompt,
+        deliverable: dayObj.deliverable,
+        surface: state.surface,
+        markdown: state.markdown
+      },
+      integrity: {
+        algorithm: 'SHA-256',
+        sourceDigestHex: srcHex,
+        sourceDigest16: srcHex.slice(0, 16),
+        capsuleDigestHex: capHex,
+        capsuleDigest16: capHex.slice(0, 16)
+      },
+      payload: { fallback: true },
+      capsuleMarkdown: md
+    };
+  }
+
+  function fallbackParseCapsuleForRehydrate(rawInput) {
+    if (rawInput == null || (typeof rawInput === 'string' && !rawInput.trim())) {
+      return {
+        ok: false,
+        error: 'Paste a Capsule JSON payload or select a .json file before rehydrating.',
+        normalized: null
+      };
+    }
+    var obj = null;
+    if (typeof rawInput === 'string') {
+      var trimmed = rawInput.trim().replace(/^```(?:json)?\s*([\s\S]*?)\s*```$/i, '$1').trim();
+      try {
+        obj = JSON.parse(trimmed);
+      } catch (err) {
+        return {
+          ok: false,
+          error: 'Malformed JSON capsule: ' + stripEmDashes(err && err.message ? err.message : 'syntax error'),
+          normalized: null
+        };
+      }
+    } else if (typeof rawInput === 'object' && !Array.isArray(rawInput)) {
+      obj = rawInput;
+    } else {
+      return { ok: false, error: 'Capsule input must be a JSON object or JSON string.', normalized: null };
+    }
+    if (!obj || typeof obj !== 'object' || Array.isArray(obj)) {
+      return { ok: false, error: 'Capsule root must be a JSON object.', normalized: null };
+    }
+    var schema = String(obj.schema || obj.schemaVersion || '').trim();
+    if (schema !== FALLBACK_CAPSULE_SCHEMA && schema !== FALLBACK_LEGACY_SCHEMA) {
+      return {
+        ok: false,
+        error: schema
+          ? ('Unsupported capsule schema "' + stripEmDashes(schema) + '". Expected ' + FALLBACK_CAPSULE_SCHEMA + ' or ' + FALLBACK_LEGACY_SCHEMA + '.')
+          : ('Missing "schema" field. Expected "' + FALLBACK_CAPSULE_SCHEMA + '" or "' + FALLBACK_LEGACY_SCHEMA + '".'),
+        normalized: null
+      };
+    }
+    var ws = (obj.workspace && typeof obj.workspace === 'object') ? obj.workspace : {};
+    var md = (typeof ws.markdown === 'string' && ws.markdown.trim())
+      ? stripEmDashes(ws.markdown)
+      : ((typeof obj.markdown === 'string' && obj.markdown.trim())
+        ? stripEmDashes(obj.markdown)
+        : ((typeof obj.capsuleMarkdown === 'string' && obj.capsuleMarkdown.trim()) ? stripEmDashes(obj.capsuleMarkdown) : ''));
+    if (!md) {
+      return { ok: false, error: 'Capsule JSON is missing workspace markdown content.', normalized: null };
+    }
+    var aspectId = fallbackNormalizeAspectId((obj.aspect && obj.aspect.id) || obj.aspectId || 'session-passdown');
+    var day = clampDay(ws.day || obj.day || 1);
+    var surface = String(ws.surface || obj.surface || 'obsidian').toLowerCase() === 'paper' ? 'paper' : 'obsidian';
+    var kitId = stripEmDashes(ws.kitId || obj.kitId || 'household-clarity');
+    var title = stripEmDashes(ws.title || obj.title || (obj.project && obj.project.name) || 'Rehydrated Workspace');
+    return {
+      ok: true,
+      error: null,
+      normalized: {
+        schemaVersion: schema,
+        aspectId: aspectId,
+        kitId: kitId,
+        title: title,
+        markdown: md,
+        day: day,
+        surface: surface,
+        note: 'Rehydrated ' + title + ' (' + schema + ') · Day ' + day + ' (' + surface + ').'
+      }
+    };
+  }
+
   /* --------------------------------------------------- SVG DOM constructor -- */
   function svgEl(tag, attrs) {
     var el = document.createElementNS('http://www.w3.org/2000/svg', tag);
@@ -802,12 +977,21 @@
       mapZoom: 1,
       mapPanX: 16,
       mapPanY: 16,
+      activeCapsuleAspect: 'session-passdown',
+      activeCapsuleFormat: 'markdown',
+      activeCapsuleText: '',
+      activeCapsuleDigestHex: '',
+      activeCapsuleTokens: 0,
+      activeCapsuleBytes: 0,
+      rehydrateState: 'idle',
+      rehydrateStatus: '',
       synthesisSource: 'Offline Seed Ready · Local Fallback',
       synthesisConnected: false,
       statusMessage: 'Ready · Select a Starter Kit or edit any line in plain English.'
     };
 
     var hashSeq = 0;
+    var capsuleHashSeq = 0;
     var renderSeq = 0;
     var dirtyPanels = { mindmap: false, dualview: false, lexicon: false, capsule: false };
     var dom = {};
@@ -815,6 +999,108 @@
     var boundGlobalListeners = false;
     var lazyObserver = null;
     var lazyArmed = false;
+
+    function getCapsulesEngine() {
+      return CapsulesDep || (typeof globalThis !== 'undefined' ? globalThis.AetherCapsules : null) || null;
+    }
+
+    function getCapsuleAspects() {
+      var eng = getCapsulesEngine();
+      if (eng && Array.isArray(eng.ASPECTS) && eng.ASPECTS.length) {
+        return eng.ASPECTS;
+      }
+      return FALLBACK_ASPECTS;
+    }
+
+    function normalizeAspect(aspectId) {
+      var eng = getCapsulesEngine();
+      if (eng && typeof eng.normalizeAspectId === 'function') {
+        return eng.normalizeAspectId(aspectId);
+      }
+      return fallbackNormalizeAspectId(aspectId);
+    }
+
+    function getAspectMeta(aspectId) {
+      var eng = getCapsulesEngine();
+      if (eng && typeof eng.getAspect === 'function') {
+        return eng.getAspect(aspectId);
+      }
+      return fallbackGetAspect(aspectId);
+    }
+
+    function normalizeCapsuleFormat(format) {
+      var raw = String(format || state.activeCapsuleFormat || 'markdown').toLowerCase().trim();
+      if (raw === 'json' || raw === 'json-v2' || raw === 'jsonv2' || raw === 'v2') {
+        return 'json';
+      }
+      return 'markdown';
+    }
+
+    function getCapsule(aspectId, format) {
+      var normAspect = normalizeAspect(aspectId || state.activeCapsuleAspect);
+      var normFormat = normalizeCapsuleFormat(format || state.activeCapsuleFormat);
+      var desc = getAspectMeta(normAspect);
+      var parsed = ensureParsed();
+      var eng = getCapsulesEngine();
+
+      var text = '';
+      var jsonObj = null;
+      if (eng && typeof eng.buildCapsuleJson === 'function' && typeof eng.buildCapsuleMarkdown === 'function') {
+        if (normFormat === 'json') {
+          jsonObj = eng.buildCapsuleJson(normAspect, state, parsed, manifest.meta);
+          text = typeof eng.serializeCapsuleJson === 'function'
+            ? eng.serializeCapsuleJson(normAspect, state, parsed, manifest.meta)
+            : stripEmDashes(JSON.stringify(jsonObj, null, 2));
+        } else {
+          text = eng.buildCapsuleMarkdown(normAspect, state, parsed, manifest.meta);
+        }
+      } else {
+        if (normFormat === 'json') {
+          jsonObj = buildFallbackCapsuleJson(normAspect, state, parsed, manifest.meta);
+          text = stripEmDashes(JSON.stringify(jsonObj, null, 2));
+        } else {
+          text = buildCapsuleMarkdown(state, parsed, manifest.meta);
+        }
+      }
+
+      var tokens = (eng && typeof eng.estimateTokens === 'function')
+        ? eng.estimateTokens(text)
+        : fallbackEstimateTokens(text);
+      var bytes = (eng && typeof eng.computeByteLength === 'function')
+        ? eng.computeByteLength(text)
+        : fallbackByteLength(text);
+      var digestHex = (eng && typeof eng.computeCapsuleDigestSync === 'function')
+        ? eng.computeCapsuleDigestSync(text)
+        : sha256FallbackHex(text);
+
+      return {
+        aspectId: desc.id,
+        aspectLabel: desc.label,
+        shortLabel: desc.shortLabel || desc.label,
+        kind: desc.kind || 'specialized',
+        tokenBudget: desc.tokenBudget || 900,
+        summary: desc.summary || '',
+        format: normFormat,
+        schemaVersion: (eng && eng.SCHEMA_VERSION) || FALLBACK_CAPSULE_SCHEMA,
+        filename: 'aether-capsule-' + desc.id + '-day-' + state.activeDay + (normFormat === 'json' ? '.json' : '.md'),
+        mimeType: normFormat === 'json' ? 'application/json;charset=utf-8' : 'text/markdown;charset=utf-8',
+        text: text,
+        content: text,
+        json: jsonObj,
+        tokens: tokens,
+        bytes: bytes,
+        digestHex: digestHex,
+        digest16: digestHex.slice(0, 16)
+      };
+    }
+
+    function computeCapsuleDigestAsync(text) {
+      var eng = getCapsulesEngine();
+      if (eng && typeof eng.computeCapsuleDigest === 'function') {
+        return eng.computeCapsuleDigest(text);
+      }
+      return computeSha256Hex(text);
+    }
 
     function getKitById(kitId) {
       return manifest.kits.find(function (k) { return k.id === kitId; }) || manifest.kits[0];
@@ -838,7 +1124,18 @@
       if (dom.statusMsg) dom.statusMsg.textContent = state.statusMessage;
     }
 
-    function setSurface(nextSurface) {
+    function setRehydrateFeedback(kind, message) {
+      state.rehydrateState = kind || 'idle';
+      state.rehydrateStatus = stripEmDashes(message || '');
+      if (!dom.rehydrateFeedback) return;
+      dom.rehydrateFeedback.textContent = state.rehydrateStatus;
+      dom.rehydrateFeedback.className = 'aw-rehydrate-feedback' +
+        (kind === 'ok' ? ' aw-rehydrate-feedback--ok' : (kind === 'error' ? ' aw-rehydrate-feedback--error' : ''));
+      dom.rehydrateFeedback.hidden = !state.rehydrateStatus;
+    }
+
+    function setSurface(nextSurface, opts) {
+      var options = opts || {};
       state.surface = nextSurface === 'paper' ? 'paper' : 'obsidian';
       if (state.mountEl) {
         state.mountEl.setAttribute('data-aw-surface', state.surface);
@@ -846,12 +1143,92 @@
       if (dom.surfaceToggleBtn) {
         dom.surfaceToggleBtn.setAttribute('aria-pressed', state.surface === 'paper' ? 'true' : 'false');
       }
-      setStatus(
-        state.surface === 'paper'
-          ? 'Studio surface switched to Warm Paper (#F2EFE8).'
-          : 'Studio surface switched to Deep Obsidian (#080A0E).'
-      );
+      if (!options.skipCapsuleRefresh) {
+        updateCapsuleDisplay();
+      }
+      if (!options.silentStatus) {
+        setStatus(
+          state.surface === 'paper'
+            ? 'Studio surface switched to Warm Paper (#F2EFE8).'
+            : 'Studio surface switched to Deep Obsidian (#080A0E).'
+        );
+      }
       return state.surface;
+    }
+
+    function updateCapsuleDisplay() {
+      var cap = getCapsule(state.activeCapsuleAspect, state.activeCapsuleFormat);
+      state.activeCapsuleAspect = cap.aspectId;
+      state.activeCapsuleFormat = cap.format;
+      state.activeCapsuleText = cap.text;
+      state.activeCapsuleDigestHex = cap.digestHex;
+      state.activeCapsuleTokens = cap.tokens;
+      state.activeCapsuleBytes = cap.bytes;
+
+      if (dom.capsuleAspectGrid) {
+        var aspectBtns = dom.capsuleAspectGrid.querySelectorAll('.aw-aspect-btn');
+        for (var i = 0; i < aspectBtns.length; i++) {
+          var aId = aspectBtns[i].getAttribute('data-capsule-aspect');
+          aspectBtns[i].setAttribute('aria-pressed', aId === cap.aspectId ? 'true' : 'false');
+        }
+      }
+      if (dom.formatMdBtn) {
+        dom.formatMdBtn.setAttribute('aria-pressed', cap.format === 'markdown' ? 'true' : 'false');
+      }
+      if (dom.formatJsonBtn) {
+        dom.formatJsonBtn.setAttribute('aria-pressed', cap.format === 'json' ? 'true' : 'false');
+      }
+      if (dom.capsuleAspectLabel) {
+        dom.capsuleAspectLabel.textContent = cap.aspectLabel + ' (' + (cap.format === 'json' ? 'JSON v2' : 'Markdown') + ')';
+      }
+      if (dom.capsuleAspectSummary) {
+        dom.capsuleAspectSummary.textContent = cap.summary;
+      }
+      if (dom.capsuleTokensChip) {
+        dom.capsuleTokensChip.textContent = '~' + cap.tokens + ' tokens';
+        dom.capsuleTokensChip.className = 'aw-chip ' + (
+          cap.aspectId === 'compact-prompt' && cap.format === 'markdown' && cap.tokens < 500
+            ? 'aw-chip--ok'
+            : 'aw-chip--amber'
+        );
+      }
+      if (dom.capsuleBytesChip) {
+        dom.capsuleBytesChip.textContent = formatByteCount(cap.bytes);
+      }
+      if (dom.capsuleDigestChip) {
+        dom.capsuleDigestChip.textContent = 'sha256: ' + cap.digest16;
+      }
+      if (dom.dlCapBtn) {
+        dom.dlCapBtn.textContent = cap.format === 'json' ? 'Download .json' : 'Download .md';
+      }
+      if (dom.capsuleBox) {
+        dom.capsuleBox.value = cap.text;
+      }
+
+      var myCapSeq = ++capsuleHashSeq;
+      computeCapsuleDigestAsync(cap.text).then(function (hex) {
+        if (myCapSeq !== capsuleHashSeq) return;
+        state.activeCapsuleDigestHex = hex;
+        if (dom.capsuleDigestChip) {
+          dom.capsuleDigestChip.textContent = 'sha256: ' + hex.slice(0, 16);
+        }
+      });
+
+      return cap;
+    }
+
+    function selectCapsuleAspect(aspectId) {
+      state.activeCapsuleAspect = normalizeAspect(aspectId);
+      var cap = updateCapsuleDisplay();
+      setStatus('Capsule aspect: ' + cap.aspectLabel + ' (~' + cap.tokens + ' tokens · ' + cap.digest16 + ').');
+      return cap;
+    }
+
+    function selectCapsuleFormat(format) {
+      state.activeCapsuleFormat = normalizeCapsuleFormat(format);
+      var cap = updateCapsuleDisplay();
+      setStatus('Capsule format: ' + (cap.format === 'json' ? 'JSON v2' : 'Markdown') + ' (~' + cap.tokens + ' tokens).');
+      return cap;
     }
 
     function refreshDigestAndCapsule() {
@@ -861,8 +1238,7 @@
         if (currentSeq !== hashSeq) return;
         state.digestHex = hex;
         if (dom.digestChip) dom.digestChip.textContent = 'sha256: ' + hex.slice(0, 16);
-        if (dom.capsuleDigestChip) dom.capsuleDigestChip.textContent = 'Digest: ' + hex.slice(0, 16);
-        if (dom.capsuleBox) dom.capsuleBox.value = buildCapsuleMarkdown(state, ensureParsed(), manifest.meta);
+        updateCapsuleDisplay();
       });
     }
 
@@ -1458,6 +1834,44 @@
       );
     }
 
+    function renderCapsuleAspects(forceRebuild) {
+      if (!dom.capsuleAspectGrid) return;
+      var aspects = getCapsuleAspects();
+      var existing = dom.capsuleAspectGrid.querySelectorAll('.aw-aspect-btn');
+      if (!forceRebuild && existing.length === aspects.length) {
+        for (var i = 0; i < existing.length; i++) {
+          var aId = existing[i].getAttribute('data-capsule-aspect');
+          existing[i].setAttribute('aria-pressed', aId === state.activeCapsuleAspect ? 'true' : 'false');
+        }
+        return;
+      }
+
+      dom.capsuleAspectGrid.innerHTML = '';
+      aspects.forEach(function (asp, idx) {
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'aw-aspect-btn' + (asp.kind === 'bundle' ? ' aw-aspect-btn--bundle' : '');
+        btn.setAttribute('data-capsule-aspect', asp.id);
+        btn.setAttribute('aria-pressed', asp.id === state.activeCapsuleAspect ? 'true' : 'false');
+        btn.setAttribute('title', asp.label + ': ' + asp.summary);
+
+        var idxSpan = document.createElement('span');
+        idxSpan.className = 'aw-aspect-btn__index';
+        idxSpan.textContent = asp.kind === 'bundle' ? 'ALL' : ('0' + (idx + 1));
+
+        var lblSpan = document.createElement('span');
+        lblSpan.className = 'aw-aspect-btn__label';
+        lblSpan.textContent = asp.shortLabel || asp.label;
+
+        btn.appendChild(idxSpan);
+        btn.appendChild(lblSpan);
+        btn.addEventListener('click', function () {
+          selectCapsuleAspect(asp.id);
+        });
+        dom.capsuleAspectGrid.appendChild(btn);
+      });
+    }
+
     function renderCapsuleTab() {
       if (dom.synthStatusTitle) {
         dom.synthStatusTitle.innerHTML = '';
@@ -1475,8 +1889,100 @@
           'v' + m.version + ' · ' + m.routingMode + ' · Gate: ' + m.compactionGate +
           ' · ' + m.pinnedToolsCount + ' pinned tools · ' + m.equationsCount + ' equations';
       }
-      if (dom.capsuleBox) {
-        dom.capsuleBox.value = buildCapsuleMarkdown(state, ensureParsed(), manifest.meta);
+      renderCapsuleAspects(false);
+      updateCapsuleDisplay();
+      if (dom.rehydrateFeedback) {
+        dom.rehydrateFeedback.textContent = state.rehydrateStatus;
+        dom.rehydrateFeedback.className = 'aw-rehydrate-feedback' +
+          (state.rehydrateState === 'ok' ? ' aw-rehydrate-feedback--ok' : (state.rehydrateState === 'error' ? ' aw-rehydrate-feedback--error' : ''));
+        dom.rehydrateFeedback.hidden = !state.rehydrateStatus;
+      }
+    }
+
+    function rehydrateCapsule(input, opts) {
+      var options = opts || {};
+      try {
+        var eng = getCapsulesEngine();
+        var res = (eng && typeof eng.parseCapsuleForRehydrate === 'function')
+          ? eng.parseCapsuleForRehydrate(input)
+          : fallbackParseCapsuleForRehydrate(input);
+
+        if (!res || !res.ok || !res.normalized) {
+          var errMsg = stripEmDashes((res && res.error) || 'Invalid capsule JSON payload.');
+          setRehydrateFeedback('error', errMsg);
+          setStatus('Rehydrate failed: ' + errMsg);
+          return { ok: false, error: errMsg, restored: null };
+        }
+
+        var n = res.normalized;
+        var matchedKit = manifest.kits.find(function (k) { return k.id === n.kitId; });
+        if (matchedKit) {
+          state.activeKitId = matchedKit.id;
+        } else if (n.kitId) {
+          state.activeKitId = stripEmDashes(n.kitId);
+        }
+
+        var dayObj = getDayObj(n.day);
+        state.activeDay = dayObj.day;
+        state.activeDayObj = dayObj;
+
+        setSurface(n.surface, { skipCapsuleRefresh: true, silentStatus: true });
+
+        state.markdown = stripEmDashes(n.markdown);
+        state.isDirty = true;
+        state.needsReparse = true;
+        state.activeCapsuleAspect = normalizeAspect(n.aspectId || state.activeCapsuleAspect);
+
+        if (dom.textarea) {
+          dom.textarea.value = state.markdown;
+        }
+
+        renderKitButtons(false);
+        renderMentorshipBar(false);
+        reparseAndRender(false);
+
+        if (!options.silent && typeof document !== 'undefined' && typeof CustomEvent === 'function') {
+          document.dispatchEvent(new CustomEvent('aether:day-select', {
+            bubbles: true,
+            detail: {
+              day: dayObj.day,
+              week: dayObj.week,
+              phase: dayObj.phase,
+              title: dayObj.title,
+              prompt: dayObj.prompt,
+              deliverable: dayObj.deliverable,
+              kitId: state.activeKitId,
+              _origin: 'aether-refractory'
+            }
+          }));
+        }
+
+        var okMsg = stripEmDashes(
+          n.note || ('Rehydrated ' + state.parsed.title + ' · Day ' + dayObj.day + ' (' + state.surface + ').')
+        );
+        setRehydrateFeedback('ok', okMsg);
+        setStatus(okMsg);
+
+        return {
+          ok: true,
+          error: null,
+          restored: {
+            schemaVersion: n.schemaVersion,
+            aspectId: state.activeCapsuleAspect,
+            kitId: state.activeKitId,
+            title: state.parsed.title,
+            day: state.activeDay,
+            week: state.activeDayObj.week,
+            surface: state.surface,
+            digest16: (state.digestHex || '').slice(0, 16),
+            note: okMsg
+          }
+        };
+      } catch (err) {
+        var safeErr = stripEmDashes((err && err.message) ? err.message : 'Unexpected capsule validation error.');
+        setRehydrateFeedback('error', safeErr);
+        setStatus('Rehydrate failed: ' + safeErr);
+        return { ok: false, error: safeErr, restored: null };
       }
     }
 
@@ -1578,16 +2084,26 @@
     function buildExportPayload() {
       var dayObj = state.activeDayObj;
       var parsed = ensureParsed();
+      var eng = getCapsulesEngine();
+      var allCapsules = (eng && typeof eng.buildAllCapsules === 'function')
+        ? eng.buildAllCapsules(state, parsed, manifest.meta)
+        : null;
       return {
         title: parsed.title,
         kitId: state.activeKitId,
+        surface: state.surface,
         day: dayObj.day,
         week: dayObj.week,
+        phase: dayObj.phase,
         dayTitle: dayObj.title,
         dayPrompt: dayObj.prompt,
+        deliverable: dayObj.deliverable,
+        digestHex: state.digestHex,
         digest16: (state.digestHex || '').slice(0, 16),
         markdown: state.markdown,
-        capsule: buildCapsuleMarkdown(state, parsed, manifest.meta),
+        capsule: getCapsule('session-passdown', 'markdown').text,
+        capsules: allCapsules,
+        meta: cloneJson(manifest.meta),
         parsed: parsed
       };
     }
@@ -2150,7 +2666,7 @@
       dom.tabPanels.lexicon = lwsWrap;
       outputPane.appendChild(lwsWrap);
 
-      /* Panel 4: 25-Turn Rehydration Capsule & Terminal Synthesis Slot */
+      /* Panel 4: Multi-Aspect Rehydration Capsules & Terminal Synthesis Slot */
       var capWrap = document.createElement('section');
       capWrap.className = 'aw-tabpanel';
       capWrap.id = 'aw-panel-capsule';
@@ -2204,7 +2720,7 @@
 
       var importBtn = document.createElement('button');
       importBtn.type = 'button';
-      importBtn.className = 'aw-btn aw-btn--sm aw-btn--amber';
+      importBtn.className = 'aw-btn aw-btn--sm';
       importBtn.textContent = 'Import JSON';
       importBtn.addEventListener('click', function () { fileInput.click(); });
 
@@ -2215,55 +2731,144 @@
       synthBar.appendChild(synthMeta);
       synthBar.appendChild(synthActions);
 
+      /* Aspect Selector Grid (6 Specialized + Master Bundle) */
+      var aspectBar = document.createElement('div');
+      aspectBar.className = 'aw-aspect-section';
+      var aspectHead = document.createElement('div');
+      aspectHead.className = 'aw-section-head';
+      var aspectEyebrow = document.createElement('p');
+      aspectEyebrow.className = 'aw-eyebrow';
+      aspectEyebrow.textContent = 'Capsule Aspect (6 Specialized + Master Bundle)';
+
+      var formatGroup = document.createElement('div');
+      formatGroup.className = 'aw-format-toggle';
+      formatGroup.setAttribute('role', 'group');
+      formatGroup.setAttribute('aria-label', 'Capsule Output Format');
+
+      var formatMdBtn = document.createElement('button');
+      formatMdBtn.type = 'button';
+      formatMdBtn.className = 'aw-format-btn';
+      formatMdBtn.setAttribute('data-capsule-format', 'markdown');
+      formatMdBtn.setAttribute('aria-pressed', state.activeCapsuleFormat === 'markdown' ? 'true' : 'false');
+      formatMdBtn.textContent = 'Markdown';
+      formatMdBtn.addEventListener('click', function () { selectCapsuleFormat('markdown'); });
+      dom.formatMdBtn = formatMdBtn;
+
+      var formatJsonBtn = document.createElement('button');
+      formatJsonBtn.type = 'button';
+      formatJsonBtn.className = 'aw-format-btn';
+      formatJsonBtn.setAttribute('data-capsule-format', 'json');
+      formatJsonBtn.setAttribute('aria-pressed', state.activeCapsuleFormat === 'json' ? 'true' : 'false');
+      formatJsonBtn.textContent = 'JSON v2';
+      formatJsonBtn.addEventListener('click', function () { selectCapsuleFormat('json'); });
+      dom.formatJsonBtn = formatJsonBtn;
+
+      formatGroup.appendChild(formatMdBtn);
+      formatGroup.appendChild(formatJsonBtn);
+      aspectHead.appendChild(aspectEyebrow);
+      aspectHead.appendChild(formatGroup);
+
+      var aspectGrid = document.createElement('div');
+      aspectGrid.className = 'aw-aspect-grid';
+      aspectGrid.setAttribute('role', 'group');
+      aspectGrid.setAttribute('aria-label', 'Rehydration Capsule Aspects');
+      dom.capsuleAspectGrid = aspectGrid;
+
+      aspectBar.appendChild(aspectHead);
+      aspectBar.appendChild(aspectGrid);
+
+      /* Active Aspect Header + Telemetry Chips + Copy/Download Actions */
       var capHead = document.createElement('div');
-      capHead.className = 'aw-section-head';
-      var capLeft = document.createElement('div');
-      capLeft.className = 'aw-map-controls';
+      capHead.className = 'aw-capsule-head';
+
+      var capInfo = document.createElement('div');
+      capInfo.className = 'aw-capsule-info';
       var capLabel = document.createElement('label');
       capLabel.className = 'aw-eyebrow aw-label';
       capLabel.setAttribute('for', 'aw-capsule-output');
-      capLabel.textContent = '25-Turn Rehydration Capsule';
+      capLabel.textContent = 'Session Pass-Down (Markdown)';
+      dom.capsuleAspectLabel = capLabel;
+      var capSummary = document.createElement('p');
+      capSummary.className = 'aw-capsule-summary';
+      dom.capsuleAspectSummary = capSummary;
+      capInfo.appendChild(capLabel);
+      capInfo.appendChild(capSummary);
+
+      var capMetaRow = document.createElement('div');
+      capMetaRow.className = 'aw-capsule-meta-row';
+
+      var capChips = document.createElement('div');
+      capChips.className = 'aw-map-controls';
+
+      var capTokensChip = document.createElement('span');
+      capTokensChip.className = 'aw-chip aw-chip--amber';
+      capTokensChip.setAttribute('data-capsule-tokens', '');
+      capTokensChip.textContent = '~0 tokens';
+      dom.capsuleTokensChip = capTokensChip;
+
+      var capBytesChip = document.createElement('span');
+      capBytesChip.className = 'aw-chip';
+      capBytesChip.setAttribute('data-capsule-bytes', '');
+      capBytesChip.textContent = '0 B';
+      dom.capsuleBytesChip = capBytesChip;
+
       var capDigestChip = document.createElement('span');
       capDigestChip.className = 'aw-chip aw-chip--live';
-      capDigestChip.textContent = 'Digest: ' + state.digestHex.slice(0, 16);
+      capDigestChip.setAttribute('data-capsule-digest', '');
+      capDigestChip.textContent = 'sha256: ' + state.digestHex.slice(0, 16);
       dom.capsuleDigestChip = capDigestChip;
-      capLeft.appendChild(capLabel);
-      capLeft.appendChild(capDigestChip);
+
+      capChips.appendChild(capTokensChip);
+      capChips.appendChild(capBytesChip);
+      capChips.appendChild(capDigestChip);
 
       var capBtns = document.createElement('div');
       capBtns.className = 'aw-map-controls';
       var copyCapBtn = document.createElement('button');
       copyCapBtn.type = 'button';
       copyCapBtn.className = 'aw-btn aw-btn--sm aw-btn--primary';
-      copyCapBtn.textContent = 'Copy Capsule Markdown';
+      copyCapBtn.setAttribute('data-capsule-copy', '');
+      copyCapBtn.textContent = 'Copy Capsule';
       copyCapBtn.addEventListener('click', function () {
-        copyTextToClipboard(dom.capsuleBox ? dom.capsuleBox.value : '', '25-Turn Capsule');
+        var cap = getCapsule(state.activeCapsuleAspect, state.activeCapsuleFormat);
+        copyTextToClipboard(
+          cap.text,
+          cap.aspectLabel + ' (' + (cap.format === 'json' ? 'JSON v2' : 'Markdown') + ')'
+        );
       });
+      dom.copyCapBtn = copyCapBtn;
+
       var dlCapBtn = document.createElement('button');
       dlCapBtn.type = 'button';
       dlCapBtn.className = 'aw-btn aw-btn--sm';
+      dlCapBtn.setAttribute('data-capsule-download', '');
       dlCapBtn.textContent = 'Download .md';
       dlCapBtn.addEventListener('click', function () {
-        var mdText = dom.capsuleBox ? dom.capsuleBox.value : '';
+        var cap = getCapsule(state.activeCapsuleAspect, state.activeCapsuleFormat);
         if (typeof Blob !== 'undefined' && typeof URL !== 'undefined' && URL.createObjectURL) {
-          var blob = new Blob([mdText], { type: 'text/markdown;charset=utf-8' });
+          var blob = new Blob([cap.text], { type: cap.mimeType });
           var url = URL.createObjectURL(blob);
           var a = document.createElement('a');
           a.href = url;
-          a.download = 'aether-25-turn-capsule-day-' + state.activeDay + '.md';
+          a.download = cap.filename;
           document.body.appendChild(a);
           a.click();
           setTimeout(function () {
             if (a.parentNode) a.parentNode.removeChild(a);
             URL.revokeObjectURL(url);
           }, 200);
-          setStatus('Downloaded 25-Turn Rehydration Capsule (.md).');
+          setStatus('Downloaded ' + cap.filename + ' (' + formatByteCount(cap.bytes) + ').');
         }
       });
+      dom.dlCapBtn = dlCapBtn;
+
       capBtns.appendChild(copyCapBtn);
       capBtns.appendChild(dlCapBtn);
-      capHead.appendChild(capLeft);
-      capHead.appendChild(capBtns);
+      capMetaRow.appendChild(capChips);
+      capMetaRow.appendChild(capBtns);
+
+      capHead.appendChild(capInfo);
+      capHead.appendChild(capMetaRow);
 
       var capBox = document.createElement('textarea');
       capBox.className = 'aw-capsule-box';
@@ -2272,9 +2877,109 @@
       capBox.readOnly = true;
       dom.capsuleBox = capBox;
 
+      /* Rehydrate / Restore Workspace Panel */
+      var rehydratePanel = document.createElement('div');
+      rehydratePanel.className = 'aw-rehydrate-panel';
+      rehydratePanel.setAttribute('aria-label', 'Rehydrate or Restore Capsule');
+
+      var rehHead = document.createElement('div');
+      rehHead.className = 'aw-section-head';
+      var rehLabel = document.createElement('label');
+      rehLabel.className = 'aw-eyebrow aw-label';
+      rehLabel.setAttribute('for', 'aw-rehydrate-input');
+      rehLabel.textContent = 'Rehydrate / Restore From Capsule JSON';
+      var rehSchemaChip = document.createElement('span');
+      rehSchemaChip.className = 'aw-chip';
+      rehSchemaChip.textContent = 'JSON v2 / v1';
+      rehHead.appendChild(rehLabel);
+      rehHead.appendChild(rehSchemaChip);
+
+      var rehInput = document.createElement('textarea');
+      rehInput.className = 'aw-rehydrate-box';
+      rehInput.id = 'aw-rehydrate-input';
+      rehInput.name = 'aw-rehydrate-input';
+      rehInput.placeholder = 'Paste Aether Capsule JSON v2 (or legacy pass-down v1) here, or load a local .json capsule file...';
+      dom.rehydrateInput = rehInput;
+
+      var rehActions = document.createElement('div');
+      rehActions.className = 'aw-rehydrate-actions';
+
+      var rehApplyBtn = document.createElement('button');
+      rehApplyBtn.type = 'button';
+      rehApplyBtn.className = 'aw-btn aw-btn--sm aw-btn--amber';
+      rehApplyBtn.setAttribute('data-aw-rehydrate-apply', '');
+      rehApplyBtn.textContent = 'Rehydrate / Restore';
+      rehApplyBtn.addEventListener('click', function () {
+        rehydrateCapsule(rehInput.value);
+      });
+
+      var rehFileLabel = document.createElement('label');
+      rehFileLabel.className = 'aw-sr-only';
+      rehFileLabel.setAttribute('for', 'aw-rehydrate-file-input');
+      rehFileLabel.textContent = 'Choose local capsule JSON file to rehydrate';
+
+      var rehFileInput = document.createElement('input');
+      rehFileInput.type = 'file';
+      rehFileInput.accept = '.json,application/json';
+      rehFileInput.className = 'aw-file-input';
+      rehFileInput.id = 'aw-rehydrate-file-input';
+      rehFileInput.name = 'aw-rehydrate-file-input';
+      rehFileInput.setAttribute('tabindex', '-1');
+      rehFileInput.addEventListener('change', function () {
+        var f = rehFileInput.files && rehFileInput.files[0];
+        if (!f || typeof FileReader === 'undefined') return;
+        var reader = new FileReader();
+        reader.onload = function () {
+          var rawText = String(reader.result || '');
+          rehInput.value = rawText;
+          rehydrateCapsule(rawText);
+        };
+        reader.readAsText(f);
+        rehFileInput.value = '';
+      });
+
+      var rehUploadBtn = document.createElement('button');
+      rehUploadBtn.type = 'button';
+      rehUploadBtn.className = 'aw-btn aw-btn--sm';
+      rehUploadBtn.setAttribute('data-aw-rehydrate-upload', '');
+      rehUploadBtn.textContent = 'Load Capsule .json';
+      rehUploadBtn.addEventListener('click', function () { rehFileInput.click(); });
+
+      var rehClearBtn = document.createElement('button');
+      rehClearBtn.type = 'button';
+      rehClearBtn.className = 'aw-btn aw-btn--sm aw-btn--ghost';
+      rehClearBtn.setAttribute('data-aw-rehydrate-clear', '');
+      rehClearBtn.textContent = 'Clear Input';
+      rehClearBtn.addEventListener('click', function () {
+        rehInput.value = '';
+        setRehydrateFeedback('idle', '');
+      });
+
+      rehActions.appendChild(rehApplyBtn);
+      rehActions.appendChild(rehUploadBtn);
+      rehActions.appendChild(rehClearBtn);
+      rehActions.appendChild(rehFileLabel);
+      rehActions.appendChild(rehFileInput);
+
+      var rehFeedback = document.createElement('div');
+      rehFeedback.className = 'aw-rehydrate-feedback';
+      rehFeedback.id = 'aw-rehydrate-feedback';
+      rehFeedback.setAttribute('role', 'status');
+      rehFeedback.setAttribute('aria-live', 'polite');
+      rehFeedback.setAttribute('aria-atomic', 'true');
+      rehFeedback.hidden = true;
+      dom.rehydrateFeedback = rehFeedback;
+
+      rehydratePanel.appendChild(rehHead);
+      rehydratePanel.appendChild(rehInput);
+      rehydratePanel.appendChild(rehActions);
+      rehydratePanel.appendChild(rehFeedback);
+
       capWrap.appendChild(synthBar);
+      capWrap.appendChild(aspectBar);
       capWrap.appendChild(capHead);
       capWrap.appendChild(capBox);
+      capWrap.appendChild(rehydratePanel);
       dom.tabPanels.capsule = capWrap;
       outputPane.appendChild(capWrap);
 
@@ -2503,8 +3208,14 @@
         prompt: state.activeDayObj.prompt,
         deliverable: state.activeDayObj.deliverable,
         kitId: state.activeDayObj.kitId,
+        markdown: state.markdown,
         digestHex: state.digestHex,
         digest16: (state.digestHex || '').slice(0, 16),
+        activeCapsuleAspect: state.activeCapsuleAspect,
+        activeCapsuleFormat: state.activeCapsuleFormat,
+        capsuleDigest16: (state.activeCapsuleDigestHex || state.digestHex || '').slice(0, 16),
+        capsuleTokens: state.activeCapsuleTokens,
+        capsuleBytes: state.activeCapsuleBytes,
         synthesisSource: state.synthesisSource,
         synthesisConnected: state.synthesisConnected,
         meta: cloneJson(manifest.meta),
@@ -2513,7 +3224,7 @@
     }
 
     var api = {
-      version: '1.1.0',
+      version: '2.1.0',
       mount: mount,
       selectDay: selectDay,
       selectKit: selectKit,
@@ -2524,6 +3235,10 @@
       copyShareNote: copyShareNote,
       reloadContext: reloadContext,
       importContextJson: importContextJson,
+      getCapsule: getCapsule,
+      rehydrateCapsule: rehydrateCapsule,
+      selectCapsuleAspect: selectCapsuleAspect,
+      selectCapsuleFormat: selectCapsuleFormat,
       getState: getState,
       _parseNote: parseNote,
       _sha256Hex: computeSha256Hex,

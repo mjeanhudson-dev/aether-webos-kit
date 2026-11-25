@@ -29,6 +29,9 @@
   --aw-ok: #4ADE80;
   --aw-ok-tint: rgba(74, 222, 128, 0.12);
   --aw-ok-line: rgba(74, 222, 128, 0.42);
+  --aw-err: #F87171;
+  --aw-err-tint: rgba(248, 113, 113, 0.12);
+  --aw-err-line: rgba(248, 113, 113, 0.45);
   --aw-edge-tree: rgba(168, 176, 188, 0.44);
   --aw-edge-dep: rgba(234, 141, 68, 0.80);
   --aw-hairline: rgba(236, 234, 228, 0.14);
@@ -69,6 +72,9 @@
   --aw-ok: #145A32;
   --aw-ok-tint: rgba(20, 90, 50, 0.10);
   --aw-ok-line: rgba(20, 90, 50, 0.40);
+  --aw-err: #B42318;
+  --aw-err-tint: rgba(180, 35, 24, 0.08);
+  --aw-err-line: rgba(180, 35, 24, 0.42);
   --aw-edge-tree: rgba(74, 77, 85, 0.50);
   --aw-edge-dep: rgba(152, 67, 6, 0.80);
   --aw-hairline: rgba(17, 18, 20, 0.16);
@@ -1052,7 +1058,7 @@
   line-height: 1.45;
 }
 
-/* ----------------------------------------------- 25-turn capsule panel -- */
+/* ----------------------------------------- rehydration capsules panel -- */
 .aw-synth-bar {
   padding: 0 0 0.85rem;
   border-radius: 0;
@@ -1106,9 +1112,143 @@
   white-space: nowrap;
 }
 
+.aw-aspect-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.aw-format-toggle {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--aw-hairline-strong);
+  border-radius: var(--aw-r-ctrl);
+  background: var(--aw-surface-deep);
+  overflow: hidden;
+}
+
+.aw-format-btn {
+  appearance: none;
+  min-height: 30px;
+  padding: 0.25rem 0.68rem;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--aw-ink-soft);
+  font-family: var(--aw-font-mono);
+  font-size: 0.74rem;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 120ms var(--aw-ease), color 120ms var(--aw-ease);
+}
+
+.aw-format-btn + .aw-format-btn {
+  border-left: 1px solid var(--aw-hairline);
+}
+
+.aw-format-btn:hover {
+  background: var(--aw-hover-bg);
+  color: var(--aw-ink);
+}
+
+.aw-format-btn[aria-pressed="true"] {
+  background: var(--aw-accent);
+  color: var(--aw-accent-ink);
+  font-weight: 700;
+}
+
+.aw-aspect-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--aw-hairline);
+  border: 1px solid var(--aw-hairline);
+}
+
+.aw-aspect-btn {
+  appearance: none;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 38px;
+  padding: 0.45rem 0.65rem;
+  border: 0;
+  border-top: 2px solid transparent;
+  border-radius: 0;
+  background: var(--aw-surface);
+  color: var(--aw-ink-soft);
+  font-family: var(--aw-font-text);
+  font-size: 0.78rem;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  min-width: 0;
+  transition: border-color 120ms var(--aw-ease), background-color 120ms var(--aw-ease);
+}
+
+.aw-aspect-btn--bundle {
+  grid-column: span 2;
+}
+
+.aw-aspect-btn:hover {
+  background: var(--aw-surface-2);
+  color: var(--aw-ink);
+}
+
+.aw-aspect-btn[aria-pressed="true"] {
+  border-top-color: var(--aw-accent);
+  background: var(--aw-surface-active);
+  color: var(--aw-ink);
+  font-weight: 700;
+}
+
+.aw-aspect-btn__index {
+  font-family: var(--aw-font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--aw-accent-text);
+  flex-shrink: 0;
+}
+
+.aw-aspect-btn__label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.aw-capsule-head {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.aw-capsule-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.aw-capsule-summary {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--aw-ink-soft);
+  line-height: 1.44;
+}
+
+.aw-capsule-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
 .aw-capsule-box {
   width: 100%;
-  min-height: 235px;
+  min-height: 215px;
   padding: 0.85rem 0.95rem;
   border-radius: 0;
   border: 1px solid var(--aw-hairline);
@@ -1120,6 +1260,72 @@
   resize: vertical;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
+}
+
+.aw-rehydrate-panel {
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--aw-hairline);
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.aw-rehydrate-box {
+  width: 100%;
+  min-height: 92px;
+  padding: 0.7rem 0.85rem;
+  border-radius: 0;
+  border: 1px solid var(--aw-hairline);
+  background: var(--aw-surface-deep);
+  color: var(--aw-ink);
+  font-family: var(--aw-font-mono);
+  font-size: 0.76rem;
+  line-height: 1.5;
+  caret-color: var(--aw-accent);
+  resize: vertical;
+}
+
+.aw-rehydrate-box::placeholder {
+  color: var(--aw-ink-soft);
+  opacity: 1;
+}
+
+.aw-rehydrate-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.aw-rehydrate-feedback {
+  padding: 0.55rem 0.75rem;
+  border-radius: 0;
+  border: 1px solid var(--aw-hairline);
+  border-left-width: 2px;
+  background: var(--aw-surface-2);
+  color: var(--aw-ink-soft);
+  font-family: var(--aw-font-mono);
+  font-size: 0.75rem;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.aw-rehydrate-feedback[hidden] {
+  display: none;
+}
+
+.aw-rehydrate-feedback--ok {
+  border-color: var(--aw-ok-line);
+  border-left-color: var(--aw-ok);
+  background: var(--aw-ok-tint);
+  color: var(--aw-ok);
+}
+
+.aw-rehydrate-feedback--error {
+  border-color: var(--aw-err-line);
+  border-left-color: var(--aw-err);
+  background: var(--aw-err-tint);
+  color: var(--aw-err);
 }
 
 /* --------------------------------------------------------- footer bar -- */
@@ -1180,6 +1386,12 @@
   .aw-lws-grid {
     grid-template-columns: 1fr;
   }
+  .aw-aspect-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .aw-aspect-btn--bundle {
+    grid-column: 1 / -1;
+  }
   .aw-map-viewport {
     height: 300px;
   }
@@ -1197,6 +1409,8 @@
   .aw-pill-btn,
   .aw-day-btn,
   .aw-tab,
+  .aw-aspect-btn,
+  .aw-format-btn,
   .aw-map-node__box {
     transition: none;
   }
