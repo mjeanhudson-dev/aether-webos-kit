@@ -38,6 +38,7 @@
   font-display: swap;
 }
 
+:root,
 [data-sc-embed] {
   --sc-canvas:      #07090D;
   --sc-surface:     #080A0E;
@@ -67,13 +68,14 @@
   --sc-font-mono:    "RedHatMono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
-[data-sc-embed] {
+html,
+body {
   overflow-x: clip;
   background: var(--aether-obsidian);
   color: var(--aether-platinum);
 }
 
-[data-sc-embed] ::selection {
+::selection {
   background: var(--aether-amber);
   color: var(--aether-amber-ink);
 }
@@ -83,11 +85,11 @@
   color: var(--aether-alabaster);
 }
 
-[data-sc-embed] a:hover {
+a:hover {
   text-underline-offset: 3px;
 }
 
-[data-sc-embed] :focus-visible {
+:focus-visible {
   outline: 2px solid var(--aether-amber);
   outline-offset: 2px;
   border-radius: 2px;
@@ -177,7 +179,7 @@
 
 /* ------------------------------------------------------- 60px Hairline Bar */
 .site-bar {
-  position: sticky;
+  position: fixed;
   top: 0;
   inset-inline: 0;
   height: 60px;
@@ -1488,6 +1490,13 @@
 
 .support-path .btn {
   align-self: flex-start;
+}
+
+.support-path__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  align-items: center;
 }
 
 .support-path .btn[aria-disabled="true"] {

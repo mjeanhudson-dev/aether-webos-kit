@@ -43,5 +43,5 @@ Small teams that need private, offline-capable tooling: local service operators,
 
 - No payment account is connected yet. Every payment URL in `funding.json` stays `null` until a real one exists, and GitHub Sponsors reported no listing for this account on 2026-11-25.
 - The Worker is written and reviewed but not deployed, and it has not been tested against real Stripe or Polar deliveries. The Polar signing-secret format and event field names are assumptions to confirm with one real test delivery. Do not show public totals until that is done.
-- `context/funding.json` is not read by any page script yet; the support section is static text.
+- `context/funding.json` is wired into `#act-support` via `scripts/stage-choreography.js` (`window.AetherFunding`): while all channel URLs stay `null`, the support button remains honestly disabled, and once a valid `https://` Stripe, GitHub Sponsors, or Polar URL is added, it activates automatically.
 - Fee numbers are approximate and need confirming at signup.

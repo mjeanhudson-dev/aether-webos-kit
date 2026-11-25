@@ -1492,6 +1492,13 @@ a:hover {
   align-self: flex-start;
 }
 
+.support-path__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  align-items: center;
+}
+
 .support-path .btn[aria-disabled="true"] {
   opacity: 0.55;
   pointer-events: none;

@@ -7,9 +7,56 @@
              to AetherArtifactShader with zero ancestor CSS-var style thrash,
              tracks data-sc-verify-state, ensures keyboard focus safety in
              pinned/pan acts, drives inline floorplan-codex specimen preview,
-             and syncs aether:day-select across header, ledger, and colophon.
+             syncs aether:day-select across header, ledger, and colophon,
+             and wires optional context/funding.json channels into #act-support.
    ========================================================================== */
-(function () {
+(function (root, factory) {
+  var funding = factory();
+  if (typeof module === 'object' && module.exports) module.exports = funding;
+  if (root) root.AetherFunding = funding;
+}(typeof globalThis !== 'undefined' ? globalThis : (typeof window !== 'undefined' ? window : null), function () {
+  'use strict';
+
+  function isSafeHttpsUrl(raw) {
+    if (typeof raw !== 'string') return false;
+    var s = raw.trim();
+    if (!s || /\s/.test(s) || /REPLACE_WITH_/i.test(s) || s.indexOf('https://') !== 0) return false;
+    try {
+      var u = new URL(s);
+      return u.protocol === 'https:' && Boolean(u.hostname);
+    } catch (_err) {
+      return false;
+    }
+  }
+
+  function resolveFundingChannels(manifest) {
+    var ch = manifest && manifest.channels && typeof manifest.channels === 'object' ? manifest.channels : {};
+    var specs = [
+      ['stripe_one_time', ch.stripe_one_time && ch.stripe_one_time.url, 'Support via Stripe'],
+      ['github_sponsors', ch.github_sponsors && ch.github_sponsors.url, 'Sponsor on GitHub'],
+      ['polar', ch.polar && ch.polar.url, 'Back on Polar'],
+      ['billing_portal', ch.billing_portal_url, 'Manage billing']
+    ];
+    var actions = [];
+    for (var i = 0; i < specs.length; i++) {
+      if (isSafeHttpsUrl(specs[i][1])) {
+        actions.push({ key: specs[i][0], url: specs[i][1].trim(), label: specs[i][2] });
+      }
+    }
+    var statsEndpoint = isSafeHttpsUrl(manifest && manifest.live_stats_endpoint)
+      ? manifest.live_stats_endpoint.trim()
+      : null;
+    var posture = manifest && typeof manifest.posture === 'string' ? manifest.posture.trim() : '';
+    return { active: actions.length > 0, actions: actions, statsEndpoint: statsEndpoint, posture: posture };
+  }
+
+  return {
+    isSafeHttpsUrl: isSafeHttpsUrl,
+    resolveFundingChannels: resolveFundingChannels
+  };
+}));
+
+if (typeof window !== 'undefined' && typeof document !== 'undefined') (function () {
   'use strict';
 
   if (
@@ -374,4 +421,76 @@
   if (window.AetherRefractory && typeof window.AetherRefractory.getState === 'function') {
     applyDayUi(window.AetherRefractory.getState());
   }
+
+  /* ---- 7. Dynamic funding channel wiring (#act-support <- context/funding.json) --- */
+  function initFundingSupport() {
+    if (window.location && window.location.protocol === 'file:') return;
+    if (typeof window.fetch !== 'function' || !window.AetherFunding) return;
+    var supportAct = document.getElementById('act-support');
+    if (!supportAct) return;
+    var slot = supportAct.querySelector('[data-funding-slot="backing"]');
+    if (!slot) return;
+
+    window.fetch('./context/funding.json', { cache: 'no-store' })
+      .then(function (res) { return res.ok ? res.json() : null; })
+      .then(function (manifest) {
+        if (!manifest) return;
+        var resolved = window.AetherFunding.resolveFundingChannels(manifest);
+        if (!resolved.active) return;
+
+        var labelEl = slot.querySelector('.support-path__label');
+        var noteEl = document.getElementById('funding-note');
+        var disabledBtn = slot.querySelector('button[aria-disabled="true"]');
+        if (labelEl) labelEl.textContent = 'Open now';
+        if (noteEl) {
+          noteEl.textContent = resolved.posture && !/no payment account/i.test(resolved.posture)
+            ? resolved.posture
+            : 'Direct backing is open. Choose a verified channel below.';
+        }
+
+        var wrap = document.createElement('div');
+        wrap.className = 'support-path__actions';
+        for (var i = 0; i < resolved.actions.length; i++) {
+          var act = resolved.actions[i];
+          var a = document.createElement('a');
+          a.className = i === 0 ? 'btn btn--primary' : 'btn btn--ghost';
+          a.href = act.url;
+          a.target = '_blank';
+          a.rel = 'noopener noreferrer';
+          a.textContent = act.label;
+          wrap.appendChild(a);
+        }
+        if (disabledBtn && disabledBtn.parentNode === slot) {
+          slot.replaceChild(wrap, disabledBtn);
+        } else {
+          slot.appendChild(wrap);
+        }
+
+        var ledgerStatus = supportAct.querySelector('.support-ledger span:first-child');
+        if (ledgerStatus) {
+          ledgerStatus.textContent = '';
+          var strong = document.createElement('strong');
+          strong.textContent = 'Funding:';
+          ledgerStatus.appendChild(strong);
+          ledgerStatus.appendChild(document.createTextNode(' live channel verified via context/funding.json.'));
+        }
+
+        if (resolved.statsEndpoint) {
+          window.fetch(resolved.statsEndpoint, { cache: 'no-store' })
+            .then(function (sr) { return sr.ok ? sr.json() : null; })
+            .then(function (stats) {
+              if (!stats || typeof stats.backers !== 'number' || !ledgerStatus) return;
+              var summary = ' ' + stats.backers + (stats.backers === 1 ? ' backer recorded.' : ' backers recorded.');
+              if (typeof stats.one_time_cents === 'number' && stats.one_time_cents > 0) {
+                summary += ' $' + (stats.one_time_cents / 100).toFixed(2) + ' USD one-time total.';
+              }
+              ledgerStatus.appendChild(document.createTextNode(summary));
+            })
+            .catch(function () {});
+        }
+      })
+      .catch(function () {});
+  }
+
+  initFundingSupport();
 })();

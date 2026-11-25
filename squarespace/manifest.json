@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-25T14:42:40.032Z",
+  "generatedAt": "2026-11-25T15:20:15.235Z",
   "target": {
     "siteUrl": "https://example.com",
     "editorUrl": "https://your-site.squarespace.com/config/pages",
@@ -63,10 +63,10 @@
     },
     {
       "source": "styles/site.css",
-      "uploadFile": "aether-webos-rollout-styles-site-094c6420.css",
-      "publicPath": "/s/aether-webos-rollout-styles-site-094c6420.css",
-      "bytes": 33657,
-      "sha256": "094c64209fb7def84c77616e0c81b07beb543a0847847cdfbe783da5b34514f7",
+      "uploadFile": "aether-webos-rollout-styles-site-8b98e7c7.css",
+      "publicPath": "/s/aether-webos-rollout-styles-site-8b98e7c7.css",
+      "bytes": 35416,
+      "sha256": "8b98e7c7b6e58fb080125154509dcb2143cd7c6b600d1e6a52b4a46c1a1b6a6d",
       "over20MB": false
     },
     {
@@ -95,10 +95,10 @@
     },
     {
       "source": "webos/live-bridge.js",
-      "uploadFile": "aether-webos-rollout-webos-live-bridge-fba38f74.js",
-      "publicPath": "/s/aether-webos-rollout-webos-live-bridge-fba38f74.js",
-      "bytes": 23661,
-      "sha256": "fba38f740243507baa2e79b002c0d3c3339ec8f89546a2541a515fc24959a167",
+      "uploadFile": "aether-webos-rollout-webos-live-bridge-3cced3d2.js",
+      "publicPath": "/s/aether-webos-rollout-webos-live-bridge-3cced3d2.js",
+      "bytes": 24159,
+      "sha256": "3cced3d2175024d3121b23ded4549bcd9cf7ec84a2f290173964ede558a3e534",
       "over20MB": false
     },
     {
@@ -111,10 +111,10 @@
     },
     {
       "source": "scripts/stage-choreography.js",
-      "uploadFile": "aether-webos-rollout-scripts-stage-choreography-5d830aa9.js",
-      "publicPath": "/s/aether-webos-rollout-scripts-stage-choreography-5d830aa9.js",
-      "bytes": 15611,
-      "sha256": "5d830aa9e1bb8b94ea481cbb37fffaf310d982873be6fd71a9bb4543dc39c17d",
+      "uploadFile": "aether-webos-rollout-scripts-stage-choreography-323b8d19.js",
+      "publicPath": "/s/aether-webos-rollout-scripts-stage-choreography-323b8d19.js",
+      "bytes": 20787,
+      "sha256": "323b8d19667c1803cd0c6b3111f93375489ee36c5bb585840667c72297d0e49d",
       "over20MB": false
     },
     {
@@ -206,14 +206,14 @@
       "over20MB": false
     },
     {
-      "source": "(generated) aether-webos-rollout-styles-site-embed-cd2f70a0.css",
-      "uploadFile": "aether-webos-rollout-styles-site-embed-cd2f70a0.css",
-      "publicPath": "/s/aether-webos-rollout-styles-site-embed-cd2f70a0.css",
-      "bytes": 33704,
-      "sha256": "cd2f70a0f1c22ca631c4ad3131114561ad42160fafc082207f3a08a113f629a5",
+      "source": "(generated) aether-webos-rollout-styles-site-embed-94ffd839.css",
+      "uploadFile": "aether-webos-rollout-styles-site-embed-94ffd839.css",
+      "publicPath": "/s/aether-webos-rollout-styles-site-embed-94ffd839.css",
+      "bytes": 33807,
+      "sha256": "94ffd8394bb4dbd12f2ec015aafa59f30b0fd5a4a913220add03119496f904b5",
       "over20MB": false
     }
   ],
   "warnings": [],
-  "totalUploadBytes": 1095271
+  "totalUploadBytes": 1102807
 }

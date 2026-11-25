@@ -8,6 +8,7 @@ import worker from '../workers/funding-webhook.js';
 
 const require = createRequire(import.meta.url);
 const bridge = require('../webos/live-bridge.js');
+const funding = require('../scripts/stage-choreography.js');
 
 function mockKv() {
   const m = new Map();
@@ -270,4 +271,43 @@ test('pack script: live-bridge is ranked between refractory and artifact-shader'
   assert.ok(i('/\\/refractory\\.js/i.test(line)) return 2') > -1);
   assert.ok(i('/\\/live-bridge\\.js/i.test(line)) return 3') > i('/\\/refractory\\.js/i.test(line)) return 2'));
   assert.ok(i('/\\/artifact-shader\\.js/i.test(line)) return 4') > i('/\\/live-bridge\\.js/i.test(line)) return 3'));
+});
+
+test('funding loader: null manifest channels stay inactive and preserve disabled support state', () => {
+  const realManifest = JSON.parse(require('node:fs').readFileSync(new URL('../context/funding.json', import.meta.url), 'utf8'));
+  const res = funding.resolveFundingChannels(realManifest);
+  assert.equal(res.active, false);
+  assert.deepEqual(res.actions, []);
+  assert.equal(res.statsEndpoint, null);
+});
+
+test('funding loader: valid https Stripe, GitHub Sponsors, Polar, and stats URLs activate in order', () => {
+  const res = funding.resolveFundingChannels({
+    posture: 'Stripe checkout active.',
+    live_stats_endpoint: 'https://stats.example.workers.dev/api/funding-stats',
+    channels: {
+      stripe_one_time: { url: 'https://buy.stripe.com/test_123456' },
+      github_sponsors: { url: 'https://github.com/sponsors/mjeanhudson-dev' },
+      polar: { url: 'https://polar.sh/mjeanhudson-dev' },
+      billing_portal_url: 'https://billing.stripe.com/p/login/test_123'
+    }
+  });
+  assert.equal(res.active, true);
+  assert.deepEqual(res.actions.map((a) => a.key), ['stripe_one_time', 'github_sponsors', 'polar', 'billing_portal']);
+  assert.equal(res.statsEndpoint, 'https://stats.example.workers.dev/api/funding-stats');
+});
+
+test('funding loader: rejects javascript, http, placeholder, and malformed URLs', () => {
+  const res = funding.resolveFundingChannels({
+    live_stats_endpoint: 'http://insecure.example/stats',
+    channels: {
+      stripe_one_time: { url: 'https://buy.stripe.com/REPLACE_WITH_REAL_PAYMENT_LINK' },
+      github_sponsors: { url: 'javascript:alert(1)' },
+      polar: { url: 'http://polar.sh/http-only' },
+      billing_portal_url: 'not a url'
+    }
+  });
+  assert.equal(res.active, false);
+  assert.deepEqual(res.actions, []);
+  assert.equal(res.statsEndpoint, null);
 });
