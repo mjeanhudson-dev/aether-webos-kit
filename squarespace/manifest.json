@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-25T13:34:54.925Z",
+  "generatedAt": "2026-11-25T14:42:40.032Z",
   "target": {
     "siteUrl": "https://example.com",
     "editorUrl": "https://your-site.squarespace.com/config/pages",
@@ -63,10 +63,10 @@
     },
     {
       "source": "styles/site.css",
-      "uploadFile": "aether-webos-rollout-styles-site-9f9b93f8.css",
-      "publicPath": "/s/aether-webos-rollout-styles-site-9f9b93f8.css",
-      "bytes": 30985,
-      "sha256": "9f9b93f8e7f66aef89f6b44957245e638f28dc3be82f0c2f3c0126d5be4af746",
+      "uploadFile": "aether-webos-rollout-styles-site-094c6420.css",
+      "publicPath": "/s/aether-webos-rollout-styles-site-094c6420.css",
+      "bytes": 33657,
+      "sha256": "094c64209fb7def84c77616e0c81b07beb543a0847847cdfbe783da5b34514f7",
       "over20MB": false
     },
     {
@@ -91,6 +91,14 @@
       "publicPath": "/s/aether-webos-rollout-webos-refractory-f4a6b440.js",
       "bytes": 146210,
       "sha256": "f4a6b440a8995ee40364c6aea7b26a9be4796297579d6b8403791fb8646aa403",
+      "over20MB": false
+    },
+    {
+      "source": "webos/live-bridge.js",
+      "uploadFile": "aether-webos-rollout-webos-live-bridge-fba38f74.js",
+      "publicPath": "/s/aether-webos-rollout-webos-live-bridge-fba38f74.js",
+      "bytes": 23661,
+      "sha256": "fba38f740243507baa2e79b002c0d3c3339ec8f89546a2541a515fc24959a167",
       "over20MB": false
     },
     {
@@ -198,14 +206,14 @@
       "over20MB": false
     },
     {
-      "source": "(generated) aether-webos-rollout-styles-site-embed-d237838f.css",
-      "uploadFile": "aether-webos-rollout-styles-site-embed-d237838f.css",
-      "publicPath": "/s/aether-webos-rollout-styles-site-embed-d237838f.css",
-      "bytes": 31032,
-      "sha256": "d237838f4ae883c7e6d74c98b29add8d622c55224b753729cd14966197caeff2",
+      "source": "(generated) aether-webos-rollout-styles-site-embed-cd2f70a0.css",
+      "uploadFile": "aether-webos-rollout-styles-site-embed-cd2f70a0.css",
+      "publicPath": "/s/aether-webos-rollout-styles-site-embed-cd2f70a0.css",
+      "bytes": 33704,
+      "sha256": "cd2f70a0f1c22ca631c4ad3131114561ad42160fafc082207f3a08a113f629a5",
       "over20MB": false
     }
   ],
   "warnings": [],
-  "totalUploadBytes": 1066266
+  "totalUploadBytes": 1095271
 }

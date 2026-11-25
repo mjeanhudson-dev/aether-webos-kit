@@ -114,9 +114,10 @@ function reorderDeferredScripts(htmlText) {
       if (/webos-capsules-/i.test(line) || /\/capsules\.js/i.test(line)) return 0;
       if (/webos-exporter-/i.test(line) || /\/exporter\.js/i.test(line)) return 1;
       if (/webos-refractory-/i.test(line) || /\/refractory\.js/i.test(line)) return 2;
-      if (/webgl-artifact-shader-/i.test(line) || /\/artifact-shader\.js/i.test(line)) return 3;
-      if (/scripts-stage-choreography-/i.test(line) || /\/stage-choreography\.js/i.test(line)) return 4;
-      return 5;
+      if (/webos-live-bridge-/i.test(line) || /\/live-bridge\.js/i.test(line)) return 3;
+      if (/webgl-artifact-shader-/i.test(line) || /\/artifact-shader\.js/i.test(line)) return 4;
+      if (/scripts-stage-choreography-/i.test(line) || /\/stage-choreography\.js/i.test(line)) return 5;
+      return 6;
     }
   );
 }
@@ -237,6 +238,7 @@ function verifyPackagedBundle(manifest, newSiteUploadFile, embedSiteUploadFile, 
     ['capsules', /<script\b[^>]*\bdefer\b[^>]*src="\/s\/aether-webos-rollout-webos-capsules-[0-9a-f]{8}\.js"/i],
     ['exporter', /<script\b[^>]*\bdefer\b[^>]*src="\/s\/aether-webos-rollout-webos-exporter-[0-9a-f]{8}\.js"/i],
     ['refractory', /<script\b[^>]*\bdefer\b[^>]*src="\/s\/aether-webos-rollout-webos-refractory-[0-9a-f]{8}\.js"/i],
+    ['live-bridge', /<script\b[^>]*\bdefer\b[^>]*src="\/s\/aether-webos-rollout-webos-live-bridge-[0-9a-f]{8}\.js"/i],
     ['artifact-shader', /<script\b[^>]*\bdefer\b[^>]*src="\/s\/aether-webos-rollout-webgl-artifact-shader-[0-9a-f]{8}\.js"/i],
     ['stage-choreography', /<script\b[^>]*\bdefer\b[^>]*src="\/s\/aether-webos-rollout-scripts-stage-choreography-[0-9a-f]{8}\.js"/i],
   ];

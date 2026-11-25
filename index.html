@@ -16,6 +16,7 @@
 <script defer src="webos/capsules.js"></script>
 <script defer src="webos/exporter.js"></script>
 <script defer src="webos/refractory.js"></script>
+<script defer src="webos/live-bridge.js"></script>
 <script defer src="webgl/artifact-shader.js"></script>
 <script defer src="scripts/stage-choreography.js"></script>
 </head>
@@ -268,6 +269,11 @@ WAVE 2 -> $25 buffer jar + offline HTML export</pre>
         <p class="studio-sub">Pick one of four plain-English Starter Kits or paste raw notes below. Edit directly to regenerate the SVG Mind-Map, Dual-View Reader, Lexicon, and 25-Turn SHA-256 Capsule.</p>
       </header>
 
+      <details class="live-copilot" id="aether-live-copilot">
+        <summary class="live-copilot__summary">Optional: talk to your plan with a live voice co-pilot</summary>
+        <div class="live-copilot__body" data-live-body></div>
+      </details>
+
       <div class="studio-cv-shell">
         <div id="aether-webos-mount" data-aw-lazy="true">
           <div class="studio-skeleton" aria-label="Preparing Aether WebOS Refractory Studio">
@@ -308,7 +314,7 @@ WAVE 2 -> $25 buffer jar + offline HTML export</pre>
         <li class="solutions-row">
           <span class="solutions-row__num">02</span>
           <h3 class="solutions-row__title">Private AI assistants that run on your machine</h3>
-          <p class="solutions-row__body">Assistants that read files on your own computer. <strong>I can set up a searchable local vault, strip passwords and keys before anything is shared, and add checks that compare what an agent reports against what it actually changed.</strong> Useful for teams that should not paste client data into a public chat. Not a fixed package yet: tell me your case and we agree scope and limits in writing first.</p>
+          <p class="solutions-row__body">Assistants that read files on your own computer. <strong>I can set up a searchable local vault, strip passwords and keys before anything is shared, and add checks that compare what an agent reports against what it actually changed.</strong> Useful for teams that should not paste client data into a public chat. Not a fixed package yet: tell me your case and we agree scope and limits in writing first. You can read two working pieces now: the <a class="site-foot__link" href="webos/live-bridge.js">live voice co-pilot bridge</a> and the <a class="site-foot__link" href="https://github.com/mjeanhudson-dev/aether-webos-kit/blob/main/workers/funding-webhook.js" target="_blank" rel="noopener noreferrer">signed-webhook worker</a>.</p>
         </li>
         <li class="solutions-row">
           <span class="solutions-row__num">03</span>

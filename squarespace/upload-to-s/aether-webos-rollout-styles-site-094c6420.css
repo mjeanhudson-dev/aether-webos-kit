@@ -1528,3 +1528,122 @@ a:hover {
   cursor: not-allowed;
   pointer-events: auto;
 }
+
+/* ------------------------------------------- Live co-pilot + tablet nav (v2.3) */
+.live-copilot {
+  margin-bottom: clamp(1rem, 2vw, 1.5rem);
+  border-top: 1px solid var(--aether-hairline);
+  border-bottom: 1px solid var(--aether-hairline);
+}
+
+.live-copilot__summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 0.85rem 0;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  font-family: var(--sc-font-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--aether-amber);
+}
+
+.live-copilot__summary::-webkit-details-marker { display: none; }
+.live-copilot__summary::before { content: "+"; margin-right: 0.6rem; }
+.live-copilot[open] > .live-copilot__summary::before { content: "-"; }
+
+.live-copilot__summary:focus-visible,
+.live-copilot input:focus-visible,
+.live-copilot select:focus-visible {
+  outline: 2px solid var(--aether-amber);
+  outline-offset: 2px;
+}
+
+.live-copilot__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  padding-bottom: 1.1rem;
+}
+
+.live-copilot__note {
+  margin: 0;
+  max-width: 62ch;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: var(--aether-steel);
+}
+
+.live-copilot__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.75rem 1rem;
+}
+
+.live-copilot__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-family: var(--sc-font-mono);
+  font-size: 0.72rem;
+  color: var(--aether-steel);
+}
+
+.live-copilot__field--grow { flex: 1 1 14rem; }
+
+.live-copilot__field { min-width: 0; max-width: 100%; }
+
+.live-copilot input,
+.live-copilot select {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 760px) {
+  .live-copilot__field { flex: 1 1 100%; }
+  .live-copilot input,
+  .live-copilot select { width: 100%; }
+}
+
+.live-copilot input,
+.live-copilot select {
+  min-height: 40px;
+  padding: 0.4rem 0.6rem;
+  background: var(--aether-obsidian);
+  color: var(--aether-platinum);
+  border: 1px solid var(--aether-hairline-strong);
+  border-radius: 2px;
+  font: inherit;
+  font-size: 0.85rem;
+}
+
+.live-copilot .btn[disabled] { opacity: 0.5; cursor: not-allowed; }
+
+.live-copilot__status {
+  font-family: var(--sc-font-mono);
+  font-size: 0.78rem;
+  color: var(--aether-amber);
+}
+
+.live-copilot__log {
+  margin: 0;
+  min-height: 3.5rem;
+  max-height: 11rem;
+  overflow: auto;
+  padding: 0.6rem 0.75rem;
+  background: var(--aether-obsidian);
+  border: 1px solid var(--aether-hairline);
+  font-family: var(--sc-font-mono);
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: var(--aether-platinum);
+  white-space: pre-wrap;
+}
+
+@media (max-width: 1060px) {
+  .site-bar__nav { gap: 0.9rem; }
+  .site-bar__day { display: none; }
+}

@@ -20,7 +20,7 @@ Unlike subscription cloud note apps, rigid boxed dashboard builders, or ephemera
 
 ## Operating Context
 
-- Zero-install browser execution (`http://` local server or exported standalone `.html` double-clicked directly from local disk in airplane mode) plus Squarespace `/s/` deployment (`22` hashed upload files totaling `1,058,554` bytes under `squarespace/upload-to-s/`).
+- Zero-install browser execution (`http://` local server or exported standalone `.html` double-clicked directly from local disk in airplane mode) plus Squarespace `/s/` deployment (`23` hashed upload files under `squarespace/upload-to-s/`).
 - Side-by-side plain-English authoring paired with live SVG dependency trees (`Wave 0`, `Wave 1`, `Wave 2`), 4 Starter Kits (`Household & Cashflow Clarity`, `Local Service & Workshop Launch`, `30-Day Creator & Newsletter System`, `Community & Teaching Hub`), and a 30-day progressive mentorship track (`Days 1 to 30` across `Weeks 1 to 4`).
 - Multi-aspect context preservation via `webos/capsules.js` (`window.AetherCapsules`, `v2.1.0`, schema `aether.rehydration.capsule.v2` + legacy `aether.compaction.passdown.v1`) and `./context/terminal-synthesis.json` `v2.1.0` hot-swap loading (`window.AetherRefractory`).
 - Artifact continuity across shipped works by Eloquent (`@mjeanhudson-dev`), opening with `Artifact 01: floorplan-codex` (`https://github.com/mjeanhudson-dev/floorplan-codex`), `Artifact 02: Aether WebOS Refractory Kit`, and `Artifact 03: Portable Single-File HTML Kit`.
@@ -67,3 +67,9 @@ Unlike subscription cloud note apps, rigid boxed dashboard builders, or ephemera
 - **Offer ladder:** free MIT-licensed kit (proof of work), custom builds scoped in writing (offline workspaces, private AI assistants that run on the buyer's machine, websites and tools the buyer owns), optional backing once a real payment channel exists.
 - **Honesty rules carried forward:** no invented testimonials, customer counts, prices, or payment links. The AI assistant row is described as not yet a fixed package.
 - **Open items:** connect a real payment channel (GitHub Sponsors listing is not approved, Polar and Stripe not set up), deploy and test `workers/funding-webhook.js` with real deliveries, and source a higher-resolution image pipeline before claiming Retina assets.
+
+## v2.3.0 product notes
+
+- **Gemini 3.8 Live Studio Co-Pilot (`webos/live-bridge.js`):** optional voice and text WebSocket bridge (`window.AetherLiveBridge`) inside `#act-studio` (`#aether-live-copilot`) exporting `WS_BASE`, `MODEL_LIVE`, `MODEL_THINKING`, `validateToken`, `buildSocketUrl`, `toolDeclarations`, `buildSetupMessage`, `buildRealtimeTextMessage`, `buildRealtimePcmMessage`, `buildAudioStreamEndMessage`, `buildToolResponseMessage`, `parseServerEvent`, `clean`, `insertIntoSection`, `applyToolCall`, and `mount`. Opens zero network connections until `Connect`, requires a `v1beta` ephemeral token (`token.name` via `access_token`), rejects raw `AIza...` keys, touches zero browser storage/cookies/`fetch`, mounts `#aether-webos-mount` lazily on first tool call, and drives three `NON_BLOCKING` tools (`append_floorplan_task`, `define_lexicon_term`, `select_studio_view`).
+- **Hardening & Packaging Parity (`scripts/test-v23-hardening.mjs`, `squarespace/`):** 21 deterministic `node:test` checks verify `workers/funding-webhook.js`, `webos/live-bridge.js`, and `scripts/pack-squarespace.mjs` (`23` hashed upload files under `squarespace/upload-to-s/`). Live GitHub Pages surface is active at `https://mjeanhudson-dev.github.io/aether-webos-kit/`.
+- **Documented shortcuts:** live server round-trips with a minted ephemeral token and migrating microphone capture from `ScriptProcessor` to `AudioWorklet` remain explicit `shortcut:` items in `webos/live-bridge.js`.
