@@ -563,8 +563,27 @@ test('live-token worker: POST /api/quote stores valid capsules in KV and rejects
     { TOKEN_RATE_KV: kv }
   );
   assert.equal(okRes.status, 200);
-  assert.equal((await okRes.json()).ref_id, 'AEQ-1234-ABCD');
+  const okBody = await okRes.json();
+  assert.equal(okBody.ref_id, 'AEQ-1234-ABCD');
+  assert.equal(okBody.refId, 'AEQ-1234-ABCD');
   assert.equal(kv._m.size, 1);
+
+  const syn = funding.synthesizeQuoteScope({
+    name: 'Test User',
+    contact: 'test@example.com',
+    track: 'webos-kit',
+    timeline: '2-to-4-weeks',
+    brief: 'Verify camelCase refId capsule saves cleanly.'
+  });
+  const synRes = await liveToken.fetch(
+    qReq(OK_ORIGIN, syn.capsule),
+    { TOKEN_RATE_KV: kv }
+  );
+  assert.equal(synRes.status, 200);
+  const synBody = await synRes.json();
+  assert.equal(synBody.refId, syn.refId);
+  assert.equal(synBody.ref_id, syn.refId);
+  assert.equal(kv._m.size, 2);
 });
 
 test('a2a: .well-known/agent.json is valid and points to eloquentwin.com', () => {

@@ -65,7 +65,10 @@ export default {
       } catch {
         return reply({ error: 'bad_json' }, 400, origin, true);
       }
-      if (!qBody || qBody.schema !== 'aether.quote.capsule.v1' || typeof qBody.ref_id !== 'string' || !/^AEQ-[0-9A-F]{4}-[0-9A-F]{4}$/.test(qBody.ref_id)) {
+      const refId = qBody && typeof qBody.refId === 'string'
+        ? qBody.refId
+        : (qBody && typeof qBody.ref_id === 'string' ? qBody.ref_id : '');
+      if (!qBody || qBody.schema !== 'aether.quote.capsule.v1' || !/^AEQ-[0-9A-F]{4}-[0-9A-F]{4}$/.test(refId)) {
         return reply({ error: 'bad_capsule' }, 400, origin, true);
       }
       const qIp = request.headers.get('cf-connecting-ip') || '';
@@ -75,9 +78,9 @@ export default {
         if (qUsed >= MAX_PER_WINDOW) return reply({ error: 'rate_limited' }, 429, origin, true);
         await env.TOKEN_RATE_KV.put(qRateKey, String(qUsed + 1), { expirationTtl: WINDOW_SECONDS });
       }
-      const storedKey = `quote:${new Date().toISOString().slice(0, 10)}:${qBody.ref_id}`;
+      const storedKey = `quote:${new Date().toISOString().slice(0, 10)}:${refId}`;
       await env.TOKEN_RATE_KV.put(storedKey, JSON.stringify({ received_at: new Date().toISOString(), origin, capsule: qBody }), { expirationTtl: QUOTE_TTL_SECONDS });
-      return reply({ ok: true, ref_id: qBody.ref_id }, 200, origin, true);
+      return reply({ ok: true, refId, ref_id: refId }, 200, origin, true);
     }
 
     if (!env.GEMINI_API_KEY) return reply({ error: 'unconfigured' }, 503, origin, true);
