@@ -5,6 +5,7 @@ import assert from 'node:assert/strict';
 import crypto from 'node:crypto';
 import { createRequire } from 'node:module';
 import worker from '../workers/funding-webhook.js';
+import liveToken from '../workers/live-token.js';
 
 const require = createRequire(import.meta.url);
 const bridge = require('../webos/live-bridge.js');
@@ -145,8 +146,9 @@ test('bridge: setup targets the right models, NON_BLOCKING tools, correct modali
   const text = bridge.buildSetupMessage({ audio: false });
   assert.deepEqual(text.setup.generationConfig.responseModalities, ['TEXT']);
   const decls = live.setup.tools[0].functionDeclarations;
-  assert.equal(decls.length, 3);
+  assert.equal(decls.length, 4);
   for (const d of decls) assert.equal(d.behavior, 'NON_BLOCKING');
+  assert.ok(decls.some((d) => d.name === 'capture_visitor_framework'));
 });
 
 test('bridge: realtime messages use text/audio/audioStreamEnd and never media', () => {
@@ -181,7 +183,7 @@ test('bridge: socket URL needs a token, uses v1beta access_token, rejects raw AP
   assert.throws(() => bridge.buildSocketUrl('AI' + 'za_fixture_rejected_raw_key'), /API key/);
   assert.throws(() => bridge.buildSocketUrl('two words'));
   const u = bridge.buildSocketUrl('auth_tokens/abc123');
-  assert.match(u, /^wss:\/\/generativelanguage\.googleapis\.com\/ws\/google\.ai\.generativelanguage\.v1beta\.GenerativeService\.BidiGenerateContent[?]access_token=auth_tokens%2Fabc123$/);
+  assert.match(u, /^wss:\/\/generativelanguage\.googleapis\.com\/ws\/google\.ai\.generativelanguage\.v1alpha\.GenerativeService\.BidiGenerateContentConstrained[?]access_token=auth_tokens%2Fabc123$/);
   assert.equal(/[?&]key=/.test(u), false);
 });
 
@@ -202,11 +204,17 @@ test('bridge: tool applier edits markdown safely and rejects bad input', () => {
 
 test('bridge: module has no storage, cookie, or fetch use, and opens the socket only inside the Connect handler', () => {
   const src = require('node:fs').readFileSync(new URL('../webos/live-bridge.js', import.meta.url), 'utf8');
-  for (const bad of ['localStorage', 'sessionStorage', 'document.cookie', 'indexedDB', 'sendBeacon', 'XMLHttpRequest', 'fetch(', 'eval(']) {
+  for (const bad of ['localStorage', 'sessionStorage', 'document.cookie', 'indexedDB', 'sendBeacon', 'XMLHttpRequest', 'eval(']) {
     assert.equal(src.includes(bad), false, `forbidden: ${bad}`);
   }
   assert.equal((src.match(/new WebSocket\(/g) || []).length, 1);
-  assert.ok(src.indexOf('new WebSocket(') > src.indexOf("el.connect.addEventListener('click'"));
+  const click = src.indexOf("el.connect.addEventListener('click'");
+  const start = src.indexOf('function startSession(');
+  assert.ok(click > -1 && start > click);
+  assert.ok(src.indexOf('new WebSocket(') > start);
+  assert.equal((src.match(/fetch\(/g) || []).length, 1);
+  assert.ok(src.indexOf('fetch(') > click && src.indexOf('fetch(') < start);
+  assert.ok(src.includes('^https:'));
 });
 
 test('bridge: tool args are strictly typed and coerced values are rejected', () => {
@@ -318,12 +326,12 @@ test('v2.4 contact manifest & quote synthesizer: eloquent@eloquentwin.com, zero 
   assert.equal(/gmail\.com|googlemail\.com/i.test(rawContact), false);
   const contactJson = JSON.parse(rawContact);
   assert.equal(contactJson.public_email, 'eloquent@eloquentwin.com');
-  assert.equal(contactJson.quote_webhook_url, null);
+  assert.equal(contactJson.quote_webhook_url, 'https://aether-live-token.eloquentwin.workers.dev/api/quote');
   assert.equal(contactJson.response_window, '1 to 2 business days');
 
   const cfg = funding.resolveContactConfig(contactJson);
   assert.equal(cfg.publicEmail, 'eloquent@eloquentwin.com');
-  assert.equal(cfg.quoteWebhookUrl, null);
+  assert.equal(cfg.quoteWebhookUrl, 'https://aether-live-token.eloquentwin.workers.dev/api/quote');
   assert.equal(cfg.responseWindow, '1 to 2 business days');
 
   const rejectedGmail = funding.resolveContactConfig({ public_email: 'someone@gmail.com', quote_webhook_url: 'http://insecure.test' });
@@ -449,3 +457,120 @@ test('v2.4 HiDPI / 4K geological assets & provenance sidecars exist on disk', ()
   assert.match(stageSrc, /predecodeStageMedia/);
 });
 
+
+function ltReq(origin, body) {
+  const headers = { 'content-type': 'application/json', ...(origin ? { origin } : {}) };
+  return new Request('https://t.test/api/live-token', { method: 'POST', headers, body: JSON.stringify(body || {}) });
+}
+async function withFetch(impl, fn) {
+  const orig = globalThis.fetch;
+  globalThis.fetch = impl;
+  try { return await fn(); } finally { globalThis.fetch = orig; }
+}
+const OK_ORIGIN = 'https://eloquentwin.com';
+
+test('live-token: missing key fails closed 503, bad or missing origin 403', async () => {
+  assert.equal((await liveToken.fetch(ltReq(OK_ORIGIN), {})).status, 503);
+  assert.equal((await liveToken.fetch(ltReq('https://evil.example'), { GEMINI_API_KEY: 'k' })).status, 403);
+  assert.equal((await liveToken.fetch(ltReq(null), { GEMINI_API_KEY: 'k' })).status, 403);
+});
+
+test('live-token: Turnstile required and verified when configured', async () => {
+  const env = { GEMINI_API_KEY: 'k', TURNSTILE_SECRET_KEY: 's' };
+  assert.equal((await liveToken.fetch(ltReq(OK_ORIGIN), env)).status, 403);
+  await withFetch(async () => new Response(JSON.stringify({ success: false })), async () => {
+    assert.equal((await liveToken.fetch(ltReq(OK_ORIGIN, { turnstileToken: 'bad' }), env)).status, 403);
+  });
+  await withFetch(async () => new Response(JSON.stringify({ success: true, action: 'other', hostname: 'eloquentwin.com' })), async () => {
+    assert.equal((await liveToken.fetch(ltReq(OK_ORIGIN, { turnstileToken: 'tok' }), env)).status, 403);
+  });
+  await withFetch(async () => new Response(JSON.stringify({ success: true, action: 'live_token', hostname: 'localhost' })), async () => {
+    assert.equal((await liveToken.fetch(ltReq(OK_ORIGIN, { turnstileToken: 'tok' }), env)).status, 403);
+  });
+  await withFetch(async (u) => {
+    if (String(u).includes('siteverify')) {
+      return new Response(JSON.stringify({ success: true, action: 'live_token', hostname: 'eloquentwin.com' }));
+    }
+    return new Response(JSON.stringify({ name: 'auth_tokens/ts_ok' }));
+  }, async () => {
+    const ok = await liveToken.fetch(ltReq(OK_ORIGIN, { turnstileToken: 'good' }), env);
+    assert.equal(ok.status, 200);
+    assert.equal((await ok.json()).token, 'auth_tokens/ts_ok');
+  });
+});
+
+test('live-token: valid request mints one-use token, no-store, never leaks the key', async () => {
+  const SECRET = 'fixture_secret_key_value';
+  let seen;
+  await withFetch(async (u, init) => { seen = { u: String(u), init }; return new Response(JSON.stringify({ name: 'auth_tokens/abc' })); }, async () => {
+    const res = await liveToken.fetch(ltReq(OK_ORIGIN), { GEMINI_API_KEY: SECRET });
+    assert.equal(res.status, 200);
+    assert.equal(res.headers.get('cache-control'), 'no-store');
+    assert.equal(res.headers.get('vary'), 'Origin');
+    assert.equal(res.headers.get('access-control-allow-origin'), OK_ORIGIN);
+    const text = await res.text();
+    assert.equal(text.includes(SECRET), false);
+    assert.equal(JSON.parse(text).token, 'auth_tokens/abc');
+    assert.match(seen.u, /v1alpha\/auth_tokens$/);
+    assert.equal(JSON.parse(seen.init.body).uses, 1);
+  });
+});
+
+test('bridge: capture_visitor_framework writes Discovery Framework, syncs quote, and validates args', () => {
+  let md = '# Plan\n\n## Wave 0: Start\n- [ ] first [Wave 0]\n\n## Lexicon\n- **old**: term\n';
+  let synced = null;
+  const host = { getText: () => md, setText: (s) => { md = s; }, selectTab: () => {}, syncQuote: (fw) => { synced = fw; } };
+  assert.match(bridge.SYSTEM_TEXT, /goals.*pain points.*bottlenecks/i);
+  assert.match(bridge.DISCOVERY_GREETING, /goal.*pain point.*bottleneck/i);
+  assert.equal(bridge.applyToolCall({ name: 'capture_visitor_framework', args: { goal: 'Ship site', pain_point: '', bottleneck: 'DNS' } }, host).ok, false);
+  const res = bridge.applyToolCall({
+    name: 'capture_visitor_framework',
+    args: {
+      goal: 'Automate intake — cleanly',
+      pain_point: 'Manual triage <script>',
+      bottleneck: 'Slow quotes',
+      recommended_track: 'UNKNOWN_TRACK',
+      light_demo_idea: 'Interactive scope preview'
+    }
+  }, host);
+  assert.equal(res.ok, true);
+  assert.match(md, /## Discovery Framework/);
+  assert.match(md, /- \*\*Goal\*\*: Automate intake - cleanly/);
+  assert.match(md, /- \*\*Pain point\*\*: Manual triage script/);
+  assert.match(md, /- \*\*Bottleneck\*\*: Slow quotes/);
+  assert.match(md, /- \*\*Track\*\*: hybrid-suite/);
+  assert.match(md, /- \*\*Light demo\*\*: Interactive scope preview/);
+  assert.deepEqual(synced, {
+    goal: 'Automate intake - cleanly',
+    pain_point: 'Manual triage script',
+    bottleneck: 'Slow quotes',
+    recommended_track: 'hybrid-suite',
+    light_demo_idea: 'Interactive scope preview'
+  });
+});
+
+test('live-token worker: POST /api/quote stores valid capsules in KV and rejects bad origins or schemas', async () => {
+  const kv = mockKv();
+  const qReq = (origin, body) => new Request('https://t.test/api/quote', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', ...(origin ? { origin } : {}) },
+    body: JSON.stringify(body),
+  });
+  assert.equal((await liveToken.fetch(qReq('https://evil.example', {}), { TOKEN_RATE_KV: kv })).status, 403);
+  assert.equal((await liveToken.fetch(qReq(OK_ORIGIN, { schema: 'wrong' }), { TOKEN_RATE_KV: kv })).status, 400);
+  const okRes = await liveToken.fetch(
+    qReq(OK_ORIGIN, { schema: 'aether.quote.capsule.v1', ref_id: 'AEQ-1234-ABCD', brief: 'Goal: ship fast' }),
+    { TOKEN_RATE_KV: kv }
+  );
+  assert.equal(okRes.status, 200);
+  assert.equal((await okRes.json()).ref_id, 'AEQ-1234-ABCD');
+  assert.equal(kv._m.size, 1);
+});
+
+test('a2a: .well-known/agent.json is valid and points to eloquentwin.com', () => {
+  const fs = require('node:fs');
+  const card = JSON.parse(fs.readFileSync(new URL('../.well-known/agent.json', import.meta.url), 'utf8'));
+  assert.equal(card.protocolVersion, '1.0.1');
+  assert.equal(card.url, 'https://eloquentwin.com/');
+  assert.equal(card.contact, 'eloquent@eloquentwin.com');
+});

@@ -4,11 +4,12 @@
 
    - Nothing connects on page load. The socket opens only after the user presses Connect.
    - Auth: Gemini EPHEMERAL TOKEN only (the value of token.name from auth_tokens.create),
-     sent as the access_token query parameter on the v1beta endpoint, as documented. A raw
+     sent as the access_token query parameter on the v1alpha BidiGenerateContentConstrained endpoint (the plain endpoint rejects ephemeral tokens). A raw
      API key (AIza...) is rejected. The token lives in a closure variable only, is never
      written to storage, exports, or capsules, and is wiped as soon as the URL is built.
    - Pure protocol builders and the tool applier are exported so Node can test them offline.
-   - shortcut: the placement of thinkingConfig inside generationConfig, the text-only
+   - Optional 1-click mode: set data-live-token-endpoint (https only) on #aether-live-copilot; with an empty token box, Connect POSTs there for a one-use token.
+    - shortcut: the placement of thinkingConfig inside generationConfig, the text-only
      response modality, and the toolResponse body are NOT yet verified against a live
      server; run one real session before relying on them. If your token is locked with
      live_connect_constraints, pick the matching model option or the server may reject setup.
@@ -21,19 +22,24 @@
 }(typeof globalThis !== 'undefined' ? globalThis : window, function () {
   'use strict';
 
-  var WS_BASE = 'wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1beta.GenerativeService.BidiGenerateContent';
+  var WS_BASE = 'wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1alpha.GenerativeService.BidiGenerateContentConstrained';
   var MODEL_LIVE = 'models/gemini-3.8-live';
   var MODEL_THINKING = 'models/gemini-3.8-live-extended-thinking';
   var VIEWS = ['mindmap', 'dualview', 'lexicon', 'capsule'];
+  var TRACKS = ['offline-workspace', 'local-ai-vault', 'custom-webos-site', 'hybrid-suite'];
   var MAX_TOOL_CALLS = 30;
   var MAX_LOG_LINES = 200;
   var DASHES = new RegExp('[\\u2013\\u2014]', 'g');
   var CONTROLS = new RegExp('[\\u0000-\\u001f\\u007f-\\u009f\\u2028\\u2029]', 'g');
   var MD_SPECIALS = new RegExp('[\\[\\]()<>*`\\\\{}|]', 'g');
 
-  var SYSTEM_TEXT = 'You are the voice co-pilot inside the Aether WebOS studio. Speak plainly and briefly. '
-    + 'When the user states a task, call append_floorplan_task. When they define a word, call define_lexicon_term. '
-    + 'When they ask to see a different view, call select_studio_view. Never invent facts about their plan.';
+  var DISCOVERY_GREETING = 'Greet the visitor in one short, plain sentence and ask what they are trying to achieve by visiting - their main goal, biggest pain point, or bottleneck - so you can map a quick framework together for a custom light demo.';
+
+  var SYSTEM_TEXT = 'You are the discovery co-pilot inside the Aether WebOS studio. Speak plainly and briefly, one question at a time. '
+    + 'Your main job is to ask visitors what they are trying to achieve on this site: their goals, pain points, and bottlenecks. '
+    + 'As soon as you have a clear goal, pain point, and bottleneck, synthesize a concise framework and call capture_visitor_framework '
+    + 'with a recommended_track (offline-workspace, local-ai-vault, custom-webos-site, or hybrid-suite) and a concrete light_demo_idea so Eloquent can build them a light demo. '
+    + 'Also call append_floorplan_task for specific plan tasks, define_lexicon_term when they define a word, and select_studio_view to switch views. Never invent facts.';
 
   // Strips control and line-separator characters, dashes, and markdown/HTML specials, then
   // truncates by code point so a surrogate pair is never cut in half.
@@ -62,6 +68,22 @@
           description: 'Switch the studio to one view: mindmap, dualview, lexicon or capsule.',
           behavior: 'NON_BLOCKING',
           parameters: { type: 'OBJECT', properties: { view: { type: 'STRING' } }, required: ['view'] }
+        },
+        {
+          name: 'capture_visitor_framework',
+          description: 'Record the visitor goals, pain points, bottlenecks, and recommended light-demo framework.',
+          behavior: 'NON_BLOCKING',
+          parameters: {
+            type: 'OBJECT',
+            properties: {
+              goal: { type: 'STRING' },
+              pain_point: { type: 'STRING' },
+              bottleneck: { type: 'STRING' },
+              recommended_track: { type: 'STRING' },
+              light_demo_idea: { type: 'STRING' }
+            },
+            required: ['goal', 'pain_point', 'bottleneck']
+          }
         }
       ]
     }];
@@ -215,6 +237,26 @@
       host.selectTab(view);
       return { ok: true };
     }
+    if (name === 'capture_visitor_framework') {
+      var goal = typeof a.goal === 'string' ? clean(a.goal, 220) : '';
+      var pain = typeof a.pain_point === 'string' ? clean(a.pain_point, 220) : '';
+      var bottle = typeof a.bottleneck === 'string' ? clean(a.bottleneck, 220) : '';
+      if (!goal || !pain || !bottle) return { ok: false, error: 'bad framework arguments' };
+      var rawTrack = typeof a.recommended_track === 'string' ? a.recommended_track.trim().toLowerCase() : '';
+      var track = TRACKS.indexOf(rawTrack) !== -1 ? rawTrack : 'hybrid-suite';
+      var demo = typeof a.light_demo_idea === 'string' ? clean(a.light_demo_idea, 220) : '';
+      var md = host.getText();
+      md = insertIntoSection(md, /^## Discovery Framework\b/, '## Discovery Framework', '- **Goal**: ' + goal);
+      md = insertIntoSection(md, /^## Discovery Framework\b/, '## Discovery Framework', '- **Pain point**: ' + pain);
+      md = insertIntoSection(md, /^## Discovery Framework\b/, '## Discovery Framework', '- **Bottleneck**: ' + bottle);
+      md = insertIntoSection(md, /^## Discovery Framework\b/, '## Discovery Framework', '- **Track**: ' + track);
+      if (demo) md = insertIntoSection(md, /^## Discovery Framework\b/, '## Discovery Framework', '- **Light demo**: ' + demo);
+      host.setText(md);
+      if (typeof host.syncQuote === 'function') {
+        host.syncQuote({ goal: goal, pain_point: pain, bottleneck: bottle, recommended_track: track, light_demo_idea: demo });
+      }
+      return { ok: true };
+    }
     return { ok: false, error: 'unknown tool' };
   }
 
@@ -239,7 +281,7 @@
     if (!body) return;
 
     body.innerHTML =
-      '<p class="live-copilot__note">Needs a Gemini ephemeral token (the token name from a server-side auth_tokens call). It stays in this tab\'s memory only, is cleared the moment you press Connect, and nothing connects until then. If your token is locked to one model, choose the matching option.</p>' +
+      '<p class="live-copilot__note">Connect to map your goals, pain points, and bottlenecks with Gemini into a structured framework for a custom light demo. Nothing connects until you press Connect; tokens stay in tab memory only.</p>' +
       '<div class="live-copilot__row">' +
         '<label class="live-copilot__field">Model<select data-live-model>' +
           '<option value="live">Gemini 3.8 Live (voice)</option>' +
@@ -248,25 +290,29 @@
         '</select></label>' +
         '<label class="live-copilot__field">Ephemeral token<input data-live-token type="password" autocomplete="off" spellcheck="false"></label>' +
       '</div>' +
+      '<div class="live-copilot__turnstile" data-live-turnstile></div>' +
       '<div class="live-copilot__row">' +
         '<button type="button" class="btn btn--primary" data-live-connect>Connect</button>' +
         '<button type="button" class="btn btn--ghost" data-live-disconnect disabled>Disconnect</button>' +
         '<button type="button" class="btn btn--ghost" data-live-talk disabled>Hold to talk</button>' +
+        '<a class="btn btn--ghost" href="#act-contact" data-live-handoff hidden>Send framework for a light demo</a>' +
         '<span class="live-copilot__status" data-live-status role="status" aria-live="polite">Not connected</span>' +
       '</div>' +
       '<form class="live-copilot__row" data-live-form>' +
-        '<label class="live-copilot__field live-copilot__field--grow">Type to the co-pilot<input data-live-text type="text" autocomplete="off" disabled></label>' +
+        '<label class="live-copilot__field live-copilot__field--grow">Tell Gemini your goals or bottlenecks<input data-live-text type="text" autocomplete="off" disabled></label>' +
         '<button type="submit" class="btn btn--ghost" data-live-send disabled>Send</button>' +
       '</form>' +
       '<pre class="live-copilot__log" data-live-log aria-live="polite"></pre>';
 
     var q = function (s) { return body.querySelector(s); };
-    var el = { model: q('[data-live-model]'), token: q('[data-live-token]'), connect: q('[data-live-connect]'),
-      disconnect: q('[data-live-disconnect]'), talk: q('[data-live-talk]'), status: q('[data-live-status]'),
-      form: q('[data-live-form]'), text: q('[data-live-text]'), send: q('[data-live-send]'), log: q('[data-live-log]') };
+    var el = { model: q('[data-live-model]'), token: q('[data-live-token]'), turnstile: q('[data-live-turnstile]'),
+      connect: q('[data-live-connect]'), disconnect: q('[data-live-disconnect]'), talk: q('[data-live-talk]'),
+      handoff: q('[data-live-handoff]'), status: q('[data-live-status]'), form: q('[data-live-form]'),
+      text: q('[data-live-text]'), send: q('[data-live-send]'), log: q('[data-live-log]') };
 
     var ws = null, micCtx = null, micStream = null, micNode = null, playCtx = null, playHead = 0, sources = [];
-    var talking = false, micGen = 0, toolCount = 0, logLines = [], sessionAudio = false;
+    var talking = false, micGen = 0, toolCount = 0, logLines = [], sessionAudio = false, greeted = false;
+    var tsWidgetId = null, tsToken = '';
 
     function g() { return typeof globalThis !== 'undefined' ? globalThis : window; }
     function log(line) {
@@ -302,6 +348,25 @@
       },
       selectTab: function (id) {
         if (g().AetherRefractory && g().AetherRefractory.selectTab) g().AetherRefractory.selectTab(id);
+      },
+      syncQuote: function (fw) {
+        var trackEl = document.getElementById('quote-track');
+        if (trackEl && fw.recommended_track) {
+          trackEl.value = fw.recommended_track;
+          trackEl.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+        var briefEl = document.getElementById('quote-brief');
+        if (briefEl) {
+          var parts = [
+            'Goal: ' + fw.goal,
+            'Pain point: ' + fw.pain_point,
+            'Bottleneck: ' + fw.bottleneck
+          ];
+          if (fw.light_demo_idea) parts.push('Light demo idea: ' + fw.light_demo_idea);
+          briefEl.value = parts.join('\n');
+          briefEl.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+        if (el.handoff) el.handoff.hidden = false;
       }
     };
 
@@ -338,7 +403,14 @@
       var parsed;
       try { parsed = JSON.parse(data); } catch (e) { return; }
       var ev = parseServerEvent(parsed);
-      if (ev.setupComplete) { setConnected(true, true, sessionAudio); setStatus('Ready'); }
+      if (ev.setupComplete) {
+        setConnected(true, true, sessionAudio);
+        setStatus('Ready');
+        if (!greeted) {
+          greeted = true;
+          send(buildRealtimeTextMessage(DISCOVERY_GREETING));
+        }
+      }
       if (ev.interrupted) flushPlayback();
       else ev.audioChunks.forEach(playPcm24k);
       if (ev.text.length) log('Co-pilot: ' + ev.text.join(''));
@@ -380,16 +452,72 @@
       if (s) { try { s.close(); } catch (e) { /* ignore */ } }
       el.token.value = '';
       toolCount = 0;
+      greeted = false;
       setConnected(false, false, false);
       setStatus(reason || 'Not connected');
     }
 
+    if (el.handoff) {
+      el.handoff.addEventListener('click', function () {
+        var brief = document.getElementById('quote-brief');
+        if (brief && !brief.value.trim()) {
+          var raw = host.getText();
+          if (raw) {
+            brief.value = raw.slice(0, 1800);
+            brief.dispatchEvent(new Event('input', { bubbles: true }));
+          }
+        }
+      });
+    }
+
+    var tokenEndpoint = (details.getAttribute('data-live-token-endpoint') || '').trim();
+    var tsSitekey = (details.getAttribute('data-turnstile-sitekey') || '').trim();
+    function drawTurnstile() {
+      if (!tsSitekey || !el.turnstile || tsWidgetId != null || !g().turnstile || !g().turnstile.render) return;
+      tsWidgetId = g().turnstile.render(el.turnstile, {
+        sitekey: tsSitekey,
+        action: 'live_token',
+        callback: function (t) { tsToken = t || ''; },
+        'expired-callback': function () { tsToken = ''; },
+        'error-callback': function () { tsToken = ''; }
+      });
+    }
+    if (tsSitekey && el.turnstile) {
+      if (g().turnstile && g().turnstile.render) drawTurnstile();
+      else if (!document.getElementById('cf-turnstile-api')) {
+        var sc = document.createElement('script');
+        sc.id = 'cf-turnstile-api';
+        sc.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+        sc.async = true;
+        sc.defer = true;
+        sc.onload = drawTurnstile;
+        document.head.appendChild(sc);
+      }
+    }
+    function resetTurnstile() {
+      tsToken = '';
+      if (tsWidgetId != null && g().turnstile && g().turnstile.reset) g().turnstile.reset(tsWidgetId);
+    }
+
     el.connect.addEventListener('click', function () {
+      var typed = el.token.value;
+      el.token.value = '';
+      if (typed.trim() || !tokenEndpoint) { startSession(typed); return; }
+      if (!/^https:\/\//i.test(tokenEndpoint)) { setStatus('Token endpoint must be https'); return; }
+      var ts = tsToken || (g().turnstile && g().turnstile.getResponse ? (tsWidgetId != null ? g().turnstile.getResponse(tsWidgetId) : g().turnstile.getResponse()) : undefined);
+      if (tsSitekey && !ts) { setStatus('Complete verification check first'); return; }
+      setStatus('Requesting token');
+      el.connect.disabled = true;
+      fetch(tokenEndpoint, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ turnstileToken: ts }), credentials: 'omit' })
+        .then(function (r) { if (!r.ok) throw new Error('Token request refused (' + r.status + ')'); return r.json(); })
+        .then(function (j) { resetTurnstile(); startSession(j && j.token); })
+        .catch(function (e) { resetTurnstile(); el.connect.disabled = false; setStatus(String(e && e.message || e)); });
+    });
+    function startSession(tokenValue) {
       var mode = el.model.value;
       var audio = mode !== 'text';
       var url;
-      try { url = buildSocketUrl(el.token.value); } catch (e) { setStatus(String(e.message || e)); return; }
-      el.token.value = '';
+      try { url = buildSocketUrl(tokenValue); } catch (e) { el.connect.disabled = false; setStatus(String(e.message || e)); return; }
       sessionAudio = audio;
       setStatus('Connecting');
       el.connect.disabled = true;
@@ -410,7 +538,7 @@
       };
       socket.onerror = function () { if (socket === ws) setStatus('Connection error'); };
       socket.onclose = function () { if (socket === ws) disconnect('Disconnected'); };
-    });
+    }
     el.disconnect.addEventListener('click', function () { disconnect('Disconnected'); });
 
     el.form.addEventListener('submit', function (e) {
@@ -479,10 +607,13 @@
   }
 
   return {
-    version: '2.3.0',
+    version: '2.5.0',
     WS_BASE: WS_BASE,
     MODEL_LIVE: MODEL_LIVE,
     MODEL_THINKING: MODEL_THINKING,
+    TRACKS: TRACKS,
+    DISCOVERY_GREETING: DISCOVERY_GREETING,
+    SYSTEM_TEXT: SYSTEM_TEXT,
     buildSetupMessage: buildSetupMessage,
     buildRealtimeTextMessage: buildRealtimeTextMessage,
     buildRealtimeAudioMessage: buildRealtimeAudioMessage,

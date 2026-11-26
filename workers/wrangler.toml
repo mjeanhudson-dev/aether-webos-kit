@@ -9,7 +9,7 @@ compatibility_date = "2026-11-01"
 #   wrangler secret put POLAR_WEBHOOK_SECRET
 [[kv_namespaces]]
 binding = "FUNDING_KV"
-id = "REPLACE_WITH_KV_NAMESPACE_ID"
+id = "b093421d1a2a4746b473668959a058e4"
 
 [vars]
-ALLOWED_ORIGIN = "https://mjeanhudson-dev.github.io"
+ALLOWED_ORIGIN = "https://eloquentwin.com"

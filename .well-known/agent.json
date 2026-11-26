@@ -1,0 +1,19 @@
+{
+  "protocolVersion": "1.0.1",
+  "name": "Eloquent - Aether WebOS & Sovereign MCP Node",
+  "description": "Offline-first WebOS kits, deterministic Stage-0 AST compaction, industrial OT/PLC telemetry pre-compensation, and Gemini Live discovery intake.",
+  "url": "https://eloquentwin.com/",
+  "provider": {
+    "organization": "Eloquent",
+    "url": "https://eloquentwin.com/"
+  },
+  "contact": "eloquent@eloquentwin.com",
+  "capabilities": {
+    "streaming": true,
+    "pushNotifications": false
+  },
+  "endpoints": {
+    "liveToken": "https://aether-live-token.eloquentwin.workers.dev/api/live-token",
+    "quoteIntake": "https://aether-live-token.eloquentwin.workers.dev/api/quote"
+  }
+}

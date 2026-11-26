@@ -28,7 +28,7 @@ jobs:
           mkdir -p _site/scripts
           cp index.html scrollcraft.css scrollcraft.js _site/
           if [ -f CNAME ]; then cp CNAME _site/; fi
-          cp -r assets fonts styles webgl webos context _site/
+          cp -r assets fonts styles webgl webos context .well-known _site/
           cp scripts/stage-choreography.js _site/scripts/
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3

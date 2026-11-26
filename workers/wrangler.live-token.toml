@@ -1,0 +1,16 @@
+name = "aether-live-token"
+main = "live-token.js"
+compatibility_date = "2026-11-01"
+
+# Run from the workers/ folder:  wrangler deploy -c wrangler.live-token.toml
+# Secrets are never stored in this file:
+#   wrangler secret put GEMINI_API_KEY -c wrangler.live-token.toml
+#   wrangler secret put TURNSTILE_SECRET_KEY -c wrangler.live-token.toml
+
+[[kv_namespaces]]
+binding = "TOKEN_RATE_KV"
+id = "5747a76f32f74cd6abd3231775e86674"
+
+[vars]
+ALLOWED_ORIGINS = "https://eloquentwin.com,https://www.eloquentwin.com,https://aether-webos-kit.pages.dev"
+TURNSTILE_HOSTNAMES = "eloquentwin.com,www.eloquentwin.com,aether-webos-kit.pages.dev"
