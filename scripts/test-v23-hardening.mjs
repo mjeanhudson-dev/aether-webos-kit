@@ -594,4 +594,23 @@ test('a2a: .well-known/agent.json is valid and points to eloquentwin.com', () =>
   assert.equal(card.protocolVersion, '1.0.1');
   assert.equal(card.url, 'https://eloquentwin.com/');
   assert.equal(card.contact, 'eloquent@eloquentwin.com');
+
+  const robots = fs.readFileSync(new URL('../robots.txt', import.meta.url), 'utf8');
+  assert.match(robots, /Sitemap:\s*https:\/\/eloquentwin\.com\/sitemap\.xml/);
+  assert.match(robots, /User-agent:\s*Googlebot/);
+  assert.match(robots, /User-agent:\s*OAI-SearchBot/);
+
+  const sitemap = fs.readFileSync(new URL('../sitemap.xml', import.meta.url), 'utf8');
+  assert.match(sitemap, /<loc>https:\/\/eloquentwin\.com\/<\/loc>/);
+  assert.match(sitemap, /<loc>https:\/\/eloquentwin\.com\/llms\.txt<\/loc>/);
+
+  const llms = fs.readFileSync(new URL('../llms.txt', import.meta.url), 'utf8');
+  assert.match(llms, /3-Track Offer Catalog/);
+  assert.match(llms, /eloquent@eloquentwin\.com/);
+  assert.equal(/[\u2014\u2013]/.test(llms), false);
+
+  const html = fs.readFileSync(new URL('../index.html', import.meta.url), 'utf8');
+  assert.match(html, /"hasOfferCatalog"/);
+  assert.match(html, /"ProfessionalService"/);
+  assert.match(html, /"areaServed"/);
 });
