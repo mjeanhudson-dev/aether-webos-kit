@@ -586,6 +586,14 @@ test('live-token worker: POST /api/quote stores valid capsules in KV and rejects
   assert.equal(synBody.refId, syn.refId);
   assert.equal(synBody.ref_id, syn.refId);
   assert.equal(kv._m.size, 2);
+
+  const inRes = await liveToken.fetch(new Request('https://eloquentwin.com/a8f4c2e91d7b40639e5a1c8d2f704b3e.txt'), {});
+  assert.equal(inRes.status, 200);
+  assert.equal(await inRes.text(), 'a8f4c2e91d7b40639e5a1c8d2f704b3e');
+
+  const smRes = await liveToken.fetch(new Request('https://eloquentwin.com/sitemaps.xml'), {});
+  assert.equal(smRes.status, 301);
+  assert.equal(smRes.headers.get('location'), 'https://eloquentwin.com/sitemap.xml');
 });
 
 test('a2a: .well-known/agent.json is valid and points to eloquentwin.com', () => {

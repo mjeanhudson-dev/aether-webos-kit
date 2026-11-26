@@ -26,7 +26,7 @@ jobs:
         if: env.CF_TOKEN != ''
         run: |
           mkdir -p _site/scripts
-          cp index.html scrollcraft.css scrollcraft.js _headers robots.txt sitemap.xml llms.txt _site/
+          cp index.html scrollcraft.css scrollcraft.js _headers robots.txt sitemap.xml llms.txt a8f4c2e91d7b40639e5a1c8d2f704b3e.txt _site/
           cp -r assets fonts styles webgl webos context .well-known _site/
           cp scripts/stage-choreography.js _site/scripts/
       - name: Publish

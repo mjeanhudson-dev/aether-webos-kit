@@ -24,6 +24,8 @@ const WINDOW_SECONDS = 600;
 const MAX_BODY_BYTES = 2048;
 const MAX_QUOTE_BYTES = 16384;
 const QUOTE_TTL_SECONDS = 60 * 60 * 24 * 90;
+const INDEXNOW_KEY = 'a8f4c2e91d7b40639e5a1c8d2f704b3e';
+const INDEXNOW_PATH = '/' + INDEXNOW_KEY + '.txt';
 
 function reply(body, status, origin, allowed) {
   const headers = {
@@ -44,6 +46,19 @@ function reply(body, status, origin, allowed) {
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+    if (url.pathname === '/sitemaps.xml' && (request.method === 'GET' || request.method === 'HEAD')) {
+      return Response.redirect('https://eloquentwin.com/sitemap.xml', 301);
+    }
+    if (url.pathname === INDEXNOW_PATH && (request.method === 'GET' || request.method === 'HEAD')) {
+      return new Response(request.method === 'HEAD' ? null : INDEXNOW_KEY, {
+        status: 200,
+        headers: {
+          'content-type': 'text/plain; charset=utf-8',
+          'cache-control': 'public, max-age=86400',
+          'x-content-type-options': 'nosniff',
+        },
+      });
+    }
     const origin = request.headers.get('origin') || '';
     const allowedList = (env.ALLOWED_ORIGINS || DEFAULT_ORIGINS).split(',').map((s) => s.trim()).filter(Boolean);
     const allowed = allowedList.includes(origin);

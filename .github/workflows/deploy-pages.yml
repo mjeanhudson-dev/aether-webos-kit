@@ -26,7 +26,7 @@ jobs:
       - name: Assemble site (runtime files only)
         run: |
           mkdir -p _site/scripts
-          cp index.html scrollcraft.css scrollcraft.js robots.txt sitemap.xml llms.txt _site/
+          cp index.html scrollcraft.css scrollcraft.js robots.txt sitemap.xml llms.txt a8f4c2e91d7b40639e5a1c8d2f704b3e.txt _site/
           if [ -f CNAME ]; then cp CNAME _site/; fi
           cp -r assets fonts styles webgl webos context .well-known _site/
           cp scripts/stage-choreography.js _site/scripts/
