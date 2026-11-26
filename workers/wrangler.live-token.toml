@@ -14,3 +14,18 @@ id = "5747a76f32f74cd6abd3231775e86674"
 [vars]
 ALLOWED_ORIGINS = "https://eloquentwin.com,https://www.eloquentwin.com,https://aether-webos-kit.pages.dev"
 TURNSTILE_HOSTNAMES = "eloquentwin.com,www.eloquentwin.com,aether-webos-kit.pages.dev"
+
+[observability]
+enabled = true
+head_sampling_rate = 1
+
+[observability.logs]
+enabled = true
+head_sampling_rate = 1
+invocation_logs = true
+persist = true
+
+[observability.traces]
+enabled = true
+head_sampling_rate = 1
+persist = true
