@@ -294,7 +294,13 @@
       '<div class="live-copilot__row">' +
         '<button type="button" class="btn btn--primary" data-live-connect>Connect</button>' +
         '<button type="button" class="btn btn--ghost" data-live-disconnect disabled>Disconnect</button>' +
-        '<button type="button" class="btn btn--ghost" data-live-talk disabled>Hold to talk</button>' +
+        '<button type="button" class="btn btn--ghost" data-live-talk disabled>' +
+          '<svg class="btn__icon" width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">' +
+            '<rect x="5.5" y="1.75" width="5" height="7.5" rx="2.5" stroke="currentColor" stroke-width="1.4"/>' +
+            '<path d="M3.25 7.25a4.75 4.75 0 0 0 9.5 0M8 12v2.25M5.5 14.25h5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>' +
+          '</svg>' +
+          '<span>Hold to talk</span>' +
+        '</button>' +
         '<a class="btn btn--ghost" href="#act-contact" data-live-handoff hidden>Send framework for a light demo</a>' +
         '<span class="live-copilot__status" data-live-status role="status" aria-live="polite">Not connected</span>' +
       '</div>' +
@@ -599,7 +605,21 @@
     var d = document.getElementById('aether-live-copilot');
     if (!d) return;
     d.addEventListener('toggle', function () { if (d.open) mount(d); });
-    if (d.open) mount(d);
+    if (d.open || (typeof location !== 'undefined' && location.hash === '#aether-live-copilot')) {
+      d.open = true;
+      mount(d);
+    }
+    var triggers = document.querySelectorAll('[data-aether-open-copilot]');
+    for (var i = 0; i < triggers.length; i++) {
+      triggers[i].addEventListener('click', function (e) {
+        e.preventDefault();
+        d.open = true;
+        mount(d);
+        if (typeof d.scrollIntoView === 'function') d.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        var c = d.querySelector('[data-live-connect]');
+        if (c && typeof c.focus === 'function') setTimeout(function () { c.focus({ preventScroll: true }); }, 220);
+      });
+    }
   }
   if (typeof document !== 'undefined') {
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', autoMount);

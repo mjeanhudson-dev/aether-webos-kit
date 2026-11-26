@@ -1514,11 +1514,22 @@ a:hover {
 }
 
 /* ------------------------------------------- Live Co-Pilot Widget Card --- */
+.site-bar__copilot {
+  border-color: rgba(240, 138, 56, 0.42);
+  color: var(--aether-amber-text);
+}
+
+.site-bar__copilot:hover,
+.site-bar__copilot:focus-visible {
+  border-color: var(--aether-amber);
+  background: rgba(226, 122, 44, 0.12);
+}
+
 .live-copilot {
   margin-bottom: clamp(1rem, 2vw, 1.5rem);
   padding-inline: 1.25rem;
-  background: var(--aether-card-bg);
-  border: 1px solid var(--aether-hairline);
+  background: linear-gradient(180deg, rgba(226, 122, 44, 0.08) 0%, var(--aether-card-bg) 100%);
+  border: 1px solid rgba(240, 138, 56, 0.42);
   border-radius: var(--aether-r-pod);
   box-shadow: var(--aether-elev-pod);
 }
@@ -1527,14 +1538,36 @@ a:hover {
   cursor: pointer;
   list-style: none;
   padding: 0.9rem 0;
-  min-height: 48px;
+  min-height: 52px;
   display: flex;
   align-items: center;
+  gap: 0.55rem;
   font-family: var(--sc-font-mono);
-  font-size: 0.79rem;
+  font-size: 0.82rem;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.03em;
   color: var(--aether-amber-text);
+}
+
+.live-copilot__mic-icon {
+  flex: 0 0 18px;
+  color: var(--aether-amber-text);
+}
+
+.live-copilot__summary-text {
+  flex: 1 1 auto;
+}
+
+.live-copilot__badge {
+  flex: 0 0 auto;
+  padding: 0.22rem 0.65rem;
+  border-radius: var(--aether-r-pill);
+  border: 1px solid rgba(240, 138, 56, 0.45);
+  background: rgba(226, 122, 44, 0.14);
+  color: var(--aether-platinum);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .live-copilot__summary::-webkit-details-marker { display: none; }

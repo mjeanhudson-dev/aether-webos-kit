@@ -383,6 +383,8 @@ test('v2.4 hero & stage markup: pre-impact freeze-frame, detonation hooks, AI qu
   assert.match(html, /id="quote-wave-0"/);
   assert.match(html, /id="quote-wave-1"/);
   assert.match(html, /id="quote-wave-2"/);
+  assert.match(html, /data-aether-open-copilot[\s\S]*?Talk to Gemini/);
+  assert.match(html, /class="live-copilot__badge">Voice \+ Text</);
   assert.equal(/[\u2014\u2013]/.test(html), false);
 });
 
