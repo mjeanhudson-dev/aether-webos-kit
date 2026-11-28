@@ -1,24 +1,26 @@
-# Eloquent : Custom AI Agent Suites, Offline-First WebOS Tools & Business Workflow Automation
+# Eloquent : Aether WebOS, MCP Security & OT-to-AI Telemetry SaaS Platform
 
-> Eloquent (@mjeanhudson-dev) builds custom AI agent suites, offline-first WebOS kits, local AI vaults, and deterministic business & industrial workflow automation. Visitors can run the free 30-day Aether WebOS Kit directly in their browser, talk to the Live Gemini Discovery concierge, or request a free Wave 0..2 project scope at https://eloquentwin.com/.
+> Eloquent (@mjeanhudson-dev), founded by Zachariah Higazy in Columbia, SC, builds Aether WebOS, the aether-pulse MCP Security Firewall, and sovereign industrial OT-to-AI telemetry SaaS tenants. Visitors can run the free 30-day Aether WebOS Kit directly in their browser, connect to the sanitized commercial MCP endpoint, or provision an Enterprise SaaS Tenant at https://eloquentwin.com/.
 
 ## Official Links & Endpoints
 
-- [Homepage & Interactive Studio](https://eloquentwin.com/): Browser-native Aether WebOS Refractory, Live Gemini Discovery concierge, and Wave 0..2 quote synthesizer.
+- [Homepage & Interactive Studio](https://eloquentwin.com/): Browser-native Aether WebOS Refractory, Live Gemini Discovery concierge, and Enterprise Tenant Architecture Router.
 - [A2A v1.0.1 Agent Card](https://eloquentwin.com/.well-known/agent.json): Machine-readable Agent-to-Agent discovery manifest.
-- [Public Contact Manifest](https://eloquentwin.com/context/contact.json): Verified public contact (`eloquent@eloquentwin.com`, 1 to 2 business days response window) and quote intake webhook (`https://aether-live-token.eloquentwin.workers.dev/api/quote`).
+- [Public Contact Manifest](https://eloquentwin.com/context/contact.json): Verified public contact (`gazy@eloquentwin.com`, 1 to 2 business days response window) and tenant intake webhook (`https://aether-live-token.eloquentwin.workers.dev/api/quote`).
+- [Commercial MCP Portal](https://eloquentwin.com/portal.html): Manage hashed `elq_live_...` keys for `https://api.eloquentwin.com/mcp`.
 - [Open-Source Repository (Aether WebOS Kit)](https://github.com/mjeanhudson-dev/aether-webos-kit): MIT-licensed source for the offline-first WebOS kit.
 - [Open-Source Parser (floorplan-codex)](https://github.com/mjeanhudson-dev/floorplan-codex): Deterministic plain-English-to-Wave-0..2 dependency parser.
+- [npm Package (aether-pulse)](https://www.npmjs.com/package/aether-pulse): Open-core MCP security and telemetry package.
 
 ## 3-Track Offer Catalog
 
-1. **Track 1 - Free 30-Day Aether WebOS Kit ($0, MIT License)**: Turn messy plain-English notes into an SVG Mind-Map, Dual-View Reader, Domain Lexicon, and a single self-contained offline `.html` file with WebCrypto SHA-256 integrity. Zero install, zero account required.
-2. **Track 2 - Custom Offline-First WebOS Kits & Local AI Vaults**: Private, air-gapped or local-first browser workspaces, field-engineer runbooks, and SHA-256-verified knowledge vaults tailored to your team's workflow. Free Wave 0..2 scoping quote in 1 to 2 business days.
-3. **Track 3 - Business & Industrial MCP Agent Suites & Turn-Key Automation**: End-to-end Model Context Protocol (MCP) servers, Gemini Live voice/text discovery concierges, Cloudflare Edge Workers, and deterministic Stage-0-to-Apex workflow automation. Free Wave 0..2 scoping quote in 1 to 2 business days.
+1. **Track 1 - Open-Core Refractory Tier ($0, MIT License)**: Turn messy plain-English notes into an SVG Mind-Map, Dual-View Reader, Domain Lexicon, and a single self-contained offline `.html` file with WebCrypto SHA-256 integrity. Zero install, zero account required.
+2. **Track 2 - Team WebOS Continuity Tenants ($49/seat/mo) & aether-pulse Pro MCP Firewall ($499/mo)**: Managed OAuth 2.1 PKCE MCP firewall, credential scrubbing, searchable encrypted team vaults, and SHA-256 parity checks across distributed engineering teams.
+3. **Track 3 - Sovereign Industrial & OT-to-AI Enterprise Tenants ($2,500+/mo)**: Dedicated air-gapped or cloud-hosted MCP servers, Gemini Live telemetry concierges, PLC/switchgear OT-to-AI ingestion pipelines, and Cloudflare Edge security tenants.
 
-## Service Area & Contact
+## Leadership & Contact
 
 - **Organization**: Eloquent
-- **Service Area**: United States (US) & Global Remote (Service-Area Business)
-- **Direct Email**: eloquent@eloquentwin.com
-- **Quote Intake**: https://eloquentwin.com/#act-contact
+- **Founder**: Zachariah Higazy, Founder & Chief Systems Architect (Columbia, SC, US)
+- **Direct Email**: gazy@eloquentwin.com
+- **Tenant Provisioning Intake**: https://eloquentwin.com/#act-contact

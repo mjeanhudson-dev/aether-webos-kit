@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Eloquent Commercial MCP — Subscriber Key Portal</title>
+  <title>Eloquent Commercial MCP - Subscriber Key Portal</title>
   <meta name="description" content="Manage your Eloquent Commercial MCP API key, verify subscription entitlements, and copy connection configs for Gemini, Claude, Codex, and Cursor." />
   <style>
     :root {
@@ -71,7 +71,7 @@
       <a class="brand" href="/">Eloquent &middot; Commercial MCP Portal</a>
       <nav class="nav">
         <a class="btn" href="/#pricing">Pricing</a>
-        <a class="btn" href="/#act-contact">Studio Quote</a>
+        <a class="btn" href="/#act-contact">Enterprise SaaS</a>
         <a class="btn btn--primary" href="/">Back to Site</a>
       </nav>
     </header>
@@ -186,7 +186,7 @@
       s.setAttribute('data-clerk-publishable-key', CLERK_PK);
       s.src = 'https://alert-elk-3324.clerk.accounts.dev/npm/@clerk/clerk-js@5/dist/clerk.browser.js';
       s.onerror = () => {
-        root.textContent = 'Account sign-in widget could not load in this browser context. You can still test an issued key on the right or request access at eloquent@eloquentwin.com.';
+        root.textContent = 'Account sign-in widget could not load in this browser context. You can still test an issued key on the right or request access at gazy@eloquentwin.com.';
       };
       s.onload = async () => {
         try {
@@ -222,7 +222,7 @@
               newKeyBox.innerHTML = '<strong class="ok">Copy now (shown once):</strong><pre>' + rj.api_key + '</pre>';
               document.getElementById('test-key-input').value = rj.api_key;
             } else {
-              newKeyBox.innerHTML = '<span class="err">' + (rj.error || 'Subscription inactive') + ' — subscribe via Pricing first.</span>';
+              newKeyBox.innerHTML = '<span class="err">' + (rj.error || 'Subscription inactive') + ' - subscribe via Pricing first.</span>';
             }
           };
           document.getElementById('btn-signout').onclick = async () => {

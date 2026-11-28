@@ -18,7 +18,7 @@
 }(typeof globalThis !== 'undefined' ? globalThis : (typeof window !== 'undefined' ? window : null), function () {
   'use strict';
 
-  var DEFAULT_PUBLIC_EMAIL = 'eloquent@eloquentwin.com';
+  var DEFAULT_PUBLIC_EMAIL = 'gazy@eloquentwin.com';
   var DEFAULT_RESPONSE_WINDOW = '1 to 2 business days';
 
   var TRACK_CATALOG = {
@@ -206,10 +206,10 @@
     var wave2 = spec.w2 + '.';
 
     var whoLabel = company ? (name ? name + ' (' + company + ')' : company) : (name || 'Prospective Client');
-    var subject = '[' + refId + '] Free Quote Request: ' + spec.shortLabel + ' - ' + whoLabel;
+    var subject = '[' + refId + '] Enterprise Tenant Spec: ' + spec.shortLabel + ' - ' + whoLabel;
 
     var lines = [
-      'AETHER FREE QUOTE & ARCHITECTURE BRIEF (' + refId + ')',
+      'AETHER ENTERPRISE TENANT & ARCHITECTURE BRIEF (' + refId + ')',
       'To: Eloquent (' + publicEmail + ')',
       'From: ' + (name || '[Your Name]') + (email ? ' <' + email + '>' : ''),
       company ? ('Organization: ' + company) : 'Organization: Independent / Unspecified',
@@ -765,7 +765,7 @@ if (typeof window !== 'undefined' && typeof document !== 'undefined') (function 
     }
     var nextLabel = activeRouterIntent === 'free-kit'
       ? 'Open Free 30-Day Kit'
-      : 'Route My Free Quote';
+      : 'Configure Tenant Architecture';
     if (routerBtnLabelEl) {
       routerBtnLabelEl.textContent = nextLabel;
     } else if (routerRouteBtn) {

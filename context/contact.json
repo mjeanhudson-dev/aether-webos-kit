@@ -1,5 +1,5 @@
 {
-  "public_email": "eloquent@eloquentwin.com",
+  "public_email": "gazy@eloquentwin.com",
   "quote_webhook_url": "https://aether-live-token.eloquentwin.workers.dev/api/quote",
   "response_window": "1 to 2 business days"
 }

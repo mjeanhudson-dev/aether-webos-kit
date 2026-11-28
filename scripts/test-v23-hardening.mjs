@@ -320,22 +320,22 @@ test('funding loader: rejects javascript, http, placeholder, and malformed URLs'
   assert.equal(res.statsEndpoint, null);
 });
 
-test('v2.4 contact manifest & quote synthesizer: eloquent@eloquentwin.com, zero gmail, deterministic Wave 0..2 scope', () => {
+test('v2.4 contact manifest & quote synthesizer: gazy@eloquentwin.com, zero gmail, deterministic Wave 0..2 scope', () => {
   const fs = require('node:fs');
   const rawContact = fs.readFileSync(new URL('../context/contact.json', import.meta.url), 'utf8');
   assert.equal(/gmail\.com|googlemail\.com/i.test(rawContact), false);
   const contactJson = JSON.parse(rawContact);
-  assert.equal(contactJson.public_email, 'eloquent@eloquentwin.com');
+  assert.equal(contactJson.public_email, 'gazy@eloquentwin.com');
   assert.equal(contactJson.quote_webhook_url, 'https://aether-live-token.eloquentwin.workers.dev/api/quote');
   assert.equal(contactJson.response_window, '1 to 2 business days');
 
   const cfg = funding.resolveContactConfig(contactJson);
-  assert.equal(cfg.publicEmail, 'eloquent@eloquentwin.com');
+  assert.equal(cfg.publicEmail, 'gazy@eloquentwin.com');
   assert.equal(cfg.quoteWebhookUrl, 'https://aether-live-token.eloquentwin.workers.dev/api/quote');
   assert.equal(cfg.responseWindow, '1 to 2 business days');
 
   const rejectedGmail = funding.resolveContactConfig({ public_email: 'someone@gmail.com', quote_webhook_url: 'http://insecure.test' });
-  assert.equal(rejectedGmail.publicEmail, 'eloquent@eloquentwin.com');
+  assert.equal(rejectedGmail.publicEmail, 'gazy@eloquentwin.com');
   assert.equal(rejectedGmail.quoteWebhookUrl, null);
 
   const syn = funding.synthesizeQuoteScope({
@@ -356,9 +356,9 @@ test('v2.4 contact manifest & quote synthesizer: eloquent@eloquentwin.com, zero 
   }).refId);
   assert.equal(syn.waves.length, 3);
   assert.match(syn.waves[0], /SHA-256|field|engineers|vault/i);
-  assert.match(syn.mailtoHref, /^mailto:eloquent@eloquentwin\.com\?subject=/);
+  assert.match(syn.mailtoHref, /^mailto:gazy@eloquentwin\.com\?subject=/);
   assert.equal(syn.capsule.schema, 'aether.quote.capsule.v1');
-  assert.equal(syn.capsule.recipient, 'eloquent@eloquentwin.com');
+  assert.equal(syn.capsule.recipient, 'gazy@eloquentwin.com');
   assert.equal(/[\u2014\u2013]/.test(syn.plainBrief), false);
 });
 
@@ -377,7 +377,7 @@ test('v2.4 hero & stage markup: pre-impact freeze-frame, detonation hooks, AI qu
   assert.match(html, /id="router-route-btn"\s+data-quote-route-btn/);
   assert.match(html, /data-impact-reset/);
   assert.match(html, /id="act-contact"\s+class="contact-section"/);
-  assert.match(html, /id="aether-quote-form"[^>]*action="mailto:eloquent@eloquentwin\.com"/);
+  assert.match(html, /id="aether-quote-form"[^>]*action="mailto:gazy@eloquentwin\.com"/);
   assert.match(html, /id="quote-brief"[\s\S]*?spellcheck="true"/);
   assert.match(html, /id="aether-quote-preview"/);
   assert.match(html, /id="quote-wave-0"/);
@@ -601,7 +601,7 @@ test('a2a: .well-known/agent.json is valid and points to eloquentwin.com', () =>
   const card = JSON.parse(fs.readFileSync(new URL('../.well-known/agent.json', import.meta.url), 'utf8'));
   assert.equal(card.protocolVersion, '1.0.1');
   assert.equal(card.url, 'https://eloquentwin.com/');
-  assert.equal(card.contact, 'eloquent@eloquentwin.com');
+  assert.equal(card.contact, 'gazy@eloquentwin.com');
 
   const robots = fs.readFileSync(new URL('../robots.txt', import.meta.url), 'utf8');
   assert.match(robots, /Sitemap:\s*https:\/\/eloquentwin\.com\/sitemap\.xml/);
@@ -614,11 +614,23 @@ test('a2a: .well-known/agent.json is valid and points to eloquentwin.com', () =>
 
   const llms = fs.readFileSync(new URL('../llms.txt', import.meta.url), 'utf8');
   assert.match(llms, /3-Track Offer Catalog/);
-  assert.match(llms, /eloquent@eloquentwin\.com/);
+  assert.match(llms, /gazy@eloquentwin\.com/);
   assert.equal(/[\u2014\u2013]/.test(llms), false);
 
   const html = fs.readFileSync(new URL('../index.html', import.meta.url), 'utf8');
-  assert.match(html, /"hasOfferCatalog"/);
-  assert.match(html, /"ProfessionalService"/);
-  assert.match(html, /"areaServed"/);
+  const ldMatch = html.match(/<script type="application\/ld\+json" id="eloquent-saas-jsonld">([\s\S]*?)<\/script>/);
+  assert.ok(ldMatch, 'missing #eloquent-saas-jsonld script block');
+  const ld = JSON.parse(ldMatch[1]);
+  assert.equal(ld['@context'], 'https://schema.org');
+  assert.ok(Array.isArray(ld['@graph']), 'JSON-LD @graph must be an array');
+  const org = ld['@graph'].find((n) => n['@type'] === 'Organization');
+  const person = ld['@graph'].find((n) => n['@type'] === 'Person');
+  const app = ld['@graph'].find((n) => n['@type'] === 'SoftwareApplication');
+  assert.ok(org && org.email === 'gazy@eloquentwin.com', 'Organization node must use gazy@eloquentwin.com');
+  assert.ok(person && person.name === 'Zachariah Higazy', 'Person node must identify Zachariah Higazy');
+  assert.ok(app && Array.isArray(app.offers) && app.offers.length === 4, 'SoftwareApplication must declare 4 USD Offer tiers');
+  assert.deepEqual(app.offers.map((o) => String(o.price)), ['0', '49', '499', '2500']);
+  assert.match(html, /href="#founder">Founder<\/a>/);
+  assert.match(html, /<section id="founder"[^>]*aria-labelledby="founder-heading"/);
+  assert.equal(/Hire a custom build|\bcustom builds?\b|Free Quote|eloquent@eloquentwin\.com|ProfessionalService/i.test(html), false, 'banned agency/old-email copy detected in index.html');
 });
