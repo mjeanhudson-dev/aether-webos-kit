@@ -1,22 +1,33 @@
 {
   "schema": "aether.funding.v1",
-  "updated_at": "2026-11-25T08:30:00-05:00",
+  "updated_at": "2026-11-27T23:55:00-05:00",
   "license": "MIT",
-  "posture": "No payment account connected. Nothing is being collected.",
+  "posture": "Commercial MCP Paywall Gateway & Subscriber Portal deployed; paste Polar or Stripe Checkout URL and webhook secret to start accepting live cards.",
+  "commercial_mcp": {
+    "endpoint": "https://api.eloquentwin.com/mcp",
+    "portal_url": "https://eloquentwin.com/portal.html",
+    "webhook_polar": "https://api.eloquentwin.com/webhook/polar",
+    "webhook_stripe": "https://api.eloquentwin.com/webhook/stripe",
+    "tiers": [
+      { "id": "free", "label": "Open WebOS Kit", "price_usd_monthly": 0, "daily_mcp_calls": 0 },
+      { "id": "pro", "label": "Pro MCP Builder", "price_usd_monthly": 19, "daily_mcp_calls": 1000 },
+      { "id": "studio", "label": "Studio Turn-Key Sprint", "price_usd_monthly": null, "daily_mcp_calls": 5000 }
+    ]
+  },
   "channels": {
-    "github_sponsors": { "url": null, "status": "not_listed", "checked": "2026-11-25" },
-    "polar": { "url": null, "status": "not_set_up" },
-    "stripe_one_time": { "url": null, "status": "not_set_up" },
+    "github_sponsors": { "url": null, "status": "not_listed", "checked": "2026-11-27" },
+    "polar": { "url": null, "status": "webhook_deployed_awaiting_checkout_url" },
+    "stripe_one_time": { "url": null, "status": "webhook_deployed_awaiting_checkout_url" },
     "billing_portal_url": null
   },
   "live_stats_endpoint": null,
   "engagement": {
     "scoping_request_url": "https://github.com/mjeanhudson-dev/aether-webos-kit/issues/new",
-    "tracks": ["offline-first WebOS kits", "private AI agent suites", "turn-key sites and tools"]
+    "tracks": ["offline-first WebOS kits", "sanitized commercial MCP access", "private AI agent suites", "turn-key sites and tools"]
   },
   "milestones": [
     { "label": "Aether WebOS Kit v2.1.0 shipped, Lighthouse 100/100/100/100", "verified": true },
-    { "label": "Payment channel connected", "verified": false },
-    { "label": "Funding webhook worker deployed", "verified": false }
+    { "label": "Sanitized commercial MCP & Cloudflare Edge Paywall deployed (api.eloquentwin.com)", "verified": true },
+    { "label": "Polar / Stripe live checkout URLs & webhook secrets connected", "verified": false }
   ]
 }

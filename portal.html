@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Eloquent Commercial MCP — Subscriber Key Portal</title>
+  <meta name="description" content="Manage your Eloquent Commercial MCP API key, verify subscription entitlements, and copy connection configs for Gemini, Claude, Codex, and Cursor." />
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #070a10;
+      --surface: #0f1520;
+      --surface-2: #161f2f;
+      --border: #25334a;
+      --text: #eef3fa;
+      --muted: #98aac4;
+      --accent: #5fa0ff;
+      --accent-fg: #051021;
+      --ok: #3ad29f;
+      --warn: #f4b740;
+      --err: #ff6b7a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background: radial-gradient(circle at 20% 0%, #121d32 0%, var(--bg) 55%);
+      color: var(--text);
+      padding: 28px 18px 64px;
+    }
+    .shell { max-width: 880px; margin: 0 auto; }
+    header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 24px; }
+    .brand { font-weight: 700; letter-spacing: -0.02em; font-size: 1.15rem; color: var(--text); text-decoration: none; }
+    .nav { display: flex; gap: 10px; align-items: center; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 10px 16px; border-radius: 10px; font-weight: 600; font-size: .9rem;
+      border: 1px solid var(--border); background: var(--surface-2); color: var(--text);
+      text-decoration: none; cursor: pointer;
+    }
+    .btn:hover { border-color: var(--accent); }
+    .btn--primary { background: var(--accent); color: var(--accent-fg); border-color: transparent; }
+    .btn--primary:hover { filter: brightness(1.06); }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 18px; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 22px; margin-bottom: 16px; }
+    h1 { margin: 0 0 8px; font-size: 1.65rem; letter-spacing: -0.02em; }
+    h2 { margin: 0 0 10px; font-size: 1.1rem; }
+    p { margin: 0 0 12px; color: var(--muted); line-height: 1.55; font-size: .94rem; }
+    .pill { display: inline-block; padding: 4px 10px; border-radius: 999px; font-size: .78rem; font-weight: 600; border: 1px solid var(--border); background: var(--surface-2); }
+    .pill--ok { color: var(--ok); border-color: rgba(58,210,159,.4); }
+    .pill--warn { color: var(--warn); border-color: rgba(244,183,64,.4); }
+    pre, code { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }
+    pre {
+      margin: 10px 0 0; padding: 14px; border-radius: 12px; background: #06090f;
+      border: 1px solid var(--border); overflow-x: auto; font-size: .82rem; color: #dbe7f9; line-height: 1.5;
+    }
+    input[type="password"], input[type="text"] {
+      width: 100%; padding: 11px 14px; border-radius: 10px; border: 1px solid var(--border);
+      background: #06090f; color: var(--text); font-size: .92rem; margin-bottom: 10px;
+    }
+    .row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    .status-box { padding: 12px 14px; border-radius: 10px; border: 1px solid var(--border); background: #0a101a; font-size: .88rem; margin-top: 10px; }
+    .ok { color: var(--ok); }
+    .err { color: var(--err); }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <a class="brand" href="/">Eloquent &middot; Commercial MCP Portal</a>
+      <nav class="nav">
+        <a class="btn" href="/#pricing">Pricing</a>
+        <a class="btn" href="/#act-contact">Studio Quote</a>
+        <a class="btn btn--primary" href="/">Back to Site</a>
+      </nav>
+    </header>
+
+    <section class="card">
+      <h1>Sanitized Commercial MCP Key &amp; Entitlement Portal</h1>
+      <p>Connect Claude, Gemini Developer Mode, Codex, or Cursor to <code>https://api.eloquentwin.com/mcp</code>. Your subscriber key is hashed (SHA-256) at Cloudflare Edge and routed strictly to the zero-privilege commercial server (7 deterministic tools, zero disk access, zero data retention).</p>
+      <div class="row">
+        <span class="pill pill--ok">Endpoint: https://api.eloquentwin.com/mcp</span>
+        <span class="pill">Protocol: MCP 2026-07-28 &rarr; 2024-11-05</span>
+        <span class="pill" id="edge-health-pill">Edge Status: checking...</span>
+      </div>
+    </section>
+
+    <div class="grid">
+      <section class="card">
+        <h2>1. Subscriber Account (Clerk)</h2>
+        <p>Sign in with the email you used at checkout to check entitlement status and mint or rotate your <code>elq_live_...</code> API key.</p>
+        <div id="clerk-auth-root" class="status-box">Loading account panel...</div>
+        <div id="portal-actions" style="display:none;margin-top:12px;">
+          <div id="entitlement-summary" class="status-box"></div>
+          <div class="row" style="margin-top:12px;">
+            <button type="button" class="btn btn--primary" id="btn-rotate-key">Mint / Rotate API Key</button>
+            <button type="button" class="btn" id="btn-signout">Sign Out</button>
+          </div>
+          <div id="new-key-box" class="status-box" style="display:none;"></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>2. Live Key Smoke Test</h2>
+        <p>Paste any active <code>elq_live_...</code> or <code>elq_test_...</code> key to verify live paywall authentication against <code>https://api.eloquentwin.com/mcp</code>.</p>
+        <input id="test-key-input" type="password" placeholder="elq_live_..." autocomplete="off" />
+        <div class="row">
+          <button type="button" class="btn btn--primary" id="btn-test-key">Test Live MCP Connection</button>
+          <a class="btn" href="/#pricing">Get a Key</a>
+        </div>
+        <pre id="test-output" style="display:none;"></pre>
+      </section>
+    </div>
+
+    <section class="card">
+      <h2>3. Copy-Paste Client Config (Gemini, Claude, Codex, Cursor)</h2>
+      <p>Replace <code>YOUR_ELQ_LIVE_KEY</code> with the key minted above.</p>
+      <pre>{
+  "mcpServers": {
+    "eloquent-commercial-mcp": {
+      "url": "https://api.eloquentwin.com/mcp",
+      "headers": {
+        "Authorization": "Bearer YOUR_ELQ_LIVE_KEY"
+      }
+    }
+  }
+}</pre>
+    </section>
+  </main>
+
+  <script>
+    const API_BASE = 'https://api.eloquentwin.com';
+    const CLERK_PK = 'pk_test_YWxlcnQtZWxrLTMzMjQuY2xlcmsuYWNjb3VudHMuZGV2JA';
+
+    async function checkEdgeHealth() {
+      const el = document.getElementById('edge-health-pill');
+      try {
+        const r = await fetch(API_BASE + '/health');
+        const j = await r.json();
+        if (r.ok && j.status === 'ONLINE') {
+          el.textContent = `Edge Status: ONLINE (${j.tools_count} tools)`;
+          el.className = 'pill pill--ok';
+          return;
+        }
+      } catch {}
+      el.textContent = 'Edge Status: unreachable';
+      el.className = 'pill pill--warn';
+    }
+
+    document.getElementById('btn-test-key').addEventListener('click', async () => {
+      const key = document.getElementById('test-key-input').value.trim();
+      const out = document.getElementById('test-output');
+      out.style.display = 'block';
+      out.textContent = 'Testing POST ' + API_BASE + '/mcp ...';
+      try {
+        const r = await fetch(API_BASE + '/mcp', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + key,
+          },
+          body: JSON.stringify({
+            jsonrpc: '2.0',
+            id: 1,
+            method: 'initialize',
+            params: { protocolVersion: '2026-07-28', capabilities: {}, clientInfo: { name: 'eloquent-portal', version: '1.0' } },
+          }),
+        });
+        const txt = await r.text();
+        out.textContent = `HTTP ${r.status}\n` + txt;
+      } catch (e) {
+        out.textContent = 'Network error: ' + String(e);
+      }
+    });
+
+    async function bootClerk() {
+      const root = document.getElementById('clerk-auth-root');
+      const actions = document.getElementById('portal-actions');
+      const summary = document.getElementById('entitlement-summary');
+      const newKeyBox = document.getElementById('new-key-box');
+
+      const s = document.createElement('script');
+      s.async = true;
+      s.crossOrigin = 'anonymous';
+      s.setAttribute('data-clerk-publishable-key', CLERK_PK);
+      s.src = 'https://alert-elk-3324.clerk.accounts.dev/npm/@clerk/clerk-js@5/dist/clerk.browser.js';
+      s.onerror = () => {
+        root.textContent = 'Account sign-in widget could not load in this browser context. You can still test an issued key on the right or request access at eloquent@eloquentwin.com.';
+      };
+      s.onload = async () => {
+        try {
+          await window.Clerk.load();
+          if (!window.Clerk.user) {
+            root.innerHTML = '';
+            const btn = document.createElement('button');
+            btn.className = 'btn btn--primary';
+            btn.textContent = 'Sign In / Create Account';
+            btn.onclick = () => window.Clerk.openSignIn();
+            root.appendChild(btn);
+            return;
+          }
+          root.textContent = 'Signed in as ' + (window.Clerk.user.primaryEmailAddress?.emailAddress || window.Clerk.user.id);
+          actions.style.display = 'block';
+
+          const token = await window.Clerk.session.getToken();
+          const stResp = await fetch(API_BASE + '/api/portal/status', {
+            headers: { 'Authorization': 'Bearer ' + token },
+          });
+          const stData = await stResp.json();
+          summary.textContent = `Plan: ${stData.tier || 'free'} | Status: ${stData.status || 'none'} | Key: ${stData.key_prefix || 'not minted'} | Usage today: ${stData.usage_today || 0}/${stData.daily_limit || 0}`;
+
+          document.getElementById('btn-rotate-key').onclick = async () => {
+            const t = await window.Clerk.session.getToken();
+            const rr = await fetch(API_BASE + '/api/portal/keys/rotate', {
+              method: 'POST',
+              headers: { 'Authorization': 'Bearer ' + t },
+            });
+            const rj = await rr.json();
+            newKeyBox.style.display = 'block';
+            if (rr.ok && rj.api_key) {
+              newKeyBox.innerHTML = '<strong class="ok">Copy now (shown once):</strong><pre>' + rj.api_key + '</pre>';
+              document.getElementById('test-key-input').value = rj.api_key;
+            } else {
+              newKeyBox.innerHTML = '<span class="err">' + (rj.error || 'Subscription inactive') + ' — subscribe via Pricing first.</span>';
+            }
+          };
+          document.getElementById('btn-signout').onclick = async () => {
+            await window.Clerk.signOut();
+            window.location.reload();
+          };
+        } catch (err) {
+          root.textContent = 'Portal init note: ' + String(err);
+        }
+      };
+      document.head.appendChild(s);
+    }
+
+    checkEdgeHealth();
+    bootClerk();
+  </script>
+</body>
+</html>
